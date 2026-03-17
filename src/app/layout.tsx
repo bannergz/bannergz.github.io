@@ -14,7 +14,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Banner Gonzales | Technical Lead & Software Architect",
   description:
-    "Systems Engineer with 6+ years leading high-traffic fintech platforms. Specialized in microservices, event-driven architectures, and scalable cloud solutions.",
+    "Systems Engineer with 8+ years leading high-traffic fintech platforms. Specialized in microservices, event-driven architectures, and scalable cloud solutions.",
   keywords: [
     "Technical Lead",
     "Software Architect",
@@ -30,8 +30,13 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Banner Gonzales | Technical Lead & Software Architect",
     description:
-      "Systems Engineer with 6+ years leading high-traffic fintech platforms.",
+      "Systems Engineer with 8+ years leading high-traffic fintech platforms.",
     type: "website",
+  },
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
   },
 };
 
