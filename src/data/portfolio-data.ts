@@ -4,7 +4,7 @@ export const portfolioData: PortfolioData = {
   name: "Banner Gonzales",
   title: "Technical Lead | Software Architect | Fintech Platforms",
   summary:
-    "Systems Engineer with over 6 years of experience in the development and technical leadership of high-traffic financial platforms. Specialized in the design of microservices architectures, event-driven systems, and scalable cloud platforms. Currently a Technical Lead at Yape, leading engineering teams and the design of critical solutions used by millions of users within the BCP financial ecosystem. Strong focus on scalability, performance, and resilience in distributed systems.",
+    "Systems Engineer with over 8 years of experience in the development and technical leadership of high-traffic financial platforms. Specialized in the design of microservices architectures, event-driven systems, and scalable cloud platforms. Currently a Technical Lead at Yape, leading engineering teams and the design of critical solutions used by millions of users within the BCP financial ecosystem. Strong focus on scalability, performance, and resilience in distributed systems.",
   contact: {
     email: "bannergz1999@gmail.com",
     phone: "+51 994 486 755",
