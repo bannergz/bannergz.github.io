@@ -74,19 +74,6 @@ export default function NorisPage() {
         );
       });
 
-      // Texto centrado al medio
-      ctx.save();
-      ctx.font = "bold 2.2rem Arial";
-      ctx.textAlign = "center";
-      ctx.fillStyle = "#FFD600";
-      ctx.shadowColor = "#fff";
-      ctx.shadowBlur = 10;
-      const text = "Flores para ti por siempre mi amorcita bella, te amo ♥";
-      const textX = width / 2;
-      const textY = height / 2;
-      ctx.fillText(text, textX, textY);
-      ctx.restore();
-
       requestAnimationFrame(animate);
     }
     animate();
@@ -95,8 +82,20 @@ export default function NorisPage() {
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 10, background: "#fffde7" }}>
       <canvas ref={canvasRef} style={{ width: "100vw", height: "100vh", display: "block" }} />
-      <div style={{ position: "absolute", top: 40, width: "100%", textAlign: "center", fontSize: 32, color: "#FFD600", fontWeight: "bold", textShadow: "1px 1px 8px #fff" }}>
-        Para ti, Noris: ¡Feliz día de las flores amarillas! 🌻
+      <div
+        style={{
+          position: "absolute",
+          top: 'min(40px, 6vw)',
+          width: "100%",
+          textAlign: "center",
+          fontSize: 'clamp(1.2rem, 5vw, 2.2rem)',
+          color: "#FFD600",
+          fontWeight: "bold",
+          textShadow: "1px 1px 8px #fff",
+          pointerEvents: 'none',
+        }}
+      >
+        Flores para ti por siempre, mi amorcita bella, te amo ♥ 🌻
       </div>
     </div>
   );

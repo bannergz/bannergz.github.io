@@ -1,5 +1,8 @@
-import type { Metadata } from "next";
+"use client";
+
+import type { ReactNode } from "react";
 import { Inter } from "next/font/google";
+import { usePathname } from "next/navigation";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
@@ -11,47 +14,21 @@ const inter = Inter({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "Banner Gonzales | Technical Lead & Software Architect",
-  description:
-    "Systems Engineer with 8+ years leading high-traffic fintech platforms. Specialized in microservices, event-driven architectures, and scalable cloud solutions.",
-  keywords: [
-    "Technical Lead",
-    "Software Architect",
-    "Fintech",
-    "Microservices",
-    "Java",
-    "Spring Boot",
-    "NodeJS",
-    "AWS",
-    "DDD",
-  ],
-  authors: [{ name: "Banner Gonzales" }],
-  openGraph: {
-    title: "Banner Gonzales | Technical Lead & Software Architect",
-    description:
-      "Systems Engineer with 8+ years leading high-traffic fintech platforms.",
-    type: "website",
-  },
-  icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-    apple: "/favicon.ico",
-  },
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
+  const pathname = usePathname();
+  const isNoris = pathname.startsWith("/noris");
+
   return (
     <html lang="en" className="scroll-smooth">
       <body className={`${inter.variable} font-sans antialiased`}>
-        <Header />
+        {!isNoris && <Header />}
         <main>{children}</main>
-        <Footer />
-        <WhatsAppButton />
+        {!isNoris && <Footer />}
+        {!isNoris && <WhatsAppButton />}
       </body>
     </html>
   );
