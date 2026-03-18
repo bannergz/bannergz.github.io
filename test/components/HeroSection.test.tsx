@@ -32,7 +32,7 @@ describe("HeroSection", () => {
 
   it("renders stats", () => {
     render(<HeroSection />);
-    expect(screen.getByText("6+")).toBeInTheDocument();
+    expect(screen.getByText("8+")).toBeInTheDocument();
     expect(screen.getByText("Years Experience")).toBeInTheDocument();
     expect(screen.getByText("20+")).toBeInTheDocument();
     expect(screen.getByText("Enterprise APIs")).toBeInTheDocument();

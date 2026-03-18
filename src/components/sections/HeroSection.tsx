@@ -111,7 +111,7 @@ export function HeroSection() {
           {/* Stats bar */}
           <div className="mt-16 grid grid-cols-2 gap-8 border-t border-white/10 pt-10 md:grid-cols-4">
             <div>
-              <p className="text-3xl font-bold text-white">6+</p>
+              <p className="text-3xl font-bold text-white">8+</p>
               <p className="mt-1 text-sm text-gray-400">Years Experience</p>
             </div>
             <div>
