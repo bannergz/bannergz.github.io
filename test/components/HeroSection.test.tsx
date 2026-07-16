@@ -11,7 +11,7 @@ describe("HeroSection", () => {
     render(<HeroSection />);
     expect(
       screen.getByText(
-        "Technical Lead | Software Architect | Fintech Platforms"
+        "Software Architect | AI & Agentic Systems | Fintech at Scale"
       )
     ).toBeInTheDocument();
   });

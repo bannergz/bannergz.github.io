@@ -2,14 +2,22 @@ import type { PortfolioData } from "@/types";
 
 export const portfolioData: PortfolioData = {
   name: "Banner Gonzales",
-  title: "Technical Lead | Software Architect | Fintech Platforms",
+  title: "Software Architect | AI & Agentic Systems | Fintech at Scale",
+  tagline:
+    "I architect fintech platforms for millions of users — and build the agentic AI systems engineering teams run on.",
   summary:
-    "Systems Engineer with over 8 years of experience in the development and technical leadership of high-traffic financial platforms. Specialized in the design of microservices architectures, event-driven systems, and scalable cloud platforms. Currently a Technical Lead at Yape, leading engineering teams and the design of critical solutions used by millions of users within the BCP financial ecosystem. Strong focus on scalability, performance, and resilience in distributed systems.",
+    "Systems Engineer with over 8 years architecting high-traffic financial platforms, now building the agentic AI systems and developer platforms that engineering teams run on. Principal Engineer at YaVendio, working across a polyglot fleet of Rust, TypeScript, and Python services. Previously Technical Lead at Yape, where I led the design of microservices and event-driven systems serving millions of users within the BCP financial ecosystem. I work where distributed-systems rigor meets agentic AI: spec-driven development, multi-agent workflows, and platforms that make teams measurably faster.",
   contact: {
     email: "bannergz1999@gmail.com",
     phone: "+51 994 486 755",
     linkedin: "linkedin.com/in/bannergz",
   },
+  heroStats: [
+    { value: "8+", label: "Years Experience" },
+    { value: "20+", label: "Enterprise APIs" },
+    { value: "Millions", label: "Users Impacted" },
+    { value: "300%", label: "AI Efficiency Gain" },
+  ],
   skillCategories: [
     {
       title: "Software Architecture",
@@ -159,12 +167,12 @@ export const portfolioData: PortfolioData = {
   ],
   languages: [
     { language: "Spanish", level: "Native" },
-    { language: "English", level: "Professional" },
+    { language: "English", level: "Proficient" },
   ],
   specializations: [
+    "Agentic AI Systems",
     "Microservices Architecture",
     "Domain Driven Design",
-    "Cloud Architecture",
-    "Agile & Scrum",
+    "Technical Leadership",
   ],
 };

@@ -7,8 +7,33 @@ describe("portfolioData", () => {
 
   it("has the correct title", () => {
     expect(portfolioData.title).toBe(
-      "Technical Lead | Software Architect | Fintech Platforms"
+      "Software Architect | AI & Agentic Systems | Fintech at Scale"
     );
+  });
+
+  it("has a tagline distinct from and shorter than the summary", () => {
+    expect(portfolioData.tagline).toBeTruthy();
+    expect(portfolioData.tagline).not.toBe(portfolioData.summary);
+    expect(portfolioData.tagline.length).toBeLessThan(
+      portfolioData.summary.length
+    );
+  });
+
+  it("leads positioning with AI", () => {
+    expect(portfolioData.title).toContain("AI");
+    expect(portfolioData.specializations[0]).toBe("Agentic AI Systems");
+  });
+
+  it("has four hero stats with unique values (HeroSection keys on value)", () => {
+    expect(portfolioData.heroStats).toHaveLength(4);
+    const values = portfolioData.heroStats.map((s) => s.value);
+    expect(new Set(values).size).toBe(values.length);
+  });
+
+  it("leads the hero stats with experience and closes with the AI metric", () => {
+    expect(portfolioData.heroStats[0].value).toBe("8+");
+    expect(portfolioData.heroStats[3].value).toBe("300%");
+    expect(portfolioData.heroStats[3].label).toBe("AI Efficiency Gain");
   });
 
   it("has valid contact information", () => {

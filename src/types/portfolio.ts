@@ -22,6 +22,11 @@ export interface Achievement {
   description: string;
 }
 
+export interface HeroStat {
+  value: string;
+  label: string;
+}
+
 export interface EducationEntry {
   period: string;
   degree: string;
@@ -36,8 +41,10 @@ export interface LanguageEntry {
 export interface PortfolioData {
   name: string;
   title: string;
+  tagline: string;
   summary: string;
   contact: ContactInfo;
+  heroStats: HeroStat[];
   skillCategories: SkillCategory[];
   experience: ExperienceEntry[];
   achievements: Achievement[];
