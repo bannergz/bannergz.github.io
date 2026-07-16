@@ -10,17 +10,21 @@ describe("SkillsSection", () => {
 
   it("renders all skill categories", () => {
     render(<SkillsSection />);
+    expect(screen.getByText("AI & Agentic Systems")).toBeInTheDocument();
     expect(screen.getByText("Software Architecture")).toBeInTheDocument();
     expect(screen.getByText("Backend & Frameworks")).toBeInTheDocument();
     expect(screen.getByText("Cloud & Infrastructure")).toBeInTheDocument();
     const observabilityElements = screen.getAllByText("Observability");
     expect(observabilityElements.length).toBeGreaterThan(0);
-    expect(screen.getByText("Databases")).toBeInTheDocument();
+    expect(screen.getByText("Data & Persistence")).toBeInTheDocument();
+    expect(screen.getByText("Testing & Quality")).toBeInTheDocument();
     expect(screen.getByText("Engineering Practices")).toBeInTheDocument();
   });
 
   it("renders individual skills", () => {
     render(<SkillsSection />);
+    expect(screen.getByText("Agentic Workflows")).toBeInTheDocument();
+    expect(screen.getByText("Rust")).toBeInTheDocument();
     expect(screen.getByText("Microservices Architecture")).toBeInTheDocument();
     expect(screen.getByText("Java (Spring Boot, Quarkus)")).toBeInTheDocument();
     expect(screen.getByText("AWS")).toBeInTheDocument();
