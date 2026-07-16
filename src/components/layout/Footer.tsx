@@ -1,7 +1,7 @@
 import { portfolioData } from "@/data/portfolio-data";
 
 export function Footer() {
-  const { name, contact } = portfolioData;
+  const { name, title, contact } = portfolioData;
   const currentYear = new Date().getFullYear();
 
   return (
@@ -13,7 +13,7 @@ export function Footer() {
               BG<span className="text-accent-light">.</span>
             </p>
             <p className="mt-1 text-sm text-gray-400">
-              {name} &mdash; Technical Lead & Software Architect
+              {name} &mdash; {title}
             </p>
           </div>
 
