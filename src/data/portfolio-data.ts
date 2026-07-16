@@ -78,7 +78,21 @@ export const portfolioData: PortfolioData = {
   ],
   experience: [
     {
-      period: "Nov 2022 – Present",
+      period: "Jun 2026 – Present",
+      role: "Principal Engineer",
+      company: "YaVendio",
+      highlights: [
+        "Technical leadership of an engineering team responsible for multiple platform capabilities.",
+        "Built a self-updating developer portal aggregating documentation and OpenAPI specifications across 60+ internal services, with automated documentation-health scoring and SSO-gated access.",
+        "Designed an authenticated architecture-documentation platform with C4 modeling, validated in CI on every change.",
+        "Authored the organization's Rust microservice scaffold — hexagonal architecture, persistence, observability bootstrap, and container-based integration testing — adopted as the fleet standard.",
+        "Introduced continuous performance benchmarking across three production services and codified it as an organization-wide engineering standard.",
+        "Contributor to and power user of the internal agentic AI harness — skills, subagents, and safety hooks for Claude-based workflows — used across the engineering organization.",
+        "Daily delivery across a polyglot fleet of Rust, TypeScript, and Python services, spanning backend, frontend, and infrastructure.",
+      ],
+    },
+    {
+      period: "Nov 2022 – Mar 2026",
       role: "Software Technical Lead",
       company: "Yape",
       highlights: [
@@ -98,7 +112,7 @@ export const portfolioData: PortfolioData = {
       company: "Globant Perú",
       highlights: [
         "Technical leadership of the team responsible for core capabilities of the Yape ecosystem.",
-        "Design and development of financial microservices for critical functionalities: Refunds, Profile Management, Blacklisting, Unenrollment, Enterprise Auth.",
+        "Design and development of financial microservices for critical customer experience (CX) functionalities.",
         "Product monitoring using Dynatrace and Kibana tools.",
         "Design of REST APIs for high-volume transaction services.",
         "Development of more than 15 business APIs using microservices architecture.",
@@ -109,7 +123,7 @@ export const portfolioData: PortfolioData = {
     {
       period: "Feb 2020 – Jan 2021",
       role: "Software Application Java Developer",
-      company: "Everis Perú",
+      company: "NTT DATA",
       highlights: [
         "Technical team leader at BCP, achieving quarterly project goals with functionalities such as credit card payments, challenge authentication, and enrollment flows.",
         "Development, testing, and delivery of reactive applications.",
@@ -121,7 +135,7 @@ export const portfolioData: PortfolioData = {
     {
       period: "Apr 2019 – Feb 2020",
       role: "Software University Practices",
-      company: "IBM Perú",
+      company: "IBM",
       highlights: [
         "Development of enterprise solutions for corporate systems.",
         "Development of backend services in Java.",

@@ -51,8 +51,48 @@ describe("portfolioData", () => {
   });
 
   it("has experience entries", () => {
-    expect(portfolioData.experience.length).toBe(4);
-    expect(portfolioData.experience[0].company).toBe("Yape");
+    expect(portfolioData.experience.length).toBe(5);
+    expect(portfolioData.experience[0].company).toBe("YaVendio");
+  });
+
+  it("shows YaVendio as the current role", () => {
+    expect(portfolioData.experience[0].role).toBe("Principal Engineer");
+    expect(portfolioData.experience[0].period).toContain("Present");
+  });
+
+  it("closes the Yape tenure", () => {
+    const yape = portfolioData.experience.find((e) => e.company === "Yape");
+    expect(yape?.period).toBe("Nov 2022 – Mar 2026");
+    expect(yape?.period).not.toContain("Present");
+  });
+
+  it("has exactly one current role", () => {
+    const current = portfolioData.experience.filter((e) =>
+      e.period.includes("Present")
+    );
+    expect(current).toHaveLength(1);
+  });
+
+  it("uses current employer names", () => {
+    const companies = portfolioData.experience.map((e) => e.company);
+    expect(companies).toContain("NTT DATA");
+    expect(companies).not.toContain("Everis Perú");
+  });
+
+  it("has unique company names (ExperienceSection keys on company)", () => {
+    const companies = portfolioData.experience.map((e) => e.company);
+    expect(new Set(companies).size).toBe(companies.length);
+  });
+
+  it("never claims authorship of the internal AI harness", () => {
+    const highlights = portfolioData.experience.flatMap((e) => e.highlights);
+    expect(
+      highlights.some((h) => h.includes("Contributor to and power user of"))
+    ).toBe(true);
+    const harnessClaims = highlights.filter((h) =>
+      /(built|authored|created) the .*harness/i.test(h)
+    );
+    expect(harnessClaims).toEqual([]);
   });
 
   it("has achievements", () => {
