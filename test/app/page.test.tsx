@@ -21,6 +21,7 @@ describe("home page", () => {
     const { container } = render(<Home />);
     const text = container.textContent ?? "";
     expect(text).not.toContain("Technical Lead & Software Architect");
+    expect(text).not.toContain("Technical Lead or Software Architect");
     expect(text).not.toContain("Senior Technical Lead");
     expect(text).not.toContain("Everis");
   });

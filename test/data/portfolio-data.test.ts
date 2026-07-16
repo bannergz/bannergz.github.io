@@ -94,17 +94,27 @@ describe("portfolioData", () => {
     portfolioData.tagline,
     portfolioData.summary,
     ...portfolioData.experience.flatMap((e) => e.highlights),
+    ...portfolioData.achievements.map((a) => a.description),
   ];
 
-  it("hedges the harness as contribution, not authorship", () => {
-    expect(
-      prose().some((p) => p.includes("Contributor to and power user of"))
-    ).toBe(true);
+  // Stated as an invariant rather than a denylist of verbs: any prose that
+  // mentions the harness must carry the hedge. A regex over phrasings cannot
+  // express "never claims authorship" — an earlier version missed "built the
+  // harness" outright, because it demanded a literal "ai" before "harness".
+  it("hedges every mention of the harness as contribution, not authorship", () => {
+    const mentions = prose().filter((p) => /harness/i.test(p));
+    expect(mentions.length).toBeGreaterThan(0);
+    mentions.forEach((p) =>
+      expect(p).toContain("Contributor to and power user of")
+    );
   });
 
-  it("never claims authorship of the harness or the agentic systems", () => {
+  // The harness invariant above cannot catch this one: it claims the systems
+  // without naming the harness. This is how the overclaim was phrased both
+  // times it shipped.
+  it("never claims to have built the agentic systems teams run on", () => {
     const overclaims = prose().filter((p) =>
-      /(build|building|built|authored|creating|created)\s+the\s+(internal\s+)?(agentic\s+)?ai\s+(harness|systems)/i.test(
+      /(build|building|built|develop|developed|authored|creator|creating|created)\s+(of\s+)?the\s+(internal\s+)?agentic\s+ai\s+system/i.test(
         p
       )
     );
