@@ -108,7 +108,8 @@
   }
 
   .animate-fade-in,
-  .animate-slide-up {
+  .animate-slide-up,
+  .animate-pulse {
     animation: none;
     opacity: 1;
     transform: none;

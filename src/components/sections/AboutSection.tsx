@@ -13,10 +13,10 @@ export function AboutSection() {
             </h2>
             <p className="text-lg leading-relaxed text-text-muted">{summary}</p>
             <p className="mt-4 text-lg leading-relaxed text-text-muted">
-              I am interested in Senior Technical Lead or Software Architect
-              roles in fintech or digital banking organizations where I can
-              leverage my expertise in designing resilient, scalable systems
-              that serve millions of users.
+              I&apos;m open to Principal Engineer, Staff Engineer, or Software
+              Architect roles where agentic AI and distributed-systems rigor
+              meet — particularly in fintech or platform organizations
+              operating at scale.
             </p>
 
             <div className="mt-8">

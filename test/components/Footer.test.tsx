@@ -12,4 +12,11 @@ describe("Footer", () => {
     const { container } = render(<Footer />);
     expect(container.textContent).toContain(portfolioData.name);
   });
+
+  it("carries no stale hardcoded role", () => {
+    const { container } = render(<Footer />);
+    expect(container.textContent).not.toContain(
+      "Technical Lead & Software Architect"
+    );
+  });
 });

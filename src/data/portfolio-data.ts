@@ -4,7 +4,7 @@ export const portfolioData: PortfolioData = {
   name: "Banner Gonzales",
   title: "Software Architect | AI & Agentic Systems | Fintech at Scale",
   tagline:
-    "I architect fintech platforms for millions of users — and build the agentic AI systems engineering teams run on.",
+    "I architect fintech platforms for millions of users — and build the developer platforms and AI workflows engineering teams run on.",
   summary:
     "Systems Engineer with over 8 years architecting high-traffic financial platforms, now building the agentic AI systems and developer platforms that engineering teams run on. Principal Engineer at YaVendio, working across a polyglot fleet of Rust, TypeScript, and Python services. Previously Technical Lead at Yape, where I led the design of microservices and event-driven systems serving millions of users within the BCP financial ecosystem. I work where distributed-systems rigor meets agentic AI: spec-driven development, multi-agent workflows, and platforms that make teams measurably faster.",
   contact: {
