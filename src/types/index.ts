@@ -1,9 +1,10 @@
-export type { 
-  ContactInfo, 
-  SkillCategory, 
-  ExperienceEntry, 
-  Achievement, 
-  EducationEntry, 
-  LanguageEntry, 
-  PortfolioData 
+export type {
+  ContactInfo,
+  SkillCategory,
+  ExperienceEntry,
+  Achievement,
+  HeroStat,
+  EducationEntry,
+  LanguageEntry,
+  PortfolioData
 } from "./portfolio";

@@ -2,15 +2,38 @@ import type { PortfolioData } from "@/types";
 
 export const portfolioData: PortfolioData = {
   name: "Banner Gonzales",
-  title: "Technical Lead | Software Architect | Fintech Platforms",
+  title: "Software Architect | AI & Agentic Systems | Fintech at Scale",
+  tagline:
+    "I architect fintech platforms for millions of users — and build the developer platforms and AI workflows engineering teams run on.",
   summary:
-    "Systems Engineer with over 8 years of experience in the development and technical leadership of high-traffic financial platforms. Specialized in the design of microservices architectures, event-driven systems, and scalable cloud platforms. Currently a Technical Lead at Yape, leading engineering teams and the design of critical solutions used by millions of users within the BCP financial ecosystem. Strong focus on scalability, performance, and resilience in distributed systems.",
+    "Systems Engineer with over 8 years architecting high-traffic financial platforms, now building the developer platforms and AI workflows that engineering teams run on. Principal Engineer at YaVendio, working across a polyglot fleet of Rust, TypeScript, and Python services. Previously Technical Lead at Yape, where I led the design of microservices and event-driven systems serving millions of users within the BCP financial ecosystem. I work where distributed-systems rigor meets agentic AI: spec-driven development, multi-agent workflows, and platforms that make teams measurably faster.",
   contact: {
     email: "bannergz1999@gmail.com",
     phone: "+51 994 486 755",
     linkedin: "linkedin.com/in/bannergz",
   },
+  heroStats: [
+    { value: "8+", label: "Years Experience" },
+    { value: "20+", label: "Enterprise APIs" },
+    { value: "Millions", label: "Users Impacted" },
+    { value: "300%", label: "AI Efficiency Gain" },
+  ],
   skillCategories: [
+    {
+      title: "AI & Agentic Systems",
+      icon: "🤖",
+      skills: [
+        "Agentic Workflows",
+        "Multi-Agent Orchestration",
+        "Claude / LLM Integration",
+        "LangChain",
+        "LangGraph",
+        "RAG",
+        "Spec-Driven Development",
+        "MCP (Model Context Protocol)",
+        "AI Code Review",
+      ],
+    },
     {
       title: "Software Architecture",
       icon: "🏗️",
@@ -29,9 +52,11 @@ export const portfolioData: PortfolioData = {
       title: "Backend & Frameworks",
       icon: "⚙️",
       skills: [
+        "Rust",
         "Java (Spring Boot, Quarkus)",
         "NodeJS / NestJS",
-        "Reactive Programming (RxJava)",
+        "Python",
+        "Reactive Programming (RxJava, WebFlux)",
         "Functional Programming",
       ],
     },
@@ -46,7 +71,7 @@ export const portfolioData: PortfolioData = {
       skills: ["Datadog", "Dynatrace", "Kibana", "PagerDuty", "Grafana"],
     },
     {
-      title: "Databases",
+      title: "Data & Persistence",
       icon: "🗄️",
       skills: [
         "PostgreSQL",
@@ -55,6 +80,25 @@ export const portfolioData: PortfolioData = {
         "SQL Server",
         "DB2",
         "CosmosDB",
+        "Redis",
+        "Caffeine",
+        "Prisma",
+        "Hibernate",
+        "Flyway",
+      ],
+    },
+    {
+      title: "Testing & Quality",
+      icon: "🧪",
+      skills: [
+        "JUnit5",
+        "Mockito",
+        "Jest",
+        "Testcontainers",
+        "SonarQube",
+        "Checkstyle",
+        "Fortify",
+        "Continuous Benchmarking",
       ],
     },
     {
@@ -70,7 +114,21 @@ export const portfolioData: PortfolioData = {
   ],
   experience: [
     {
-      period: "Nov 2022 – Present",
+      period: "Jun 2026 – Present",
+      role: "Principal Engineer",
+      company: "YaVendio",
+      highlights: [
+        "Technical leadership of an engineering team responsible for multiple platform capabilities.",
+        "Built a self-updating developer portal aggregating documentation and OpenAPI specifications across 60+ internal services, with automated documentation-health scoring and SSO-gated access.",
+        "Designed an authenticated architecture-documentation platform with C4 modeling, validated in CI on every change.",
+        "Authored the organization's Rust microservice scaffold — hexagonal architecture, persistence, observability bootstrap, and container-based integration testing — adopted as the fleet standard.",
+        "Introduced continuous performance benchmarking across three production services and codified it as an organization-wide engineering standard.",
+        "Contributor to and power user of the internal agentic AI harness — skills, subagents, and safety hooks for Claude-based workflows — used across the engineering organization.",
+        "Daily delivery across a polyglot fleet of Rust, TypeScript, and Python services, spanning backend, frontend, and infrastructure.",
+      ],
+    },
+    {
+      period: "Nov 2022 – Mar 2026",
       role: "Software Technical Lead",
       company: "Yape",
       highlights: [
@@ -90,7 +148,7 @@ export const portfolioData: PortfolioData = {
       company: "Globant Perú",
       highlights: [
         "Technical leadership of the team responsible for core capabilities of the Yape ecosystem.",
-        "Design and development of financial microservices for critical functionalities: Refunds, Profile Management, Blacklisting, Unenrollment, Enterprise Auth.",
+        "Design and development of financial microservices for critical customer experience (CX) functionalities.",
         "Product monitoring using Dynatrace and Kibana tools.",
         "Design of REST APIs for high-volume transaction services.",
         "Development of more than 15 business APIs using microservices architecture.",
@@ -101,7 +159,7 @@ export const portfolioData: PortfolioData = {
     {
       period: "Feb 2020 – Jan 2021",
       role: "Software Application Java Developer",
-      company: "Everis Perú",
+      company: "NTT DATA",
       highlights: [
         "Technical team leader at BCP, achieving quarterly project goals with functionalities such as credit card payments, challenge authentication, and enrollment flows.",
         "Development, testing, and delivery of reactive applications.",
@@ -113,7 +171,7 @@ export const portfolioData: PortfolioData = {
     {
       period: "Apr 2019 – Feb 2020",
       role: "Software University Practices",
-      company: "IBM Perú",
+      company: "IBM",
       highlights: [
         "Development of enterprise solutions for corporate systems.",
         "Development of backend services in Java.",
@@ -126,28 +184,27 @@ export const portfolioData: PortfolioData = {
   ],
   achievements: [
     {
-      metric: "Millions",
-      description:
-        "Users impacted by technological solutions designed and implemented on Yape.",
-    },
-    {
-      metric: "20+",
-      description:
-        "Enterprise APIs developed using microservices architecture.",
-    },
-    {
       metric: "5x",
       description: "Optimization of applications and products.",
     },
     {
       metric: "250%",
-      description:
-        "Efficiency improvement in the customer service process.",
+      description: "Efficiency improvement in the customer service process.",
     },
     {
       metric: "19+",
       description:
         "APIs managed in production integrated with BCP's financial systems.",
+    },
+    {
+      metric: "60+",
+      description:
+        "Internal services aggregated into a self-updating developer documentation portal with automated health scoring.",
+    },
+    {
+      metric: "Org-wide",
+      description:
+        "Continuous performance benchmarking introduced across production services and codified as an engineering standard.",
     },
   ],
   education: [
@@ -159,12 +216,12 @@ export const portfolioData: PortfolioData = {
   ],
   languages: [
     { language: "Spanish", level: "Native" },
-    { language: "English", level: "Professional" },
+    { language: "English", level: "Proficient" },
   ],
   specializations: [
+    "Agentic AI Systems",
     "Microservices Architecture",
     "Domain Driven Design",
-    "Cloud Architecture",
-    "Agile & Scrum",
+    "Technical Leadership",
   ],
 };

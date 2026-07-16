@@ -20,9 +20,9 @@ export function ContactSection() {
             Let&apos;s Work <span className="text-accent-light">Together</span>
           </h2>
           <p className="mt-4 text-lg text-gray-300">
-            Looking for a Technical Lead or Software Architect to drive your
-            engineering team? I&apos;d love to discuss how I can contribute to
-            your organization&apos;s success.
+            Looking for a Principal Engineer or Software Architect to drive
+            your platform and AI strategy? I&apos;d love to discuss how I can
+            contribute to your organization&apos;s success.
           </p>
 
           <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">

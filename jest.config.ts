@@ -14,6 +14,8 @@ const config: Config = {
   },
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
+    "^next/font/google$": "<rootDir>/test/mocks/next-font.ts",
+    "\\.css$": "<rootDir>/test/mocks/style-mock.ts",
   },
   setupFilesAfterEnv: ["<rootDir>/test/setup.ts"],
 };
