@@ -6,7 +6,7 @@ export const portfolioData: PortfolioData = {
   tagline:
     "I architect fintech platforms for millions of users — and build the developer platforms and AI workflows engineering teams run on.",
   summary:
-    "Systems Engineer with over 8 years architecting high-traffic financial platforms, now building the agentic AI systems and developer platforms that engineering teams run on. Principal Engineer at YaVendio, working across a polyglot fleet of Rust, TypeScript, and Python services. Previously Technical Lead at Yape, where I led the design of microservices and event-driven systems serving millions of users within the BCP financial ecosystem. I work where distributed-systems rigor meets agentic AI: spec-driven development, multi-agent workflows, and platforms that make teams measurably faster.",
+    "Systems Engineer with over 8 years architecting high-traffic financial platforms, now building the developer platforms and AI workflows that engineering teams run on. Principal Engineer at YaVendio, working across a polyglot fleet of Rust, TypeScript, and Python services. Previously Technical Lead at Yape, where I led the design of microservices and event-driven systems serving millions of users within the BCP financial ecosystem. I work where distributed-systems rigor meets agentic AI: spec-driven development, multi-agent workflows, and platforms that make teams measurably faster.",
   contact: {
     email: "bannergz1999@gmail.com",
     phone: "+51 994 486 755",

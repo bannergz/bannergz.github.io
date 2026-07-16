@@ -84,15 +84,31 @@ describe("portfolioData", () => {
     expect(new Set(companies).size).toBe(companies.length);
   });
 
-  it("never claims authorship of the internal AI harness", () => {
-    const highlights = portfolioData.experience.flatMap((e) => e.highlights);
+  // The agentic AI harness engineering teams run on was authored by a
+  // colleague; Banner is contributor #2. Copy may claim the AI workflows and
+  // developer platforms he did author — never the harness or the systems
+  // themselves. Scans every user-facing prose field, not just highlights: the
+  // first version of this guard read highlights only, and an identical
+  // overclaim shipped in `summary` because nothing was looking there.
+  const prose = () => [
+    portfolioData.tagline,
+    portfolioData.summary,
+    ...portfolioData.experience.flatMap((e) => e.highlights),
+  ];
+
+  it("hedges the harness as contribution, not authorship", () => {
     expect(
-      highlights.some((h) => h.includes("Contributor to and power user of"))
+      prose().some((p) => p.includes("Contributor to and power user of"))
     ).toBe(true);
-    const harnessClaims = highlights.filter((h) =>
-      /(built|authored|created) the .*harness/i.test(h)
+  });
+
+  it("never claims authorship of the harness or the agentic systems", () => {
+    const overclaims = prose().filter((p) =>
+      /(build|building|built|authored|creating|created)\s+the\s+(internal\s+)?(agentic\s+)?ai\s+(harness|systems)/i.test(
+        p
+      )
     );
-    expect(harnessClaims).toEqual([]);
+    expect(overclaims).toEqual([]);
   });
 
   it("has exactly five achievements (AchievementsSection renders xl:grid-cols-5)", () => {
