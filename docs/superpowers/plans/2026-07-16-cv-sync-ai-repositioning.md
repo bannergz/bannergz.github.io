@@ -259,13 +259,21 @@ In `test/data/portfolio-data.test.ts`, replace the existing `"has experience ent
     const companies = portfolioData.experience.map((e) => e.company);
     expect(new Set(companies).size).toBe(companies.length);
   });
+```
+
+The attribution test below must run per-highlight, not over the joined string. Joining and regex-matching lets a greedy `.*` span unrelated bullets: the permitted "Authored the organization's Rust microservice scaffold…" would concatenate with the correctly-hedged "…the internal agentic AI harness…" bullet and match, failing on correct data.
+
+```ts
 
   it("never claims authorship of the internal AI harness", () => {
-    const allHighlights = portfolioData.experience
-      .flatMap((e) => e.highlights)
-      .join(" ");
-    expect(allHighlights).toContain("Contributor to and power user of");
-    expect(allHighlights).not.toMatch(/(built|authored|created) the .*harness/i);
+    const highlights = portfolioData.experience.flatMap((e) => e.highlights);
+    expect(
+      highlights.some((h) => h.includes("Contributor to and power user of"))
+    ).toBe(true);
+    const harnessClaims = highlights.filter((h) =>
+      /(built|authored|created) the .*harness/i.test(h)
+    );
+    expect(harnessClaims).toEqual([]);
   });
 ```
 
