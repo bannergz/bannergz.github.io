@@ -17,7 +17,7 @@
 - **Never invent experience.** Every bullet traces to the CV PDF or to verified git evidence. If a claim cannot be sourced, drop it.
 - **Dashes:** periods use the en dash `–` (U+2013), matching existing data (`"Nov 2022 – Present"`). The tagline uses an em dash `—` (U+2014).
 - **Tests ship in the same commit as the code they cover.** Never a follow-up commit.
-- **Every commit leaves `rtk npm test` green.** Data changes in Tasks 1–3 break assertions in component tests owned by later tasks; each task fixes the assertions it breaks rather than deferring them. CI (lint + test + build) must pass at every commit.
+- **Every commit leaves `rtk npm.cmd test` green.** Data changes in Tasks 1–3 break assertions in component tests owned by later tasks; each task fixes the assertions it breaks rather than deferring them. CI (lint + test + build) must pass at every commit.
 - **Branch:** `feat/cv-sync-ai-repositioning`. Never commit to `develop` or `main`.
 - **Component keys are load-bearing.** `ExperienceSection` keys on `entry.company`, `SkillsSection` on `category.title`, `AchievementsSection` on `achievement.metric`, and `HeroSection` (after Task 5) on `stat.value`. All four must stay unique.
 - **No metric appears in both `heroStats` and `achievements`.** Each number earns its place once. Task 3 enforces this with a test.
@@ -82,7 +82,7 @@ In `test/data/portfolio-data.test.ts`, replace the existing `"has the correct ti
 
 - [ ] **Step 2: Run tests to verify they fail**
 
-Run: `rtk npx jest test/data/portfolio-data.test.ts`
+Run: `rtk npx.cmd jest test/data/portfolio-data.test.ts`
 Expected: FAIL. `title` mismatch, and TypeScript errors on `portfolioData.tagline` and `portfolioData.heroStats` — neither property exists yet.
 
 - [ ] **Step 3: Add `tagline` and `heroStats` to the types**
@@ -194,7 +194,7 @@ Touch nothing else in that file — the Hero component itself is Task 5's.
 
 - [ ] **Step 7: Run the full suite to verify it passes**
 
-Run: `rtk npm test`
+Run: `rtk npm.cmd test`
 Expected: all suites PASS.
 
 - [ ] **Step 8: Commit**
@@ -303,7 +303,7 @@ The `"Software Technical Lead"` count stays at 2 (Yape + Globant) — YaVendio i
 
 - [ ] **Step 3: Run tests to verify they fail**
 
-Run: `rtk npx jest test/data/portfolio-data.test.ts test/components/ExperienceSection.test.tsx`
+Run: `rtk npx.cmd jest test/data/portfolio-data.test.ts test/components/ExperienceSection.test.tsx`
 Expected: FAIL. Data: `expect(received).toBe(expected) // Expected: 5, Received: 4`. Component: unable to find text `"YaVendio"` / `"NTT DATA"`.
 
 - [ ] **Step 4: Update the experience data**
@@ -387,7 +387,7 @@ Note the Globant highlight 2 change: the previously-named internal Yape capabili
 
 - [ ] **Step 5: Run tests to verify they pass**
 
-Run: `rtk npx jest test/data/portfolio-data.test.ts test/components/ExperienceSection.test.tsx`
+Run: `rtk npx.cmd jest test/data/portfolio-data.test.ts test/components/ExperienceSection.test.tsx`
 Expected: PASS.
 
 - [ ] **Step 6: Commit**
@@ -504,7 +504,7 @@ In `test/data/portfolio-data.test.ts`, replace the existing `"has achievements"`
 
 - [ ] **Step 4: Run tests to verify they fail**
 
-Run: `rtk npx jest test/data/portfolio-data.test.ts test/components/SkillsSection.test.tsx test/components/AchievementsSection.test.tsx`
+Run: `rtk npx.cmd jest test/data/portfolio-data.test.ts test/components/SkillsSection.test.tsx test/components/AchievementsSection.test.tsx`
 Expected: FAIL. Data: `skillCategories[0].title` is `"Software Architecture"`, and `"does not repeat the hero stats"` fails because `"Millions"` and `"20+"` are still achievements. Components: unable to find `"AI & Agentic Systems"`, `"Data & Persistence"`, `"60+"`, `"Org-wide"`.
 
 - [ ] **Step 5: Replace skillCategories**
@@ -644,7 +644,7 @@ In the same file, replace the whole `achievements: [...]` array with:
 
 - [ ] **Step 7: Run tests to verify they pass**
 
-Run: `rtk npx jest test/data/portfolio-data.test.ts test/components/SkillsSection.test.tsx test/components/AchievementsSection.test.tsx`
+Run: `rtk npx.cmd jest test/data/portfolio-data.test.ts test/components/SkillsSection.test.tsx test/components/AchievementsSection.test.tsx`
 Expected: PASS.
 
 - [ ] **Step 8: Commit**
@@ -733,7 +733,7 @@ describe("root metadata", () => {
 
 - [ ] **Step 4: Run the test to verify it fails**
 
-Run: `rtk npx jest test/app/metadata.test.ts`
+Run: `rtk npx.cmd jest test/app/metadata.test.ts`
 Expected: FAIL with `metadata` undefined — `layout.tsx` is a Client Component and exports no metadata.
 
 - [ ] **Step 5: Rewrite layout.tsx**
@@ -821,12 +821,12 @@ Note: no `width`/`height` on the OG image. `BannerGonzalesWhite.png` is a 12 KB 
 
 - [ ] **Step 6: Run the test to verify it passes**
 
-Run: `rtk npx jest test/app/metadata.test.ts`
+Run: `rtk npx.cmd jest test/app/metadata.test.ts`
 Expected: PASS.
 
 - [ ] **Step 7: Verify the build still exports statically**
 
-Run: `rtk npm run build`
+Run: `rtk npm.cmd run build`
 Expected: build succeeds. `layout.tsx` is now a Server Component; `layout-content.tsx` carries `"use client"` and owns the `usePathname` call.
 
 - [ ] **Step 8: Verify the metadata actually renders**
@@ -924,7 +924,7 @@ The first test drives the values from the data, so it cannot go stale. The secon
 
 - [ ] **Step 2: Run tests to verify they fail**
 
-Run: `rtk npx jest test/components/HeroSection.test.tsx`
+Run: `rtk npx.cmd jest test/components/HeroSection.test.tsx`
 Expected: FAIL on the title, tagline, `Download CV`/`LinkedIn profile`, `View Experience`, and `300%` assertions.
 
 - [ ] **Step 3: Render the tagline instead of the summary**
@@ -1018,7 +1018,7 @@ The four stat tiles are hardcoded in JSX today — the same drift bug Task 6 fix
 
 - [ ] **Step 6: Run tests to verify they pass**
 
-Run: `rtk npx jest test/components/HeroSection.test.tsx`
+Run: `rtk npx.cmd jest test/components/HeroSection.test.tsx`
 Expected: PASS.
 
 - [ ] **Step 7: Commit**
@@ -1066,7 +1066,7 @@ describe("Footer", () => {
 
 - [ ] **Step 2: Run the test to verify it fails**
 
-Run: `rtk npx jest test/components/Footer.test.tsx`
+Run: `rtk npx.cmd jest test/components/Footer.test.tsx`
 Expected: FAIL — the footer renders the hardcoded `"Technical Lead & Software Architect"`, not `portfolioData.title`.
 
 - [ ] **Step 3: Read the title from data**
@@ -1087,7 +1087,7 @@ and replace the paragraph containing the hardcoded `"Technical Lead & Software A
 
 - [ ] **Step 4: Run the test to verify it passes**
 
-Run: `rtk npx jest test/components/Footer.test.tsx`
+Run: `rtk npx.cmd jest test/components/Footer.test.tsx`
 Expected: PASS.
 
 - [ ] **Step 5: Commit**
@@ -1133,7 +1133,7 @@ The placement is load-bearing. Unlayered CSS wins over layered CSS in the cascad
 
 - [ ] **Step 2: Verify in the browser**
 
-Run: `rtk npm run dev`
+Run: `rtk npm.cmd run dev`
 
 In Chrome DevTools: open the Command Menu (Ctrl+Shift+P) → "Show Rendering" → set **Emulate CSS media feature prefers-reduced-motion** to `reduce`. Reload.
 
@@ -1156,17 +1156,17 @@ rtk git commit -m "fix: respect prefers-reduced-motion for animations and scroll
 
 - [ ] **Step 1: Run the full test suite**
 
-Run: `rtk npm test`
+Run: `rtk npm.cmd test`
 Expected: all suites PASS.
 
 - [ ] **Step 2: Lint**
 
-Run: `rtk npm run lint`
+Run: `rtk npm.cmd run lint`
 Expected: no errors.
 
 - [ ] **Step 3: Build**
 
-Run: `rtk npm run build`
+Run: `rtk npm.cmd run build`
 Expected: success, static export to `out/`.
 
 - [ ] **Step 4: Verify the rendered output**
@@ -1175,7 +1175,7 @@ Confirm `out/index.html` contains: a `<title>` with "Banner Gonzales", an `og:ti
 
 - [ ] **Step 5: Eyeball it**
 
-Run: `rtk npm run dev` and load `http://localhost:3000`.
+Run: `rtk npm.cmd run dev` and load `http://localhost:3000`.
 
 Check: hero shows one primary CTA; the tagline is short and the long summary appears only in About; the timeline shows YaVendio first with the "Current" badge and Yape without it; no metric appears in both the hero stats bar and Achievements; Skills leads with the AI card.
 
