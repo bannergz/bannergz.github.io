@@ -99,3 +99,18 @@
     }
   }
 }
+
+/* Unlayered: must beat Tailwind's scroll-smooth utility and the animation
+   utilities above, both of which live in cascade layers. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .animate-fade-in,
+  .animate-slide-up {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
