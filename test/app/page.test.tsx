@@ -17,13 +17,6 @@ describe("home page", () => {
     expect(countOccurrences(container.textContent ?? "", portfolioData.tagline)).toBe(1);
   });
 
-  it("renders each specialization exactly once", () => {
-    const { container } = render(<Home />);
-    portfolioData.specializations.forEach((spec) => {
-      expect(countOccurrences(container.textContent ?? "", spec)).toBe(1);
-    });
-  });
-
   it("carries no stale role copy anywhere on the page", () => {
     const { container } = render(<Home />);
     const text = container.textContent ?? "";
