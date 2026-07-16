@@ -19,22 +19,29 @@
 - **Tests ship in the same commit as the code they cover.** Never a follow-up commit.
 - **Every commit leaves `rtk npm test` green.** Data changes in Tasks 1–3 break assertions in component tests owned by later tasks; each task fixes the assertions it breaks rather than deferring them. CI (lint + test + build) must pass at every commit.
 - **Branch:** `feat/cv-sync-ai-repositioning`. Never commit to `develop` or `main`.
-- **Component keys are load-bearing.** `ExperienceSection` keys on `entry.company`, `SkillsSection` on `category.title`, `AchievementsSection` on `achievement.metric`. All three must stay unique.
+- **Component keys are load-bearing.** `ExperienceSection` keys on `entry.company`, `SkillsSection` on `category.title`, `AchievementsSection` on `achievement.metric`, and `HeroSection` (after Task 5) on `stat.value`. All four must stay unique.
+- **No metric appears in both `heroStats` and `achievements`.** Each number earns its place once. Task 3 enforces this with a test.
+- **Spec amendment (approved):** the spec scoped hero stats out of the data layer; this plan moves them in (Task 1 + Task 5). Everything else in the spec governs as written.
 
 ---
 
 ### Task 1: Identity & positioning data
 
-Adds the `tagline` field that resolves the duplicated-paragraph defect (Hero and About both render `summary` today), and flips the title/specializations to AI-forward.
+Adds the `tagline` field that resolves the duplicated-paragraph defect (Hero and About both render `summary` today), flips the title/specializations to AI-forward, and lifts the hero stats out of JSX into the data layer.
+
+The `heroStats` move is a deliberate amendment to the spec, which had scoped it out. Without it, Task 3's de-duplication test would have to hand-copy the hero's values into a magic array and could never actually detect drift — and leaving the hero hardcoded while Task 6 fixes the identical bug in the Footer would be incoherent.
 
 **Files:**
-- Modify: `src/types/portfolio.ts:36-47`
-- Modify: `src/data/portfolio-data.ts:3-12`, `:160-169`
+- Modify: `src/types/portfolio.ts` — the `PortfolioData` interface
+- Modify: `src/data/portfolio-data.ts` — the `name`/`title`/`summary` block, plus the `languages` and `specializations` arrays
 - Test: `test/data/portfolio-data.test.ts`
+- Test: `test/components/HeroSection.test.tsx` (title assertion only)
 
 **Interfaces:**
 - Consumes: nothing (first task).
-- Produces: `PortfolioData.tagline: string` — read by `HeroSection` (Task 5) and by `metadata.description` (Task 4). `PortfolioData.summary` stays `string` and becomes About-only.
+- Produces:
+  - `PortfolioData.tagline: string` — read by `HeroSection` (Task 5) and by `metadata.description` (Task 4). `PortfolioData.summary` stays `string` and becomes About-only.
+  - `HeroStat { value: string; label: string }` and `PortfolioData.heroStats: HeroStat[]` — compared against `achievements` in Task 3, rendered by `HeroSection` in Task 5.
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -59,16 +66,37 @@ In `test/data/portfolio-data.test.ts`, replace the existing `"has the correct ti
     expect(portfolioData.title).toContain("AI");
     expect(portfolioData.specializations[0]).toBe("Agentic AI Systems");
   });
+
+  it("has four hero stats with unique values (HeroSection keys on value)", () => {
+    expect(portfolioData.heroStats).toHaveLength(4);
+    const values = portfolioData.heroStats.map((s) => s.value);
+    expect(new Set(values).size).toBe(values.length);
+  });
+
+  it("leads the hero stats with experience and closes with the AI metric", () => {
+    expect(portfolioData.heroStats[0].value).toBe("8+");
+    expect(portfolioData.heroStats[3].value).toBe("300%");
+    expect(portfolioData.heroStats[3].label).toBe("AI Efficiency Gain");
+  });
 ```
 
 - [ ] **Step 2: Run tests to verify they fail**
 
 Run: `rtk npx jest test/data/portfolio-data.test.ts`
-Expected: FAIL. `title` mismatch, and TypeScript errors on `portfolioData.tagline` — the property does not exist yet.
+Expected: FAIL. `title` mismatch, and TypeScript errors on `portfolioData.tagline` and `portfolioData.heroStats` — neither property exists yet.
 
-- [ ] **Step 3: Add `tagline` to the type**
+- [ ] **Step 3: Add `tagline` and `heroStats` to the types**
 
-In `src/types/portfolio.ts`, add one line to `PortfolioData` between `title` and `summary`:
+In `src/types/portfolio.ts`, add the `HeroStat` interface above `PortfolioData` (place it after the existing `Achievement` interface, matching the file's convention of one interface per concept):
+
+```ts
+export interface HeroStat {
+  value: string;
+  label: string;
+}
+```
+
+Then add `tagline` and `heroStats` to `PortfolioData`:
 
 ```ts
 export interface PortfolioData {
@@ -77,6 +105,7 @@ export interface PortfolioData {
   tagline: string;
   summary: string;
   contact: ContactInfo;
+  heroStats: HeroStat[];
   skillCategories: SkillCategory[];
   experience: ExperienceEntry[];
   achievements: Achievement[];
@@ -86,9 +115,26 @@ export interface PortfolioData {
 }
 ```
 
-- [ ] **Step 4: Update the data**
+- [ ] **Step 4: Re-export `HeroStat` from the types barrel**
 
-In `src/data/portfolio-data.ts`, replace lines 4–7 (`name` through `summary`) with:
+`src/types/index.ts` names every type explicitly — there is no wildcard, so a new type is invisible to `@/types` consumers until it is listed. Task 5 imports `HeroStat` from `@/types` and would fail to compile without this. Replace the export block with:
+
+```ts
+export type {
+  ContactInfo,
+  SkillCategory,
+  ExperienceEntry,
+  Achievement,
+  HeroStat,
+  EducationEntry,
+  LanguageEntry,
+  PortfolioData
+} from "./portfolio";
+```
+
+- [ ] **Step 5: Update the data**
+
+In `src/data/portfolio-data.ts`, replace the `name` / `title` / `summary` block (the first three properties of the object) with:
 
 ```ts
   name: "Banner Gonzales",
@@ -99,7 +145,22 @@ In `src/data/portfolio-data.ts`, replace lines 4–7 (`name` through `summary`) 
     "Systems Engineer with over 8 years architecting high-traffic financial platforms, now building the agentic AI systems and developer platforms that engineering teams run on. Principal Engineer at YaVendio, working across a polyglot fleet of Rust, TypeScript, and Python services. Previously Technical Lead at Yape, where I led the design of microservices and event-driven systems serving millions of users within the BCP financial ecosystem. I work where distributed-systems rigor meets agentic AI: spec-driven development, multi-agent workflows, and platforms that make teams measurably faster.",
 ```
 
-Then replace the `languages` and `specializations` blocks (lines 160–169) with:
+Next, insert `heroStats` immediately after the `contact` object and before `skillCategories`, matching the property order declared on the interface:
+
+```ts
+  heroStats: [
+    { value: "8+", label: "Years Experience" },
+    { value: "20+", label: "Enterprise APIs" },
+    { value: "Millions", label: "Users Impacted" },
+    { value: "300%", label: "AI Efficiency Gain" },
+  ],
+```
+
+These are the values the Hero renders today except the last: `5x` / `App Optimization` becomes `300%` / `AI Efficiency Gain`. `5x` is not lost — it stays in Achievements. The `300%` figure comes from the CV's YaVendio bullet, and promoting it here is what puts the AI positioning above the fold.
+
+The Hero component still hardcodes its own stats until Task 5; that is expected. Nothing asserts the coupling until then.
+
+Then replace the `languages` and `specializations` arrays (the last two properties of the object) with:
 
 ```ts
   languages: [
@@ -114,7 +175,7 @@ Then replace the `languages` and `specializations` blocks (lines 160–169) with
   ],
 ```
 
-- [ ] **Step 5: Keep the Hero test green**
+- [ ] **Step 6: Keep the Hero test green**
 
 Changing `title` breaks the title assertion in `test/components/HeroSection.test.tsx`. Task 5 rewrites that file wholesale, but leaving it red here would mean four consecutive commits with a failing suite and red CI. Every commit stays green. Update just that one assertion now:
 
@@ -131,16 +192,16 @@ Changing `title` breaks the title assertion in `test/components/HeroSection.test
 
 Touch nothing else in that file — the Hero component itself is Task 5's.
 
-- [ ] **Step 6: Run the full suite to verify it passes**
+- [ ] **Step 7: Run the full suite to verify it passes**
 
 Run: `rtk npm test`
 Expected: all suites PASS.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 8: Commit**
 
 ```bash
-rtk git add src/types/portfolio.ts src/data/portfolio-data.ts test/data/portfolio-data.test.ts test/components/HeroSection.test.tsx
-rtk git commit -m "feat: add tagline field and reposition title AI-forward"
+rtk git add src/types/portfolio.ts src/types/index.ts src/data/portfolio-data.ts test/data/portfolio-data.test.ts test/components/HeroSection.test.tsx
+rtk git commit -m "feat: add tagline and heroStats to data, reposition title AI-forward"
 ```
 
 ---
@@ -150,9 +211,11 @@ rtk git commit -m "feat: add tagline field and reposition title AI-forward"
 The factual core: a new current role, a closed Yape tenure, and two renamed employers.
 
 **Files:**
-- Modify: `src/data/portfolio-data.ts:71-126`
+- Modify: `src/data/portfolio-data.ts` — the `experience` array
 - Test: `test/data/portfolio-data.test.ts`
 - Test: `test/components/ExperienceSection.test.tsx` (asserts `"Everis Perú"` and `"IBM Perú"` today — this task renames both)
+
+Line numbers are deliberately omitted: Task 1 already shifted this file. Anchor on the property name.
 
 **Interfaces:**
 - Consumes: `ExperienceEntry` from `src/types/portfolio.ts` (unchanged shape: `period`, `role`, `company`, `highlights`).
@@ -245,7 +308,7 @@ Expected: FAIL. Data: `expect(received).toBe(expected) // Expected: 5, Received:
 
 - [ ] **Step 4: Update the experience data**
 
-In `src/data/portfolio-data.ts`, replace the whole `experience: [...]` array (lines 71–126) with:
+In `src/data/portfolio-data.ts`, replace the whole `experience: [...]` array with:
 
 ```ts
   experience: [
@@ -341,7 +404,7 @@ rtk git commit -m "feat: sync experience with updated CV (YaVendio, Yape end dat
 Adds the AI skill category in first position, and de-duplicates Achievements against the Hero stats bar.
 
 **Files:**
-- Modify: `src/data/portfolio-data.ts:13-70` (skillCategories), `:127-152` (achievements)
+- Modify: `src/data/portfolio-data.ts` — the `skillCategories` and `achievements` arrays
 - Test: `test/data/portfolio-data.test.ts`
 - Test: `test/components/SkillsSection.test.tsx` (asserts `"Databases"` today — this task renames it)
 - Test: `test/components/AchievementsSection.test.tsx` (asserts `"Millions"` and `"20+"` today — this task removes both)
@@ -365,9 +428,10 @@ In `test/data/portfolio-data.test.ts`, replace the existing `"has achievements"`
   });
 
   it("does not repeat the hero stats in achievements", () => {
-    const HERO_STATS = ["8+", "20+", "Millions", "300%"];
+    const heroValues = portfolioData.heroStats.map((s) => s.value);
     const metrics = portfolioData.achievements.map((a) => a.metric);
-    HERO_STATS.forEach((stat) => expect(metrics).not.toContain(stat));
+    const overlap = metrics.filter((m) => heroValues.includes(m));
+    expect(overlap).toEqual([]);
   });
 
   it("leads skills with the AI category", () => {
@@ -445,7 +509,7 @@ Expected: FAIL. Data: `skillCategories[0].title` is `"Software Architecture"`, a
 
 - [ ] **Step 5: Replace skillCategories**
 
-In `src/data/portfolio-data.ts`, replace the whole `skillCategories: [...]` array (lines 13–70) with:
+In `src/data/portfolio-data.ts`, replace the whole `skillCategories: [...]` array with:
 
 ```ts
   skillCategories: [
@@ -546,7 +610,7 @@ In `src/data/portfolio-data.ts`, replace the whole `skillCategories: [...]` arra
 
 - [ ] **Step 6: Replace achievements**
 
-In the same file, replace the whole `achievements: [...]` array (lines 127–152) with:
+In the same file, replace the whole `achievements: [...]` array with:
 
 ```ts
   achievements: [
@@ -782,11 +846,13 @@ rtk git commit -m "fix: restore SEO metadata by making layout a Server Component
 ### Task 5: Hero rewrite
 
 **Files:**
-- Modify: `src/components/sections/HeroSection.tsx:37-39` (tagline), `:41-109` (CTAs), `:111-129` (stats)
+- Modify: `src/components/sections/HeroSection.tsx` — the destructure, the summary paragraph, the CTA block, and the last stat tile
 - Test: `test/components/HeroSection.test.tsx`
 
+Anchor on content, not line numbers: each step below shifts the ones after it.
+
 **Interfaces:**
-- Consumes: `portfolioData.tagline` (Task 1), `.name`, `.title`, `.contact.linkedin`.
+- Consumes: `portfolioData.tagline` and `portfolioData.heroStats` (Task 1), `.name`, `.title`, `.contact.linkedin`. `HeroStat` is importable from `@/types`.
 - Produces: nothing consumed downstream.
 
 - [ ] **Step 1: Write the failing tests**
@@ -838,16 +904,23 @@ describe("HeroSection", () => {
     expect(screen.queryByText("View Experience")).not.toBeInTheDocument();
   });
 
-  it("renders stats", () => {
+  it("renders every hero stat from the data layer", () => {
     render(<HeroSection />);
-    expect(screen.getByText("8+")).toBeInTheDocument();
-    expect(screen.getByText("Years Experience")).toBeInTheDocument();
-    expect(screen.getByText("20+")).toBeInTheDocument();
+    portfolioData.heroStats.forEach((stat) => {
+      expect(screen.getByText(stat.value)).toBeInTheDocument();
+      expect(screen.getByText(stat.label)).toBeInTheDocument();
+    });
+  });
+
+  it("renders the AI stat that carries the positioning", () => {
+    render(<HeroSection />);
     expect(screen.getByText("300%")).toBeInTheDocument();
     expect(screen.getByText("AI Efficiency Gain")).toBeInTheDocument();
   });
 });
 ```
+
+The first test drives the values from the data, so it cannot go stale. The second pins the one stat the positioning depends on — if someone drops it, that should fail loudly rather than silently pass a data-driven loop.
 
 - [ ] **Step 2: Run tests to verify they fail**
 
@@ -856,13 +929,13 @@ Expected: FAIL on the title, tagline, `Download CV`/`LinkedIn profile`, `View Ex
 
 - [ ] **Step 3: Render the tagline instead of the summary**
 
-In `src/components/sections/HeroSection.tsx`, change the destructure on line 4:
+In `src/components/sections/HeroSection.tsx`, change the destructure at the top of the component to:
 
 ```tsx
-  const { name, title, tagline, contact } = portfolioData;
+  const { name, title, tagline, contact, heroStats } = portfolioData;
 ```
 
-and replace the summary paragraph (lines 37–39) with:
+`summary` is dropped from the destructure — it now lives only in About. Then replace the paragraph that renders `{summary}` with:
 
 ```tsx
           <p className="mt-6 max-w-2xl animate-slide-up text-lg leading-relaxed text-gray-300">
@@ -872,7 +945,7 @@ and replace the summary paragraph (lines 37–39) with:
 
 - [ ] **Step 4: Collapse the CTA cluster**
 
-Replace the entire CTA block (lines 41–109, the `<div className="mt-10 flex animate-slide-up flex-wrap gap-4">` through its closing `</div>`) with:
+Replace the entire CTA block — the `<div className="mt-10 flex animate-slide-up flex-wrap gap-4">` through its matching closing `</div>`, containing all four current CTAs — with:
 
 ```tsx
           <div className="mt-10 flex animate-slide-up flex-wrap items-center gap-4">
@@ -926,18 +999,22 @@ Replace the entire CTA block (lines 41–109, the `<div className="mt-10 flex an
           </div>
 ```
 
-- [ ] **Step 5: Update the stats bar**
+- [ ] **Step 5: Render the stats bar from data**
 
-Replace the last stat `<div>` in the stats grid (lines 125–128, the `5x` / `App Optimization` block) with:
+The four stat tiles are hardcoded in JSX today — the same drift bug Task 6 fixes in the Footer. Task 1 already moved the values into `portfolioData.heroStats`. Replace the entire stats grid (the `<div className="mt-16 grid grid-cols-2 gap-8 border-t border-white/10 pt-10 md:grid-cols-4">` through its matching closing `</div>`, containing all four hardcoded tiles) with:
 
 ```tsx
-            <div>
-              <p className="text-3xl font-bold text-white">300%</p>
-              <p className="mt-1 text-sm text-gray-400">AI Efficiency Gain</p>
-            </div>
+          <div className="mt-16 grid grid-cols-2 gap-8 border-t border-white/10 pt-10 md:grid-cols-4">
+            {heroStats.map((stat) => (
+              <div key={stat.value}>
+                <p className="text-3xl font-bold text-white">{stat.value}</p>
+                <p className="mt-1 text-sm text-gray-400">{stat.label}</p>
+              </div>
+            ))}
+          </div>
 ```
 
-The other three stats (`8+`, `20+`, `Millions`) stay as they are. `5x` is not lost — it lives in Achievements.
+`key={stat.value}` is safe: Task 1's test asserts those values are unique. The grid classes are unchanged — four stats still lay out `grid-cols-2` on mobile and `md:grid-cols-4` on desktop.
 
 - [ ] **Step 6: Run tests to verify they pass**
 
@@ -958,7 +1035,7 @@ rtk git commit -m "feat: rewrite hero with tagline, single primary CTA, and AI s
 `Footer.tsx:16` hardcodes `"Technical Lead & Software Architect"` outside the data layer. That string is already stale — it is the exact drift this whole plan exists to fix.
 
 **Files:**
-- Modify: `src/components/layout/Footer.tsx:4`, `:15-17`
+- Modify: `src/components/layout/Footer.tsx` — the destructure and the tagline paragraph
 - Create: `test/components/Footer.test.tsx`
 
 **Interfaces:**
@@ -994,13 +1071,13 @@ Expected: FAIL — the footer renders the hardcoded `"Technical Lead & Software 
 
 - [ ] **Step 3: Read the title from data**
 
-In `src/components/layout/Footer.tsx`, change line 4:
+In `src/components/layout/Footer.tsx`, change the destructure to:
 
 ```tsx
   const { name, title, contact } = portfolioData;
 ```
 
-and replace lines 15–17 with:
+and replace the paragraph containing the hardcoded `"Technical Lead & Software Architect"` with:
 
 ```tsx
             <p className="mt-1 text-sm text-gray-400">
@@ -1107,6 +1184,5 @@ Check: hero shows one primary CTA; the tagline is short and the long summary app
 ## Follow-ups (out of scope, do not do here)
 
 - **Real OG image.** `BannerGonzalesWhite.png` is a 12 KB wordmark standing in for a 1200×630 social card.
-- **Hero stats are still hardcoded** in `HeroSection.tsx`. Same drift class as the Footer bug fixed in Task 6; moving them into `portfolio-data.ts` would close it. The spec deliberately scoped this out.
 - **The CV PDF omits Rust.** It lists `Programming Languages: Java, NodeJS`. After this plan the site lists Rust and the PDF does not — they disagree on a real skill until the PDF is regenerated.
 - **Deploy.** `.github/workflows/deploy.yml` triggers on push to `main`. This branch must be merged for any of it to go live.
