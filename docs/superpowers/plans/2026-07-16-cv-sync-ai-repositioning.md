@@ -679,9 +679,12 @@ The highest-impact fix in the plan. `src/app/layout-content.tsx` already exists,
 - Consumes: `portfolioData.name`, `.title`, `.tagline`, `.contact`, `.experience[0]`, `.languages` (Tasks 1–2). `LayoutContent` from `./layout-content` — signature `({ children }: { children: React.ReactNode }) => JSX.Element`.
 - Produces: `export const metadata: Metadata` from `src/app/layout.tsx`.
 
-- [ ] **Step 1: Add the font mock**
+- [ ] **Step 1: Add the font and stylesheet mocks**
 
-`next/font/google` is compiled by Next's SWC plugin. This project runs plain `ts-jest` (no `next/jest`), so importing `layout.tsx` in a test would execute `Inter()` and throw. Mock it.
+Importing `layout.tsx` from a test trips two things that only Next's build pipeline normally handles. This project runs plain `ts-jest`, not `next/jest`, so both need stubbing:
+
+1. `next/font/google` is compiled by Next's SWC plugin — under Jest, `Inter()` executes and throws.
+2. `layout.tsx` does `import "./globals.css"`. Jest's `transform` only covers `^.+\.tsx?$`, so it tries to parse `globals.css` (which opens with `@import "tailwindcss";`) as JavaScript and dies with `SyntaxError: Invalid or unexpected token`. This has been latent: no other file in `src/` imports `globals.css`, and nothing imported `layout.tsx` at all — which is the very gap this task closes.
 
 Create `test/mocks/next-font.ts`:
 
@@ -693,18 +696,27 @@ export const Inter = () => ({
 });
 ```
 
-This file does not match Jest's default `testMatch` patterns, so it will not be collected as a test suite.
+Create `test/mocks/style-mock.ts`:
 
-- [ ] **Step 2: Wire the mock into Jest**
+```ts
+export default {};
+```
 
-In `jest.config.ts`, extend `moduleNameMapper`:
+Neither file matches Jest's default `testMatch` patterns, so neither is collected as a test suite.
+
+- [ ] **Step 2: Wire the mocks into Jest**
+
+In `jest.config.ts`, extend `moduleNameMapper`. Order matters: the CSS pattern must not shadow the `@/` alias, and it does not — they cannot both match one specifier.
 
 ```ts
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
     "^next/font/google$": "<rootDir>/test/mocks/next-font.ts",
+    "\\.css$": "<rootDir>/test/mocks/style-mock.ts",
   },
 ```
+
+The stylesheet stub only changes what the test runner does with a CSS import. It has no effect on the build, where Tailwind processes `globals.css` normally.
 
 - [ ] **Step 3: Write the failing test**
 
@@ -742,7 +754,7 @@ describe("root metadata", () => {
 - [ ] **Step 4: Run the test to verify it fails**
 
 Run: `rtk npx.cmd jest test/app/metadata.test.ts`
-Expected: FAIL with `metadata` undefined — `layout.tsx` is a Client Component and exports no metadata.
+Expected: FAIL — `metadata` is undefined, because `layout.tsx` is still a Client Component and exports no metadata. If instead you see `SyntaxError: Invalid or unexpected token` pointing at `globals.css`, the CSS mapping from Step 2 is missing or its pattern does not match; fix that before continuing, since the same error would resurface at Step 6 and mask the real result.
 
 - [ ] **Step 5: Rewrite layout.tsx**
 
@@ -845,7 +857,7 @@ Expected: a match. Also confirm `out/index.html` contains a `<title>` tag and `a
 - [ ] **Step 9: Commit**
 
 ```bash
-rtk git add src/app/layout.tsx jest.config.ts test/mocks/next-font.ts test/app/metadata.test.ts
+rtk git add src/app/layout.tsx jest.config.ts test/mocks/next-font.ts test/mocks/style-mock.ts test/app/metadata.test.ts
 rtk git commit -m "fix: restore SEO metadata by making layout a Server Component"
 ```
 
