@@ -20,6 +20,21 @@ export const portfolioData: PortfolioData = {
   ],
   skillCategories: [
     {
+      title: "AI & Agentic Systems",
+      icon: "🤖",
+      skills: [
+        "Agentic Workflows",
+        "Multi-Agent Orchestration",
+        "Claude / LLM Integration",
+        "LangChain",
+        "LangGraph",
+        "RAG",
+        "Spec-Driven Development",
+        "MCP (Model Context Protocol)",
+        "AI Code Review",
+      ],
+    },
+    {
       title: "Software Architecture",
       icon: "🏗️",
       skills: [
@@ -37,9 +52,11 @@ export const portfolioData: PortfolioData = {
       title: "Backend & Frameworks",
       icon: "⚙️",
       skills: [
+        "Rust",
         "Java (Spring Boot, Quarkus)",
         "NodeJS / NestJS",
-        "Reactive Programming (RxJava)",
+        "Python",
+        "Reactive Programming (RxJava, WebFlux)",
         "Functional Programming",
       ],
     },
@@ -54,7 +71,7 @@ export const portfolioData: PortfolioData = {
       skills: ["Datadog", "Dynatrace", "Kibana", "PagerDuty", "Grafana"],
     },
     {
-      title: "Databases",
+      title: "Data & Persistence",
       icon: "🗄️",
       skills: [
         "PostgreSQL",
@@ -63,6 +80,25 @@ export const portfolioData: PortfolioData = {
         "SQL Server",
         "DB2",
         "CosmosDB",
+        "Redis",
+        "Caffeine",
+        "Prisma",
+        "Hibernate",
+        "Flyway",
+      ],
+    },
+    {
+      title: "Testing & Quality",
+      icon: "🧪",
+      skills: [
+        "JUnit5",
+        "Mockito",
+        "Jest",
+        "Testcontainers",
+        "SonarQube",
+        "Checkstyle",
+        "Fortify",
+        "Continuous Benchmarking",
       ],
     },
     {
@@ -148,28 +184,27 @@ export const portfolioData: PortfolioData = {
   ],
   achievements: [
     {
-      metric: "Millions",
-      description:
-        "Users impacted by technological solutions designed and implemented on Yape.",
-    },
-    {
-      metric: "20+",
-      description:
-        "Enterprise APIs developed using microservices architecture.",
-    },
-    {
       metric: "5x",
       description: "Optimization of applications and products.",
     },
     {
       metric: "250%",
-      description:
-        "Efficiency improvement in the customer service process.",
+      description: "Efficiency improvement in the customer service process.",
     },
     {
       metric: "19+",
       description:
         "APIs managed in production integrated with BCP's financial systems.",
+    },
+    {
+      metric: "60+",
+      description:
+        "Internal services aggregated into a self-updating developer documentation portal with automated health scoring.",
+    },
+    {
+      metric: "Org-wide",
+      description:
+        "Continuous performance benchmarking introduced across production services and codified as an engineering standard.",
     },
   ],
   education: [

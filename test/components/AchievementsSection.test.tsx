@@ -10,10 +10,16 @@ describe("AchievementsSection", () => {
 
   it("renders achievement metrics", () => {
     render(<AchievementsSection />);
-    expect(screen.getByText("Millions")).toBeInTheDocument();
-    expect(screen.getByText("20+")).toBeInTheDocument();
     expect(screen.getByText("5x")).toBeInTheDocument();
     expect(screen.getByText("250%")).toBeInTheDocument();
     expect(screen.getByText("19+")).toBeInTheDocument();
+    expect(screen.getByText("60+")).toBeInTheDocument();
+    expect(screen.getByText("Org-wide")).toBeInTheDocument();
+  });
+
+  it("does not duplicate the hero stats", () => {
+    render(<AchievementsSection />);
+    expect(screen.queryByText("Millions")).not.toBeInTheDocument();
+    expect(screen.queryByText("20+")).not.toBeInTheDocument();
   });
 });

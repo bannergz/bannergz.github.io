@@ -95,8 +95,34 @@ describe("portfolioData", () => {
     expect(harnessClaims).toEqual([]);
   });
 
-  it("has achievements", () => {
-    expect(portfolioData.achievements.length).toBeGreaterThan(0);
+  it("has exactly five achievements (AchievementsSection renders xl:grid-cols-5)", () => {
+    expect(portfolioData.achievements).toHaveLength(5);
+  });
+
+  it("has unique achievement metrics (AchievementsSection keys on metric)", () => {
+    const metrics = portfolioData.achievements.map((a) => a.metric);
+    expect(new Set(metrics).size).toBe(metrics.length);
+  });
+
+  it("does not repeat the hero stats in achievements", () => {
+    const heroValues = portfolioData.heroStats.map((s) => s.value);
+    const metrics = portfolioData.achievements.map((a) => a.metric);
+    const overlap = metrics.filter((m) => heroValues.includes(m));
+    expect(overlap).toEqual([]);
+  });
+
+  it("leads skills with the AI category", () => {
+    expect(portfolioData.skillCategories[0].title).toBe("AI & Agentic Systems");
+  });
+
+  it("lists Rust among the skills", () => {
+    const allSkills = portfolioData.skillCategories.flatMap((c) => c.skills);
+    expect(allSkills).toContain("Rust");
+  });
+
+  it("has unique skill category titles (SkillsSection keys on title)", () => {
+    const titles = portfolioData.skillCategories.map((c) => c.title);
+    expect(new Set(titles).size).toBe(titles.length);
   });
 
   it("has education entries", () => {
