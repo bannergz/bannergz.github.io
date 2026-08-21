@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { Inter } from "next/font/google";
 import { LayoutContent } from "./layout-content";
 import { portfolioData } from "@/data/portfolio-data";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const inter = Inter({
@@ -11,7 +12,6 @@ const inter = Inter({
   display: "swap",
 });
 
-const SITE_URL = "https://bannergz.github.io";
 const OG_IMAGE = "/BannerGonzalesWhite.png";
 const PAGE_TITLE = `${portfolioData.name} — ${portfolioData.title}`;
 
