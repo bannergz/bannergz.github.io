@@ -1,5 +1,6 @@
 import { metadata } from "@/app/layout";
 import { portfolioData } from "@/data/portfolio-data";
+import { SITE_URL } from "@/lib/site";
 
 describe("root metadata", () => {
   it("has a title containing the name", () => {
@@ -13,6 +14,15 @@ describe("root metadata", () => {
 
   it("has a metadataBase so relative asset URLs resolve", () => {
     expect(metadata.metadataBase).toBeInstanceOf(URL);
+  });
+
+  it("declares the custom domain, not the github.io origin it redirects from", () => {
+    // github.io 301s to the custom domain: declaring it canonical points
+    // crawlers and link unfurlers at a URL that only redirects back.
+    expect(SITE_URL).toBe("https://www.bannergonzales.com");
+    expect(metadata.metadataBase?.origin).toBe(SITE_URL);
+    expect(metadata.openGraph?.url).toBe(SITE_URL);
+    expect(JSON.stringify(metadata)).not.toContain("github.io");
   });
 
   it("has OpenGraph with an image", () => {
