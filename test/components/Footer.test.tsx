@@ -20,3 +20,13 @@ describe("Footer", () => {
     );
   });
 });
+
+describe("Footer tools", () => {
+  it("links to the tax calculator with descriptive Spanish anchor text", () => {
+    const { container } = render(<Footer />);
+    const link = container.querySelector('a[href="/calcula-tus-impuestos"]');
+    expect(link).not.toBeNull();
+    expect(link?.textContent).toMatch(/SUNAT/);
+    expect(link?.getAttribute("hreflang")).toBe("es");
+  });
+});

@@ -2,8 +2,9 @@ import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site";
 
 /**
- * Only the public portfolio is listed. `/noris` is `noindex` by design and
- * `/_not-found` is not a real destination, so neither belongs in a sitemap.
+ * Only the public pages are listed: the portfolio and the tax calculator.
+ * `/noris` is `noindex` by design and `/_not-found` is not a real destination,
+ * so neither belongs in a sitemap.
  */
 // `output: export` requires every route handler to be explicitly static;
 // without this Next fails the build with "dynamic not configured".
@@ -16,6 +17,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 1,
+    },
+    {
+      url: `${SITE_URL}/calcula-tus-impuestos`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.8,
     },
   ];
 }

@@ -1,14 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
 const NAV_LINKS: ReadonlyArray<{ href: string; label: string }> = [
-  { href: "#about", label: "About" },
-  { href: "#skills", label: "Skills" },
-  { href: "#experience", label: "Experience" },
-  { href: "#achievements", label: "Achievements" },
-  { href: "#education", label: "Education" },
-  { href: "#contact", label: "Contact" },
+  { href: "/#about", label: "About" },
+  { href: "/#skills", label: "Skills" },
+  { href: "/#experience", label: "Experience" },
+  { href: "/#achievements", label: "Achievements" },
+  { href: "/#education", label: "Education" },
+  { href: "/#contact", label: "Contact" },
 ];
 
 export function Header() {
@@ -17,29 +18,29 @@ export function Header() {
   return (
     <header className="fixed top-0 right-0 left-0 z-50 border-b border-white/10 bg-white/90 backdrop-blur-md">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 lg:px-8">
-        <a
-          href="#"
+        <Link
+          href="/"
           className="text-xl font-bold tracking-tight text-primary"
         >
           BG<span className="text-accent">.</span>
-        </a>
+        </Link>
 
         {/* Desktop nav */}
         <ul className="hidden items-center gap-8 md:flex">
           {NAV_LINKS.map((link) => (
             <li key={link.href}>
-              <a
+              <Link
                 href={link.href}
                 className="text-sm font-medium text-text-muted transition-colors hover:text-accent"
               >
                 {link.label}
-              </a>
+              </Link>
             </li>
           ))}
           <li>
-            <a href="#contact" className="btn-primary text-sm">
+            <Link href="/#contact" className="btn-primary text-sm">
               Hire Me
-            </a>
+            </Link>
           </li>
         </ul>
 
@@ -82,23 +83,23 @@ export function Header() {
           <ul className="flex flex-col gap-1 px-6 py-4">
             {NAV_LINKS.map((link) => (
               <li key={link.href}>
-                <a
+                <Link
                   href={link.href}
                   className="block rounded-lg px-4 py-3 text-sm font-medium text-text-muted transition-colors hover:bg-surface-dark hover:text-accent"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {link.label}
-                </a>
+                </Link>
               </li>
             ))}
             <li className="mt-2">
-              <a
-                href="#contact"
+              <Link
+                href="/#contact"
                 className="btn-primary w-full justify-center text-sm"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Hire Me
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
