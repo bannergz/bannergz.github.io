@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { portfolioData } from "@/data/portfolio-data";
 
 export function Footer() {
@@ -7,7 +8,7 @@ export function Footer() {
   return (
     <footer className="border-t border-gray-100 bg-primary text-white">
       <div className="mx-auto max-w-6xl px-6 py-12 lg:px-8">
-        <div className="flex flex-col items-center gap-6 md:flex-row md:justify-between">
+        <div className="flex flex-col items-center gap-8 text-center md:flex-row md:items-start md:justify-between md:text-left">
           <div>
             <p className="text-xl font-bold">
               BG<span className="text-accent-light">.</span>
@@ -16,6 +17,26 @@ export function Footer() {
               {name} &mdash; {title}
             </p>
           </div>
+
+          <nav aria-label="Free tools">
+            <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
+              Free tools
+            </p>
+            <ul className="mt-3">
+              <li>
+                <Link
+                  href="/calcula-tus-impuestos"
+                  hrefLang="es"
+                  className="text-sm font-medium text-gray-200 transition-colors hover:text-accent-light"
+                >
+                  Calculadora de Impuesto a la Renta 2026 &mdash; ¿cuánto me descuenta SUNAT?
+                </Link>
+                <p className="mt-1 text-xs text-gray-500">
+                  Planilla o recibo por honorarios, UIT 2026 y gastos deducibles (Perú)
+                </p>
+              </li>
+            </ul>
+          </nav>
 
           <div className="flex items-center gap-6">
             <a
