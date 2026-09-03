@@ -28,21 +28,25 @@ describe("Header", () => {
 });
 
 describe("Header · menú móvil", () => {
-  it("dice qué elemento controla, no solo que está expandido", async () => {
+  it("controla un elemento que existe también con el menú cerrado", async () => {
     const user = userEvent.setup();
     render(<Header />);
 
     const boton = screen.getByRole("button", { name: "Toggle menu" });
+    const controlado = boton.getAttribute("aria-controls");
+    expect(controlado).toBeTruthy();
+
+    // Cerrado: el destino ya está en el DOM, solo oculto. Un aria-controls
+    // que apunta a un id inexistente no controla nada.
+    const menu = document.getElementById(controlado as string);
+    expect(menu).toBeInTheDocument();
+    expect(menu).not.toBeVisible();
     expect(boton).toHaveAttribute("aria-expanded", "false");
 
     await user.click(boton);
 
     expect(boton).toHaveAttribute("aria-expanded", "true");
-    const controlado = boton.getAttribute("aria-controls");
-    expect(controlado).toBeTruthy();
-    // El id declarado tiene que existir de verdad: un aria-controls colgando
-    // de la nada es peor que no ponerlo.
-    expect(document.getElementById(controlado as string)).toBeInTheDocument();
+    expect(menu).toBeVisible();
   });
 
   it("cierra con Escape y devuelve el foco al botón que lo abrió", async () => {
@@ -51,12 +55,12 @@ describe("Header · menú móvil", () => {
 
     const boton = screen.getByRole("button", { name: "Toggle menu" });
     await user.click(boton);
-    const id = boton.getAttribute("aria-controls") as string;
-    expect(document.getElementById(id)).toBeInTheDocument();
+    const menu = document.getElementById(boton.getAttribute("aria-controls") as string);
+    expect(menu).toBeVisible();
 
     await user.keyboard("{Escape}");
 
-    expect(document.getElementById(id)).toBeNull();
+    expect(menu).not.toBeVisible();
     expect(boton).toHaveAttribute("aria-expanded", "false");
     expect(boton).toHaveFocus();
   });
