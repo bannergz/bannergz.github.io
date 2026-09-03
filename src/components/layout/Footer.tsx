@@ -7,7 +7,7 @@ export function Footer() {
   const buildYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-line bg-panel text-fg">
+    <footer className="border-t border-line bg-panel pr-[env(safe-area-inset-right)] pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)] text-fg">
       <div className="mx-auto max-w-6xl px-6 py-12 lg:px-8">
         <div className="flex flex-col items-center gap-8 text-center md:flex-row md:items-start md:justify-between md:text-left">
           <div>

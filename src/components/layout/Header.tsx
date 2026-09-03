@@ -33,8 +33,13 @@ export function Header() {
   }, [isMenuOpen]);
 
   return (
-    <header className="fixed top-0 right-0 left-0 z-50 border-b border-line bg-ink/90 backdrop-blur-md">
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 lg:px-8">
+    <header className="fixed top-0 right-0 left-0 z-50 border-b border-line bg-ink/90 pt-[env(safe-area-inset-top)] pr-[env(safe-area-inset-right)] pl-[env(safe-area-inset-left)] backdrop-blur-md">
+      {/* Con nombre: la página tiene dos landmarks de navegación y sin
+          etiqueta se anuncian iguales. */}
+      <nav
+        aria-label="Main"
+        className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 lg:px-8"
+      >
         <Link
           href="/"
           className="font-mono text-xl font-semibold tracking-tight text-fg"

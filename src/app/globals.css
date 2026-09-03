@@ -65,6 +65,20 @@
     scroll-margin-top: 6rem;
   }
 
+  /* iOS espera ~300 ms tras cada toque por si venía un doble-tap de zoom:
+     todo control se siente lento sin esto. El resaltado del toque se declara
+     a propósito — el gris de WebKit no pertenece a esta paleta. */
+  a,
+  button,
+  input,
+  label,
+  select,
+  summary,
+  [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgb(255 182 39 / 0.18);
+  }
+
   /* Un foco visible y consistente en todo lo que se puede tabular.
      Va con outline (no ring) para que sobreviva a forced-colors. */
   :focus-visible {
