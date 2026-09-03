@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode, type WheelEvent } from "react";
 import { escribirUrlSearch, urlAbsoluta, useUrlSearch } from "@/hooks/useUrlSearch";
 import {
   codificarEstado,
@@ -41,13 +41,18 @@ const INPUT_BASE =
 const INPUT = `w-full ${INPUT_BASE}`;
 const LABEL = "col-label";
 
+/** La rueda del mouse sobre un `type="number"` enfocado cambia el valor sin que
+ *  nadie lo pida, y el usuario solo queria bajar la pagina: al primer giro el
+ *  campo suelta el foco y el desplazamiento sigue de largo. */
+const soltarFoco = (e: WheelEvent<HTMLInputElement>) => e.currentTarget.blur();
+
 function aNumero(s: string): number {
   const n = parseFloat(s);
   return Number.isFinite(n) ? n : 0;
 }
 
 function pct(tasa: number): string {
-  return `${Math.round(tasa * 100)} %`;
+  return `${Math.round(tasa * 100)}\u00A0%`;
 }
 
 /* ------------------------------------------------------------------ */
@@ -242,7 +247,7 @@ function BarraTramos({ r }: { r: ResultadoRenta }) {
           <span key={i} className="flex items-center gap-2 text-sm text-text-muted">
             <i className="block h-3 w-3 rounded-sm" style={{ background: COLOR_TRAMO[i] }} />
             {pct(c.tramo.tasa)} sobre{" "}
-            <b className="font-semibold tabular-nums text-fg">S/ {soles0(c.base)}</b>
+            <b className="font-semibold tabular-nums text-fg">S/&nbsp;{soles0(c.base)}</b>
           </span>
         ))}
       </div>
@@ -419,8 +424,8 @@ function Motor({ search }: { search: string }) {
       titulo: "Te queda al mes",
       valor: soles0(r.netoMensual),
       tono: "good",
-      nota: `Promedio. Bruto S/ ${soles0(r.ingresoMensualPEN)} menos IR S/ ${soles0(r.retencionMensualPromedio)}${
-        r.pensionMensual > 0 ? ` y previsional S/ ${soles0(r.pensionMensual)}` : ""
+      nota: `Promedio. Bruto S/\u00A0${soles0(r.ingresoMensualPEN)} menos IR S/\u00A0${soles0(r.retencionMensualPromedio)}${
+        r.pensionMensual > 0 ? ` y previsional S/&nbsp;${soles0(r.pensionMensual)}` : ""
       }. La retención real varía mes a mes.`,
     };
   } else if (!r.obligadoPagoMensual) {
@@ -428,21 +433,21 @@ function Motor({ search }: { search: string }) {
       titulo: "Adelanto mensual",
       valor: "0",
       tono: "flat",
-      nota: `Estás bajo el mínimo de S/ ${soles0(MENSUAL_SIN_OBLIGACION)} al mes`,
+      nota: `Estás bajo el mínimo de S/\u00A0${soles0(MENSUAL_SIN_OBLIGACION)} al mes`,
     };
   } else if (r.saldo >= 0) {
     tercera = {
       titulo: "Te devuelven al final",
       valor: soles0(r.saldo),
       tono: "good",
-      nota: `Adelantas S/ ${soles0(r.pagoACuentaMensual)} al mes y debes S/ ${soles0(r.impuesto)}`,
+      nota: `Adelantas S/\u00A0${soles0(r.pagoACuentaMensual)} al mes y debes S/\u00A0${soles0(r.impuesto)}`,
     };
   } else {
     tercera = {
       titulo: "Te falta pagar",
       valor: soles0(Math.abs(r.saldo)),
       tono: "accent",
-      nota: `Adelantas S/ ${soles0(r.pagoACuentaAnual)} y debes S/ ${soles0(r.impuesto)}`,
+      nota: `Adelantas S/\u00A0${soles0(r.pagoACuentaAnual)} y debes S/\u00A0${soles0(r.impuesto)}`,
     };
   }
 
@@ -452,27 +457,27 @@ function Motor({ search }: { search: string }) {
     avisos.push({
       tipo: "warn",
       titulo: "Tope de 3 UIT alcanzado",
-      texto: `Tus gastos dan S/ ${soles2(r.deduccion3Bruta)} de deducción pero el máximo es S/ ${soles0(TOPE_3_UIT)}. Registrar más gastos de estas categorías ya no baja tu impuesto.`,
+      texto: `Tus gastos dan S/\u00A0${soles2(r.deduccion3Bruta)} de deducción pero el máximo es S/\u00A0${soles0(TOPE_3_UIT)}. Registrar más gastos de estas categorías ya no baja tu impuesto.`,
     });
   } else if (r.deduccion3Bruta === 0) {
     avisos.push({
       tipo: "info",
       titulo: "No estás usando las 3 UIT",
-      texto: `Es la única deducción que depende de ti. Con alquiler o consumo en restaurantes pagados con tarjeta y comprobante a tu nombre puedes bajar hasta S/ ${soles0(TOPE_3_UIT)} de tu renta imponible.`,
+      texto: `Es la única deducción que depende de ti. Con alquiler o consumo en restaurantes pagados con tarjeta y comprobante a tu nombre puedes bajar hasta S/\u00A0${soles0(TOPE_3_UIT)} de tu renta imponible.`,
     });
   }
   if (!esQuinta && r.puedeSuspender) {
     avisos.push({
       tipo: "good",
       titulo: "Puedes pedir suspensión de retenciones",
-      texto: `Tu proyección anual de S/ ${soles0(r.rentaBrutaAnual)} no supera el tope de S/ ${soles0(ANUAL_SUSPENSION)}, así que puedes solicitar la constancia y dejar de adelantar el 8 %.`,
+      texto: `Tu proyección anual de S/\u00A0${soles0(r.rentaBrutaAnual)} no supera el tope de S/\u00A0${soles0(ANUAL_SUSPENSION)}, así que puedes solicitar la constancia y dejar de adelantar el 8\u00A0%.`,
     });
   }
   if (!esQuinta && r.rentaBrutaAnual > ANUAL_SUSPENSION && r.saldo > 0) {
     avisos.push({
       tipo: "info",
       titulo: "Vas a adelantar de más",
-      texto: `El 8 % se calcula sobre tu ingreso bruto, pero el impuesto se calcula sobre tu renta neta, que es mucho menor. La diferencia de S/ ${soles0(r.saldo)} se recupera solo si presentas la declaración anual.`,
+      texto: `El 8\u00A0% se calcula sobre tu ingreso bruto, pero el impuesto se calcula sobre tu renta neta, que es mucho menor. La diferencia de S/\u00A0${soles0(r.saldo)} se recupera solo si presentas la declaración anual.`,
     });
   }
   if (esQuinta && r.impuesto > 0) {
@@ -500,19 +505,19 @@ function Motor({ search }: { search: string }) {
       </>,
       pagador === "exterior"
         ? "Nadie te retiene: un pagador del exterior no es agente de retención en el Perú."
-        : `Si el recibo supera S/ ${soles0(RETENCION_RHE_DESDE)} tu cliente te retiene el 8 %. Si es menor, el adelanto lo haces tú.`,
+        : `Si el recibo supera S/\u00A0${soles0(RETENCION_RHE_DESDE)} tu cliente te retiene el 8\u00A0%. Si es menor, el adelanto lo haces tú.`,
     );
     if (!r.obligadoPagoMensual) {
       pasos.push(
         <>
-          Ganas menos de S/ {soles0(MENSUAL_SIN_OBLIGACION)} al mes, así que{" "}
+          Ganas menos de S/&nbsp;{soles0(MENSUAL_SIN_OBLIGACION)} al mes, así que{" "}
           <b>no tienes obligación de declarar mensualmente</b>.
         </>,
       );
     } else {
       pasos.push(
         <>
-          Declara y paga el <b>Formulario Virtual 616</b> cada mes: S/ {soles2(r.pagoACuentaMensual)}.
+          Declara y paga el <b>Formulario Virtual 616</b> cada mes: S/&nbsp;{soles2(r.pagoACuentaMensual)}.
           Ruta:{" "}
           <Codigo>
             Mis declaraciones y pagos → Pago y presentación de otras declaraciones → Trabajadores
@@ -530,7 +535,7 @@ function Motor({ search }: { search: string }) {
       <>
         Presenta la <b>declaración anual</b> entre marzo y abril del año siguiente. Es el único
         momento en que se aplican las 7 UIT y las 3 UIT
-        {r.saldo > 0 ? ` y en que recuperas los S/ ${soles0(r.saldo)} que adelantaste de más.` : "."}
+        {r.saldo > 0 ? ` y en que recuperas los S/\u00A0${soles0(r.saldo)} que adelantaste de más.` : "."}
       </>,
     );
   }
@@ -571,6 +576,7 @@ function Motor({ search }: { search: string }) {
             min={0}
             step={100}
             inputMode="decimal"
+            onWheel={soltarFoco}
             className={INPUT}
             value={monto}
             onChange={(e) => setMonto(e.target.value)}
@@ -588,6 +594,7 @@ function Motor({ search }: { search: string }) {
               min={0.01}
               step={0.001}
               inputMode="decimal"
+              onWheel={soltarFoco}
               className={INPUT}
               value={tipoCambio}
               onChange={(e) => setTipoCambio(e.target.value)}
@@ -622,7 +629,7 @@ function Motor({ search }: { search: string }) {
                 ]}
               />
               <Pista>
-                14 incluye las dos gratificaciones más la bonificación extraordinaria del 9 % de la
+                14 incluye las dos gratificaciones más la bonificación extraordinaria del 9&nbsp;% de la
                 Ley 30334, que también es renta gravada.
               </Pista>
             </div>
@@ -637,8 +644,8 @@ function Motor({ search }: { search: string }) {
                 value={pension}
                 onChange={(e) => setPension(e.target.value)}
               >
-                <option value="0.13">ONP — 13 %</option>
-                <option value="0.129">AFP — 12.9 % aprox.</option>
+                <option value="0.13">ONP — 13&nbsp;%</option>
+                <option value="0.129">AFP — 12.9&nbsp;% aprox.</option>
                 <option value="0">Ninguno</option>
               </select>
               <Pista>No es impuesto ni va a SUNAT. Se muestra aparte porque sí sale de tu sueldo.</Pista>
@@ -683,6 +690,7 @@ function Motor({ search }: { search: string }) {
                 min={0}
                 step={g.step}
                 inputMode="decimal"
+                onWheel={soltarFoco}
                 className={`${INPUT_BASE} w-24 flex-none px-2 py-1.5 text-sm`}
                 value={gastos[g.key]}
                 onChange={(e) => setGasto(g.key, e.target.value)}
@@ -692,7 +700,7 @@ function Motor({ search }: { search: string }) {
           <div className="flex items-center justify-between gap-2 pt-1 text-sm">
             <span className="text-text-muted">Deducción lograda</span>
             <b className="tabular-nums text-accent">
-              S/ {soles2(r.deduccion3)} de S/ {soles0(TOPE_3_UIT)}
+              S/&nbsp;{soles2(r.deduccion3)} de S/&nbsp;{soles0(TOPE_3_UIT)}
             </b>
           </div>
         </div>
@@ -712,7 +720,7 @@ function Motor({ search }: { search: string }) {
             titulo="Impuesto del año"
             prefijo="S/"
             valor={soles0(r.impuesto)}
-            nota={`Renta bruta anual S/ ${soles0(r.rentaBrutaAnual)} · ${r.composicionAnual}`}
+            nota={`Renta bruta anual S/\u00A0${soles0(r.rentaBrutaAnual)} · ${r.composicionAnual}`}
           />
           <Tarjeta
             titulo="Tasa efectiva"
@@ -722,7 +730,7 @@ function Motor({ search }: { search: string }) {
             nota={
               r.impuesto === 0
                 ? "No pagas impuesto a la renta con estos datos"
-                : `De cada S/ 100 que ganas, S/ ${r.tasaEfectiva.toFixed(2)} van a SUNAT`
+                : `De cada S/\u00A0100 que ganas, S/\u00A0${r.tasaEfectiva.toFixed(2)} van a SUNAT`
             }
           />
           <Tarjeta
@@ -771,7 +779,7 @@ function Motor({ search }: { search: string }) {
                 {!esQuinta && (
                   <>
                     <Fila
-                      concepto="Deducción del 20 %"
+                      concepto="Deducción del 20\u00A0%"
                       cita={`Art. 45.° LIR${r.deduccion20Topada ? " · topada en 24 UIT" : ""}`}
                       parcial={`(${soles2(r.deduccion20)})`}
                       acumulado="—"
@@ -814,7 +822,7 @@ function Motor({ search }: { search: string }) {
                   .map((c) => (
                     <Fila
                       key={c.tramo.nombre}
-                      concepto={`S/ ${soles2(c.base)} al ${pct(c.tramo.tasa)}`}
+                      concepto={`S/\u00A0${soles2(c.base)} al ${pct(c.tramo.tasa)}`}
                       parcial={soles2(c.base)}
                       acumulado={soles2(c.impuesto)}
                     />

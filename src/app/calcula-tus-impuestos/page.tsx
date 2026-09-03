@@ -3,10 +3,10 @@ import { fuentesOficiales, preguntasFrecuentes } from "@/data/calculadora-faq";
 import { DEDUCCION_7_UIT, TOPE_3_UIT, UIT, soles0 } from "@/lib/impuestos";
 
 const cifras = [
-  { valor: `S/ ${soles0(UIT)}`, etiqueta: "UIT 2026" },
-  { valor: `S/ ${soles0(DEDUCCION_7_UIT)}`, etiqueta: "7 UIT libres de impuesto" },
-  { valor: `S/ ${soles0(TOPE_3_UIT)}`, etiqueta: "Hasta 3 UIT más por gastos" },
-  { valor: "8 % → 30 %", etiqueta: "Escala progresiva" },
+  { valor: `S/\u00A0${soles0(UIT)}`, etiqueta: "UIT 2026" },
+  { valor: `S/\u00A0${soles0(DEDUCCION_7_UIT)}`, etiqueta: "7 UIT libres de impuesto" },
+  { valor: `S/\u00A0${soles0(TOPE_3_UIT)}`, etiqueta: "Hasta 3 UIT más por gastos" },
+  { valor: "8\u00A0% → 30\u00A0%", etiqueta: "Escala progresiva" },
 ];
 
 export default function CalculaTusImpuestosPage() {
@@ -102,16 +102,16 @@ export default function CalculaTusImpuestosPage() {
           <div className="mt-12 max-w-3xl space-y-3 border-t border-line pt-8 text-sm leading-relaxed text-text-muted">
             <p>
               <b className="font-semibold text-fg">Referencia, no asesoría.</b> El cálculo aplica
-              la UIT 2026 de S/ 5,500 (DS 301-2025-EF), la deducción del 20 % con tope de 24 UIT
+              la UIT 2026 de S/&nbsp;5,500 (DS 301-2025-EF), la deducción del 20&nbsp;% con tope de 24 UIT
               (Art. 45.° LIR), las 7 UIT y hasta 3 UIT adicionales (Art. 46.° LIR) y la escala del
               Art. 53.° LIR. Los montos de pago a cuenta y suspensión son los de la RS
-              000390-2025/SUNAT: S/ 4,010 mensuales y S/ 48,125 anuales.
+              000390-2025/SUNAT: S/&nbsp;4,010 mensuales y S/&nbsp;48,125 anuales.
             </p>
             <p>
               <b className="font-semibold text-fg">Lo que no cubre.</b> Rentas de primera,
               segunda o tercera categoría; CTS y beneficios laborales; ingresos como director,
               mandatario o síndico, que son cuarta categoría pero <b>no</b> tienen la deducción del
-              20 %. El aporte a AFP es un estimado: la comisión y la prima varían por administradora.
+              20&nbsp;%. El aporte a AFP es un estimado: la comisión y la prima varían por administradora.
               Para tu caso concreto, confirma con un contador.
             </p>
           </div>

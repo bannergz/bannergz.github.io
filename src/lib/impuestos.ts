@@ -153,7 +153,7 @@ export function calcularRenta(entrada: EntradaRenta): ResultadoRenta {
   } else if (entrada.sueldosAlAno === 14) {
     rentaBrutaAnual =
       ingresoMensualPEN * 12 + ingresoMensualPEN * 2 * (1 + BONIFICACION_LEY_30334);
-    composicionAnual = "12 sueldos + 2 gratificaciones + bonificación 9 %";
+    composicionAnual = "12 sueldos + 2 gratificaciones + bonificación 9\u00A0%";
   } else {
     rentaBrutaAnual = ingresoMensualPEN * 12;
     composicionAnual = "12 sueldos";

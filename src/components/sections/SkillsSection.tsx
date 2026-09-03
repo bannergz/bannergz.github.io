@@ -5,7 +5,7 @@ function SkillCard({ category }: { category: SkillCategory }) {
   return (
     <div className="panel-card group">
       <div className="mb-4 flex items-center gap-3">
-        <span className="text-2xl" role="img" aria-label={category.title}>
+        <span className="text-2xl" aria-hidden="true">
           {category.icon}
         </span>
         <h3 className="text-lg font-bold text-fg">{category.title}</h3>
