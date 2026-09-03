@@ -15,27 +15,27 @@ export const preguntasFrecuentes: ReadonlyArray<PreguntaFrecuente> = [
   {
     pregunta: "¿Cuánto es la UIT 2026 en el Perú?",
     respuesta:
-      "La Unidad Impositiva Tributaria de 2026 es S/ 5,500 (Decreto Supremo 301-2025-EF). De ella salen todos los umbrales del impuesto: las 7 UIT libres son S/ 38,500, el tope de gastos deducibles de 3 UIT es S/ 16,500 y el primer tramo del 8 % llega hasta 5 UIT, es decir S/ 27,500 de renta neta.",
+      "La Unidad Impositiva Tributaria de 2026 es S/\u00A05,500 (Decreto Supremo 301-2025-EF). De ella salen todos los umbrales del impuesto: las 7 UIT libres son S/\u00A038,500, el tope de gastos deducibles de 3 UIT es S/\u00A016,500 y el primer tramo del 8\u00A0% llega hasta 5 UIT, es decir S/\u00A027,500 de renta neta.",
   },
   {
     pregunta: "¿Qué son las 7 UIT que no pagan impuesto?",
     respuesta:
-      "Es el mínimo no imponible del Art. 46 de la Ley del Impuesto a la Renta: los primeros S/ 38,500 de renta neta de trabajo del año no tributan. En planilla, el empleador ya lo descuenta al proyectar tu retención mensual. Con recibo por honorarios se aplica recién en la declaración anual, por eso el 8 % que adelantas cada mes suele ser mayor que el impuesto real.",
+      "Es el mínimo no imponible del Art. 46 de la Ley del Impuesto a la Renta: los primeros S/\u00A038,500 de renta neta de trabajo del año no tributan. En planilla, el empleador ya lo descuenta al proyectar tu retención mensual. Con recibo por honorarios se aplica recién en la declaración anual, por eso el 8\u00A0% que adelantas cada mes suele ser mayor que el impuesto real.",
   },
   {
     pregunta: "¿Cuál es la diferencia entre renta de cuarta y de quinta categoría?",
     respuesta:
-      "Quinta categoría es el trabajo dependiente, en planilla: el empleador calcula y retiene el impuesto cada mes y tú no presentas declaraciones. Cuarta categoría es el trabajo independiente, con recibo por honorarios: tienes una deducción del 20 % de tus ingresos brutos (con tope de 24 UIT), adelantas el 8 % de cada pago y liquidas el impuesto real en la declaración anual.",
+      "Quinta categoría es el trabajo dependiente, en planilla: el empleador calcula y retiene el impuesto cada mes y tú no presentas declaraciones. Cuarta categoría es el trabajo independiente, con recibo por honorarios: tienes una deducción del 20\u00A0% de tus ingresos brutos (con tope de 24 UIT), adelantas el 8\u00A0% de cada pago y liquidas el impuesto real en la declaración anual.",
   },
   {
     pregunta: "¿Cuándo tengo que declarar el Formulario Virtual 616?",
     respuesta:
-      "Cada mes en que tus ingresos por honorarios superen S/ 4,010 (RS 000390-2025/SUNAT) y no te hayan retenido el 8 % completo, dentro del cronograma de vencimientos que SUNAT fija según el último dígito de tu RUC. Se presenta en SUNAT Operaciones en Línea con Clave SOL y se paga ahí mismo o en un banco con el código de tributo 3041. Si proyectas ganar hasta S/ 48,125 en el año puedes pedir la suspensión y dejar de adelantar.",
+      "Cada mes en que tus ingresos por honorarios superen S/\u00A04,010 (RS 000390-2025/SUNAT) y no te hayan retenido el 8\u00A0% completo, dentro del cronograma de vencimientos que SUNAT fija según el último dígito de tu RUC. Se presenta en SUNAT Operaciones en Línea con Clave SOL y se paga ahí mismo o en un banco con el código de tributo 3041. Si proyectas ganar hasta S/\u00A048,125 en el año puedes pedir la suspensión y dejar de adelantar.",
   },
   {
     pregunta: "¿Qué gastos puedo deducir hasta 3 UIT?",
     respuesta:
-      "Alquiler de vivienda (30 % del monto), honorarios de médicos y odontólogos (30 %), servicios de otros profesionales independientes (30 %), consumo en restaurantes, bares y hoteles (15 %) y los aportes a EsSalud de trabajadores del hogar (100 %). Cuentan solo con comprobante electrónico a tu nombre y pagados con tarjeta, transferencia u otro medio bancarizado. El total deducible tiene tope de 3 UIT, S/ 16,500 en 2026.",
+      "Alquiler de vivienda (30\u00A0% del monto), honorarios de médicos y odontólogos (30\u00A0%), servicios de otros profesionales independientes (30\u00A0%), consumo en restaurantes, bares y hoteles (15\u00A0%) y los aportes a EsSalud de trabajadores del hogar (100\u00A0%). Cuentan solo con comprobante electrónico a tu nombre y pagados con tarjeta, transferencia u otro medio bancarizado. El total deducible tiene tope de 3 UIT, S/\u00A016,500 en 2026.",
   },
   {
     pregunta: "Me paga una empresa del exterior, ¿igual tributo en el Perú?",
@@ -85,7 +85,7 @@ export const fuentesOficiales: ReadonlyArray<FuenteOficial> = [
     titulo: "Suspensión de retenciones",
     url: "https://personas.sunat.gob.pe/trabajador-independiente/suspension-retenciones",
     dominio: "personas.sunat.gob.pe",
-    detalle: "Para dejar de adelantar el 8 % si proyectas ganar poco en el año.",
+    detalle: "Para dejar de adelantar el 8\u00A0% si proyectas ganar poco en el año.",
   },
   {
     titulo: "Cálculo de rentas de cuarta",

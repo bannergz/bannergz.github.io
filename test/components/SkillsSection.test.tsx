@@ -31,4 +31,12 @@ describe("SkillsSection", () => {
     expect(screen.getByText("PostgreSQL")).toBeInTheDocument();
     expect(screen.getByText("TDD / BDD")).toBeInTheDocument();
   });
+
+  it("does not announce the category twice: the emoji is decorative", () => {
+    const { container } = render(<SkillsSection />);
+    expect(
+      screen.getAllByRole("heading", { level: 3, name: "AI & Agentic Systems" }),
+    ).toHaveLength(1);
+    expect(container.querySelector('[role="img"]')).toBeNull();
+  });
 });

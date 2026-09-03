@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { CalculadoraImpuestos } from "@/components/calculadora/CalculadoraImpuestos";
 
@@ -133,5 +133,22 @@ describe("CalculadoraImpuestos · lectores de pantalla", () => {
         ),
       { timeout: 3000 },
     );
+  });
+});
+
+describe("CalculadoraImpuestos - rueda del mouse", () => {
+  afterEach(() => window.history.replaceState(null, "", "/"));
+
+  it("no deja que un scroll cambie el monto: el campo suelta el foco", () => {
+    render(<CalculadoraImpuestos />);
+
+    const monto = screen.getByLabelText("Ingreso bruto mensual");
+    monto.focus();
+    expect(monto).toHaveFocus();
+
+    fireEvent.wheel(monto);
+
+    expect(monto).not.toHaveFocus();
+    expect(monto).toHaveValue(5000);
   });
 });

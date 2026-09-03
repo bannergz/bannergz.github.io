@@ -53,6 +53,7 @@ export function Header() {
           aria-expanded={isMenuOpen}
         >
           <svg
+            aria-hidden="true"
             className="h-6 w-6 text-fg"
             fill="none"
             stroke="currentColor"

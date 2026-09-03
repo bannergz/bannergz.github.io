@@ -44,6 +44,7 @@ function TimelineItem({
           {entry.highlights.map((highlight, i) => (
             <li key={i} className="flex gap-3 text-sm text-text-muted">
               <svg
+                aria-hidden="true"
                 className="mt-1 h-4 w-4 shrink-0 text-accent/60"
                 fill="none"
                 stroke="currentColor"

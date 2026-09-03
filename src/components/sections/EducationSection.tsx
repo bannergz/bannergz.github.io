@@ -17,9 +17,9 @@ export function EducationSection() {
               <span className="col-label">
                 {entry.period}
               </span>
-              <h4 className="mt-3 text-lg font-bold text-fg">
+              <h3 className="mt-3 text-lg font-bold text-fg">
                 {entry.degree}
-              </h4>
+              </h3>
               <p className="mt-1 text-text-muted">{entry.institution}</p>
             </div>
           ))}
