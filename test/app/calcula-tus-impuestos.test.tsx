@@ -61,6 +61,19 @@ describe("metadata de /calcula-tus-impuestos", () => {
   });
 });
 
+describe("jerarquía de encabezados", () => {
+  it("no salta niveles: el panel colgaba del h1 con un h3", () => {
+    const { container } = render(<CalculadoraPage />);
+    const niveles = Array.from(container.querySelectorAll("h1, h2, h3, h4, h5, h6")).map((h) =>
+      Number(h.tagName[1]),
+    );
+    expect(niveles[0]).toBe(1);
+    for (let i = 1; i < niveles.length; i++) {
+      expect(niveles[i]).toBeLessThanOrEqual(niveles[i - 1] + 1);
+    }
+  });
+});
+
 describe("datos estructurados de /calcula-tus-impuestos", () => {
   it("emite WebApplication, FAQPage y BreadcrumbList en JSON-LD", () => {
     const { container } = render(

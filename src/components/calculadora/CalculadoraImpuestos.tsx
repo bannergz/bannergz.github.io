@@ -1,6 +1,13 @@
 "use client";
 
-import { useEffect, useState, type ReactNode, type WheelEvent } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type KeyboardEvent,
+  type ReactNode,
+  type WheelEvent,
+} from "react";
 import { escribirUrlSearch, urlAbsoluta, useUrlSearch } from "@/hooks/useUrlSearch";
 import {
   codificarEstado,
@@ -70,12 +77,39 @@ function Segmentado<T extends string | number>({
   options: ReadonlyArray<{ value: T; label: string }>;
   onChange: (v: T) => void;
 }) {
+  const grupoRef = useRef<HTMLDivElement>(null);
+  const actual = Math.max(
+    0,
+    options.findIndex((o) => o.value === value),
+  );
+
+  // Un radiogroup se recorre con flechas: Tab entra y sale del grupo entero,
+  // y adentro solo el seleccionado es tabulable. Sin esto, anunciar "radio"
+  // prometería un teclado que no existe.
+  const alPulsar = (e: KeyboardEvent<HTMLDivElement>) => {
+    const paso =
+      e.key === "ArrowRight" || e.key === "ArrowDown"
+        ? 1
+        : e.key === "ArrowLeft" || e.key === "ArrowUp"
+          ? -1
+          : 0;
+    if (paso === 0) return;
+    e.preventDefault();
+    const destino = (actual + paso + options.length) % options.length;
+    onChange(options[destino].value);
+    // El foco acompaña a la selección: si se queda atras, la siguiente flecha
+    // parte del botón equivocado.
+    grupoRef.current?.querySelectorAll("button")[destino]?.focus();
+  };
+
   return (
     <div className="flex flex-col gap-1.5">
       <span className={LABEL}>{label}</span>
       <div
-        role="group"
+        ref={grupoRef}
+        role="radiogroup"
         aria-label={label}
+        onKeyDown={alPulsar}
         className="flex rounded-sm border border-line bg-panel-hi p-1"
       >
         {options.map((o) => {
@@ -84,7 +118,9 @@ function Segmentado<T extends string | number>({
             <button
               key={String(o.value)}
               type="button"
-              aria-pressed={activo}
+              role="radio"
+              aria-checked={activo}
+              tabIndex={activo ? 0 : -1}
               onClick={() => onChange(o.value)}
               className={`flex-1 rounded-sm px-3 py-1.5 text-sm font-medium transition-colors ${
                 activo ? "bg-accent text-on-accent" : "text-text-muted hover:text-fg"
@@ -572,7 +608,9 @@ function Motor({ search }: { search: string }) {
           </label>
           <input
             id="monto"
+            name="monto"
             type="number"
+            autoComplete="off"
             min={0}
             step={100}
             inputMode="decimal"
@@ -590,7 +628,9 @@ function Motor({ search }: { search: string }) {
             </label>
             <input
               id="tc"
+              name="tc"
               type="number"
+              autoComplete="off"
               min={0.01}
               step={0.001}
               inputMode="decimal"
@@ -640,6 +680,8 @@ function Motor({ search }: { search: string }) {
               </label>
               <select
                 id="pension"
+                name="pension"
+                autoComplete="off"
                 className={INPUT}
                 value={pension}
                 onChange={(e) => setPension(e.target.value)}
@@ -669,7 +711,7 @@ function Motor({ search }: { search: string }) {
         )}
 
         <div className="flex flex-col gap-3 border-t border-line pt-5">
-          <h3 className="text-sm font-semibold text-fg">Gastos deducibles del año</h3>
+          <h2 className="text-sm font-semibold text-fg">Gastos deducibles del año</h2>
           <Pista>
             Lo que pagaste con tarjeta o transferencia y con comprobante electrónico a tu nombre. En
             efectivo no cuenta.
@@ -686,7 +728,9 @@ function Motor({ search }: { search: string }) {
               </div>
               <input
                 id={`gasto-${g.key}`}
+                name={`gasto-${g.key}`}
                 type="number"
+                autoComplete="off"
                 min={0}
                 step={g.step}
                 inputMode="decimal"
