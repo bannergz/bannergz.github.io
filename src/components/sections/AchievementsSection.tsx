@@ -3,9 +3,9 @@ import type { Achievement } from "@/types";
 
 function AchievementCard({ achievement }: { achievement: Achievement }) {
   return (
-    <div className="glass-card text-center">
-      <p className="gradient-text text-4xl font-bold">{achievement.metric}</p>
-      <p className="mt-3 text-sm leading-relaxed text-text-muted">
+    <div className="panel-card flex flex-col gap-3">
+      <p className="figure-accent text-4xl">{achievement.metric}</p>
+      <p className="text-sm leading-relaxed text-text-muted">
         {achievement.description}
       </p>
     </div>
@@ -16,10 +16,10 @@ export function AchievementsSection() {
   const { achievements } = portfolioData;
 
   return (
-    <section id="achievements" className="bg-surface">
+    <section id="achievements" className="bg-ink">
       <div className="section-container">
         <h2 className="section-title">
-          Key <span className="gradient-text">Achievements</span>
+          Key <span className="text-accent">Achievements</span>
         </h2>
         <p className="section-subtitle">
           Measurable impact delivered across enterprise fintech platforms.

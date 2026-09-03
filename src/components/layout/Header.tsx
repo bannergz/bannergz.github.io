@@ -16,11 +16,11 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="fixed top-0 right-0 left-0 z-50 border-b border-white/10 bg-white/90 backdrop-blur-md">
+    <header className="fixed top-0 right-0 left-0 z-50 border-b border-line bg-ink/90 backdrop-blur-md">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 lg:px-8">
         <Link
           href="/"
-          className="text-xl font-bold tracking-tight text-primary"
+          className="font-mono text-xl font-semibold tracking-tight text-fg"
         >
           BG<span className="text-accent">.</span>
         </Link>
@@ -53,7 +53,7 @@ export function Header() {
           aria-expanded={isMenuOpen}
         >
           <svg
-            className="h-6 w-6 text-primary"
+            className="h-6 w-6 text-fg"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -79,13 +79,13 @@ export function Header() {
 
       {/* Mobile menu */}
       {isMenuOpen && (
-        <div className="border-t border-gray-100 bg-white md:hidden">
+        <div className="border-t border-line bg-panel md:hidden">
           <ul className="flex flex-col gap-1 px-6 py-4">
             {NAV_LINKS.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="block rounded-lg px-4 py-3 text-sm font-medium text-text-muted transition-colors hover:bg-surface-dark hover:text-accent"
+                  className="block rounded-sm px-4 py-3 text-sm font-medium text-text-muted transition-colors hover:bg-panel-hi hover:text-accent"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {link.label}

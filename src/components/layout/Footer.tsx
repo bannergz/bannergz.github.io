@@ -7,20 +7,20 @@ export function Footer() {
   const buildYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-gray-100 bg-primary text-white">
+    <footer className="border-t border-line bg-panel text-fg">
       <div className="mx-auto max-w-6xl px-6 py-12 lg:px-8">
         <div className="flex flex-col items-center gap-8 text-center md:flex-row md:items-start md:justify-between md:text-left">
           <div>
-            <p className="text-xl font-bold">
-              BG<span className="text-accent-light">.</span>
+            <p className="font-mono text-xl font-semibold">
+              BG<span className="text-accent">.</span>
             </p>
-            <p className="mt-1 text-sm text-gray-400">
+            <p className="mt-1 text-sm text-text-muted">
               {name} &mdash; {title}
             </p>
           </div>
 
           <nav aria-label="Free tools">
-            <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
+            <p className="text-xs font-semibold uppercase tracking-wider text-text-muted">
               Free tools
             </p>
             <ul className="mt-3">
@@ -28,11 +28,11 @@ export function Footer() {
                 <Link
                   href="/calcula-tus-impuestos"
                   hrefLang="es"
-                  className="text-sm font-medium text-gray-200 transition-colors hover:text-accent-light"
+                  className="text-sm font-medium text-fg transition-colors hover:text-accent"
                 >
                   Calculadora de Impuesto a la Renta 2026 &mdash; ¿cuánto me descuenta SUNAT?
                 </Link>
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-1 text-xs text-text-muted">
                   Planilla o recibo por honorarios, UIT 2026 y gastos deducibles (Perú)
                 </p>
               </li>
@@ -44,7 +44,7 @@ export function Footer() {
               href={`https://${contact.linkedin}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-400 transition-colors hover:text-accent-light"
+              className="text-text-muted transition-colors hover:text-accent"
               aria-label="LinkedIn"
             >
               <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -53,7 +53,7 @@ export function Footer() {
             </a>
             <a
               href={`mailto:${contact.email}`}
-              className="text-gray-400 transition-colors hover:text-accent-light"
+              className="text-text-muted transition-colors hover:text-accent"
               aria-label="Email"
             >
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -64,7 +64,7 @@ export function Footer() {
               href="https://github.com/bannergz"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-400 transition-colors hover:text-accent-light"
+              className="text-text-muted transition-colors hover:text-accent"
               aria-label="GitHub"
             >
               <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -74,8 +74,8 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-8 border-t border-gray-700 pt-8 text-center">
-          <p className="text-sm text-gray-400">
+        <div className="mt-8 border-t border-line pt-8 text-center">
+          <p className="text-sm text-text-muted">
             &copy; <CurrentYear buildYear={buildYear} /> {name}. All rights reserved. Built with Next.js
             &amp; Tailwind CSS.
           </p>
