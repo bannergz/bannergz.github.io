@@ -1,0 +1,153 @@
+/* Esta página vive fuera del sistema de diseño del sitio a propósito: no es
+   portafolio, es un regalo. Un solo mundo visual, un campo al atardecer, así
+   que no hay tema claro ni oscuro que elegir y todo se pinta explícito. */
+
+.campo {
+  --tinta: #34200f;
+  --tinta-suave: #6b4a2e;
+
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  background: #4a5f9e;
+  color: var(--tinta);
+  font-family: var(--font-karla), ui-sans-serif, system-ui, sans-serif;
+  overflow: hidden;
+}
+
+.lienzo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;
+}
+
+.dedicatoria {
+  position: relative;
+  z-index: 1;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0 1.5rem clamp(2.5rem, 9vh, 5.5rem);
+  text-align: center;
+  pointer-events: none;
+}
+
+.mensaje {
+  margin: 0;
+  max-width: 22ch;
+  font-family: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-weight: 600;
+  font-size: clamp(1.75rem, 6.2vw, 3.6rem);
+  line-height: 1.14;
+  text-wrap: balance;
+  color: var(--tinta);
+  /* El contraste lo da la banda cálida del horizonte, no una sombra. */
+  text-shadow: 0 1px 0 rgba(255, 244, 214, 0.5);
+}
+
+.corazon {
+  display: inline-block;
+  color: #b8321f;
+  animation: latir 2.4s ease-in-out infinite;
+}
+
+.firma {
+  margin: 0;
+  font-size: clamp(0.72rem, 2.4vw, 0.9rem);
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--tinta-suave);
+}
+
+.pista {
+  position: fixed;
+  left: 50%;
+  top: clamp(1.5rem, 5vh, 3rem);
+  transform: translateX(-50%);
+  z-index: 2;
+  margin: 0;
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  background: rgba(255, 247, 228, 0.7);
+  color: var(--tinta-suave);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  pointer-events: none;
+  animation: desvanecer 1.2s ease-out 9s forwards;
+}
+
+/* La dedicatoria entra cuando el campo ya floreció, no antes. */
+.entra {
+  opacity: 0;
+  animation: subir 1.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.mensaje.entra {
+  animation-delay: 2.9s;
+}
+.firma.entra {
+  animation-delay: 3.5s;
+}
+
+@keyframes subir {
+  from {
+    opacity: 0;
+    transform: translateY(1.2rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes latir {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  14% {
+    transform: scale(1.16);
+  }
+  28% {
+    transform: scale(1);
+  }
+  42% {
+    transform: scale(1.1);
+  }
+  56% {
+    transform: scale(1);
+  }
+}
+
+@keyframes desvanecer {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entra {
+    opacity: 1;
+    animation: none;
+    transform: none;
+  }
+  .corazon {
+    animation: none;
+  }
+  .pista {
+    animation: none;
+    opacity: 0;
+    visibility: hidden;
+  }
+}
