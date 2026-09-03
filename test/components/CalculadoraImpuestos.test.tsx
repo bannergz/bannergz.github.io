@@ -1,8 +1,12 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { CalculadoraImpuestos } from "@/components/calculadora/CalculadoraImpuestos";
 
 describe("CalculadoraImpuestos", () => {
+  // El estado vive en la URL: sin esto, el enlace que escribe un test entra
+  // como estado inicial del siguiente.
+  afterEach(() => window.history.replaceState(null, "", "/"));
+
   it("abre con un caso real ya calculado: S/ 5,000 en planilla con 14 sueldos", () => {
     const { container } = render(<CalculadoraImpuestos />);
     const text = container.textContent ?? "";
@@ -52,6 +56,82 @@ describe("CalculadoraImpuestos", () => {
     expect(screen.getByRole("button", { name: "Recibo por honorarios" })).toHaveAttribute(
       "aria-pressed",
       "false",
+    );
+  });
+});
+
+describe("CalculadoraImpuestos · enlace compartible", () => {
+  afterEach(() => window.history.replaceState(null, "", "/"));
+
+  it("abre con los valores del enlace", () => {
+    window.history.replaceState(null, "", "/calcula-tus-impuestos/?monto=12000&regimen=cuarta");
+    render(<CalculadoraImpuestos />);
+
+    expect(screen.getByLabelText("Ingreso bruto mensual")).toHaveValue(12000);
+    expect(screen.getByRole("button", { name: "Recibo por honorarios" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+  });
+
+  it("un enlace manipulado no rompe el render: cae a los valores por defecto", () => {
+    window.history.replaceState(null, "", "/?monto=-1&pension=0.5&regimen=tercera");
+    render(<CalculadoraImpuestos />);
+
+    expect(screen.getByLabelText("Ingreso bruto mensual")).toHaveValue(5000);
+    expect(screen.getByLabelText("Aporte previsional")).toHaveValue("0.129");
+  });
+
+  it("lleva a la URL lo que el usuario cambia", async () => {
+    const user = userEvent.setup();
+    render(<CalculadoraImpuestos />);
+
+    const monto = screen.getByLabelText("Ingreso bruto mensual");
+    await user.clear(monto);
+    await user.type(monto, "12000");
+
+    await waitFor(() => expect(window.location.search).toBe("?monto=12000"), { timeout: 2000 });
+  });
+
+  it("copia el enlace del cálculo", async () => {
+    // userEvent instala su propio portapapeles: se lee de ahí, no de un espía.
+    const user = userEvent.setup();
+    render(<CalculadoraImpuestos />);
+
+    await user.click(screen.getByRole("button", { name: "Recibo por honorarios" }));
+    await user.click(screen.getByRole("button", { name: /copiar enlace/i }));
+
+    expect(await navigator.clipboard.readText()).toContain("?regimen=cuarta");
+    expect(await screen.findByText("Enlace copiado.")).toBeInTheDocument();
+  });
+});
+
+describe("CalculadoraImpuestos · lectores de pantalla", () => {
+  afterEach(() => window.history.replaceState(null, "", "/"));
+
+  it("publica el resultado en una región viva desde el primer render", () => {
+    render(<CalculadoraImpuestos />);
+
+    const region = screen.getByText(/Impuesto del año: .+ soles\./);
+    expect(region).toHaveAttribute("aria-live", "polite");
+    expect(region.textContent).toContain("Tasa efectiva:");
+    expect(region.textContent).toContain("Te queda al mes:");
+  });
+
+  it("anuncia el resultado nuevo cuando el usuario deja de escribir", async () => {
+    const user = userEvent.setup();
+    render(<CalculadoraImpuestos />);
+
+    const alquiler = screen.getByLabelText("Alquiler");
+    await user.clear(alquiler);
+    await user.type(alquiler, "60000");
+
+    await waitFor(
+      () =>
+        expect(screen.getByText(/Impuesto del año:/).textContent).toContain(
+          "Tope de 3 UIT alcanzado",
+        ),
+      { timeout: 3000 },
     );
   });
 });
