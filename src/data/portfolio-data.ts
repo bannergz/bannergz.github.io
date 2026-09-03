@@ -150,7 +150,7 @@ export const portfolioData: PortfolioData = {
         "Technical leadership of an engineering team responsible for multiple platform capabilities.",
         "Built a self-updating developer portal aggregating documentation and OpenAPI specifications across 60+ internal services, with automated documentation-health scoring and SSO-gated access.",
         "Designed an authenticated architecture-documentation platform with C4 modeling, validated in CI on every change.",
-        "Authored the organization's Rust microservice scaffold — hexagonal architecture, persistence, observability bootstrap, and container-based integration testing — adopted as the fleet standard.",
+        "Authored the organization’s Rust microservice scaffold — hexagonal architecture, persistence, observability bootstrap, and container-based integration testing — adopted as the fleet standard.",
         "Introduced continuous performance benchmarking across three production services and codified it as an organization-wide engineering standard.",
         "Contributor to and power user of the internal agentic AI harness — skills, subagents, and safety hooks for Claude-based workflows — used across the engineering organization.",
         "Daily delivery across a polyglot fleet of Rust, TypeScript, and Python services, spanning backend, frontend, and infrastructure.",
@@ -163,7 +163,7 @@ export const portfolioData: PortfolioData = {
       highlights: [
         "Technical leadership of an engineering team responsible for multiple capabilities of the Yape ecosystem used by millions of users.",
         "Design of solution architectures using the C4 Model and principles of DDD and microservices architecture.",
-        "Responsible for more than 19 APIs in a microservices architecture integrated with BCP's financial systems.",
+        "Responsible for more than 19 APIs in a microservices architecture integrated with BCP’s financial systems.",
         "Design of event-driven solutions for processing financial transactions.",
         "Implementation of backend services with Spring Boot, Quarkus, and NodeJS.",
         "Definition of architectural guidelines for cross-organizational teams.",
@@ -182,7 +182,7 @@ export const portfolioData: PortfolioData = {
         "Design of REST APIs for high-volume transaction services.",
         "Development of more than 15 business APIs using microservices architecture.",
         "Implementation of clean and decoupled architectural patterns.",
-        "Integration with the bank's core financial system.",
+        "Integration with the bank’s core financial system.",
       ],
     },
     {
@@ -223,7 +223,7 @@ export const portfolioData: PortfolioData = {
     {
       metric: "19+",
       description:
-        "APIs managed in production integrated with BCP's financial systems.",
+        "APIs managed in production integrated with BCP’s financial systems.",
     },
     {
       metric: "60+",

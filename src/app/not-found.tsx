@@ -16,7 +16,7 @@ export default function NotFound() {
       <p className="col-label">Error</p>
       <p className="figure-accent mt-3 text-7xl leading-none lg:text-8xl">404</p>
 
-      <h1 className="section-title mt-8">This page doesn&rsquo;t exist</h1>
+      <h1 className="section-title mt-8">This Page Doesn&rsquo;t Exist</h1>
       <p className="section-subtitle">
         The address may be mistyped, or the page may have moved. Everything about my work lives
         on the home page &mdash; experience, skills, and how to reach me.
@@ -24,10 +24,10 @@ export default function NotFound() {
 
       <div className="flex flex-wrap gap-4">
         <Link href="/" className="btn-primary">
-          Back to home
+          Back to Home
         </Link>
         <Link href="/calcula-tus-impuestos" className="btn-outline">
-          Peru income tax calculator
+          Peru Income Tax Calculator
         </Link>
       </div>
     </section>

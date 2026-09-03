@@ -3,6 +3,11 @@ import userEvent from "@testing-library/user-event";
 import { Header } from "@/components/layout/Header";
 
 describe("Header", () => {
+  it("nombra su landmark: la página tiene dos navegaciones", () => {
+    render(<Header />);
+    expect(screen.getByRole("navigation", { name: "Main" })).toBeInTheDocument();
+  });
+
   it("apunta cada ancla a la home, para que funcione desde una subpágina", () => {
     const { container } = render(<Header />);
     const hrefs = Array.from(container.querySelectorAll("a[href]")).map(

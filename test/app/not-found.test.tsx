@@ -5,7 +5,7 @@ describe("página 404", () => {
   it("dice qué pasó en un encabezado, no sólo con la cifra", () => {
     render(<NotFound />);
     const h1 = document.querySelector("h1");
-    expect(h1?.textContent).toContain("This page doesn");
+    expect(h1?.textContent).toContain("This Page Doesn");
   });
 
   it("ofrece la salida que el 404 de fábrica no tiene: volver al inicio", () => {

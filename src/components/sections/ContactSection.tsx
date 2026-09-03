@@ -17,12 +17,12 @@ export function ContactSection() {
       <div className="section-container relative z-10">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold text-balance text-fg lg:text-4xl">
-            Let&apos;s Work <span className="text-accent">Together</span>
+            Let&rsquo;s Work <span className="text-accent">Together</span>
           </h2>
           <p className="mt-4 text-lg text-text-muted">
             Looking for a Principal Engineer or Software Architect to drive
-            your platform and AI strategy? I&apos;d love to discuss how I can
-            contribute to your organization&apos;s success.
+            your platform and AI strategy? I&rsquo;d love to discuss how I can
+            contribute to your organization&rsquo;s success.
           </p>
 
           <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
@@ -64,8 +64,8 @@ export function ContactSection() {
             </a>
           </div>
 
-          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-3">
-            <div className="rounded-lg border border-line bg-panel p-6">
+          <ul className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-3">
+            <li className="rounded-lg border border-line bg-panel p-6">
               <svg
                 aria-hidden="true"
                 className="mx-auto h-8 w-8 text-accent"
@@ -84,8 +84,8 @@ export function ContactSection() {
               <a href={`mailto:${contact.email}`} className="mt-1 block text-sm text-text-muted transition-colors hover:text-accent">
                 {contact.email}
               </a>
-            </div>
-            <div className="rounded-lg border border-line bg-panel p-6">
+            </li>
+            <li className="rounded-lg border border-line bg-panel p-6">
               <svg
                 aria-hidden="true"
                 className="mx-auto h-8 w-8 text-accent"
@@ -104,8 +104,8 @@ export function ContactSection() {
               <a href={`tel:${contact.phone.replace(/\s/g, "")}`} className="mt-1 block text-sm text-text-muted transition-colors hover:text-accent">
                 {contact.phone}
               </a>
-            </div>
-            <div className="rounded-lg border border-line bg-panel p-6">
+            </li>
+            <li className="rounded-lg border border-line bg-panel p-6">
               <svg
                 aria-hidden="true"
                 className="mx-auto h-8 w-8 text-accent"
@@ -123,8 +123,8 @@ export function ContactSection() {
               >
                 {name}
               </a>
-            </div>
-          </div>
+            </li>
+          </ul>
 
           {/* Formacion e idiomas vivian en la seccion About, que ya no existe.
               Son datos de ficha, y esta es la ficha. */}

@@ -11,7 +11,7 @@ function TimelineItem({
   const isFirst = index === 0;
 
   return (
-    <div className="relative pl-8 pb-12 last:pb-0 md:pl-12">
+    <li className="relative pl-8 pb-12 last:pb-0 md:pl-12">
       {/* Timeline line */}
       <div className="absolute top-0 left-0 h-full w-px bg-gradient-to-b from-accent to-accent/20 md:left-4" />
 
@@ -62,7 +62,7 @@ function TimelineItem({
           ))}
         </ul>
       </div>
-    </div>
+    </li>
   );
 }
 
@@ -90,11 +90,11 @@ export function ExperienceSection() {
           ))}
         </ul>
 
-        <div className="mx-auto max-w-3xl">
+        <ol className="mx-auto max-w-3xl">
           {experience.map((entry, index) => (
             <TimelineItem key={entry.company} entry={entry} index={index} />
           ))}
-        </div>
+        </ol>
       </div>
     </section>
   );
