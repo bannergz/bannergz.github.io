@@ -121,11 +121,11 @@ describe("portfolioData", () => {
     expect(overclaims).toEqual([]);
   });
 
-  it("has exactly five achievements (AchievementsSection renders xl:grid-cols-5)", () => {
+  it("has exactly five achievements (la fila de cifras de Experience usa lg:grid-cols-5)", () => {
     expect(portfolioData.achievements).toHaveLength(5);
   });
 
-  it("has unique achievement metrics (AchievementsSection keys on metric)", () => {
+  it("has unique achievement metrics (la fila de cifras de Experience indexa por metric)", () => {
     const metrics = portfolioData.achievements.map((a) => a.metric);
     expect(new Set(metrics).size).toBe(metrics.length);
   });

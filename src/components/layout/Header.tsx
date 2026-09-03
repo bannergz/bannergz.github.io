@@ -1,19 +1,36 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
 const NAV_LINKS: ReadonlyArray<{ href: string; label: string }> = [
-  { href: "/#about", label: "About" },
-  { href: "/#skills", label: "Skills" },
   { href: "/#experience", label: "Experience" },
-  { href: "/#achievements", label: "Achievements" },
-  { href: "/#education", label: "Education" },
+  { href: "/#skills", label: "Skills" },
   { href: "/#contact", label: "Contact" },
 ];
 
+/** El botón lo declara en `aria-controls`, así que tiene que ser estable. */
+const MENU_ID = "menu-principal";
+
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const botonRef = useRef<HTMLButtonElement>(null);
+
+  // Abierto, el menú tapa la página entera. Sin Escape, quien navega con
+  // teclado solo sale volviendo al botón que lo abrió.
+  useEffect(() => {
+    if (!isMenuOpen) return;
+
+    const alPulsar = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      setIsMenuOpen(false);
+      // El foco vuelve a donde estaba: cerrar no debe soltarlo al inicio.
+      botonRef.current?.focus();
+    };
+
+    window.addEventListener("keydown", alPulsar);
+    return () => window.removeEventListener("keydown", alPulsar);
+  }, [isMenuOpen]);
 
   return (
     <header className="fixed top-0 right-0 left-0 z-50 border-b border-line bg-ink/90 backdrop-blur-md">
@@ -46,11 +63,13 @@ export function Header() {
 
         {/* Mobile toggle */}
         <button
+          ref={botonRef}
           type="button"
           className="md:hidden"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           aria-label="Toggle menu"
           aria-expanded={isMenuOpen}
+          aria-controls={MENU_ID}
         >
           <svg
             aria-hidden="true"
@@ -80,7 +99,7 @@ export function Header() {
 
       {/* Mobile menu */}
       {isMenuOpen && (
-        <div className="border-t border-line bg-panel md:hidden">
+        <div id={MENU_ID} className="border-t border-line bg-panel md:hidden">
           <ul className="flex flex-col gap-1 px-6 py-4">
             {NAV_LINKS.map((link) => (
               <li key={link.href}>

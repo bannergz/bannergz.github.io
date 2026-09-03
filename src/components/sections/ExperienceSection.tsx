@@ -67,7 +67,7 @@ function TimelineItem({
 }
 
 export function ExperienceSection() {
-  const { experience } = portfolioData;
+  const { experience, achievements, summary } = portfolioData;
 
   return (
     <section id="experience" className="bg-ink">
@@ -75,10 +75,20 @@ export function ExperienceSection() {
         <h2 className="section-title">
           Professional <span className="text-accent">Experience</span>
         </h2>
-        <p className="section-subtitle">
-          A track record of leading engineering teams and delivering
-          high-impact financial platforms at scale.
-        </p>
+        <p className="section-subtitle">{summary}</p>
+
+        {/* Las cifras tenían sección propia. Solas no dicen de dónde salen,
+            así que ahora encabezan la línea de tiempo que las explica. */}
+        <ul className="mb-14 grid grid-cols-2 gap-x-6 gap-y-8 border-y border-line py-8 sm:grid-cols-3 lg:grid-cols-5">
+          {achievements.map((achievement) => (
+            <li key={achievement.metric} className="flex flex-col gap-1.5">
+              <span className="figure-accent text-3xl">{achievement.metric}</span>
+              <span className="text-sm leading-snug text-pretty text-text-muted">
+                {achievement.description}
+              </span>
+            </li>
+          ))}
+        </ul>
 
         <div className="mx-auto max-w-3xl">
           {experience.map((entry, index) => (

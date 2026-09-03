@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { ExperienceSection } from "@/components/sections/ExperienceSection";
+import { portfolioData } from "@/data/portfolio-data";
 
 describe("ExperienceSection", () => {
   it("renders the section title", () => {
@@ -30,5 +31,18 @@ describe("ExperienceSection", () => {
     expect(
       screen.getByText("Software Application Java Developer")
     ).toBeInTheDocument();
+  });
+
+  it("lleva las cifras que antes eran su propia sección", () => {
+    render(<ExperienceSection />);
+    portfolioData.achievements.forEach((logro) => {
+      expect(screen.getByText(logro.metric)).toBeInTheDocument();
+      expect(screen.getByText(logro.description)).toBeInTheDocument();
+    });
+  });
+
+  it("abre con el resumen profesional, no con una bajada genérica", () => {
+    const { container } = render(<ExperienceSection />);
+    expect(container.textContent).toContain(portfolioData.summary);
   });
 });

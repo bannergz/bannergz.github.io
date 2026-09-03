@@ -20,7 +20,11 @@ describe("root metadata", () => {
     // github.io 301s to the custom domain: declaring it canonical points
     // crawlers and link unfurlers at a URL that only redirects back.
     expect(SITE_URL).toBe("https://www.bannergonzales.com");
-    expect(metadata.metadataBase?.origin).toBe(SITE_URL);
+    // `metadataBase` se declara `string | URL | null`, y solo `URL` tiene
+    // `origin`: se estrecha con la propia aserción antes de leerlo.
+    const base = metadata.metadataBase;
+    expect(base).toBeInstanceOf(URL);
+    expect((base as URL).origin).toBe(SITE_URL);
     expect(metadata.openGraph?.url).toBe(SITE_URL);
     expect(JSON.stringify(metadata)).not.toContain("github.io");
   });
