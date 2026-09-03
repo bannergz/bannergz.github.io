@@ -1,6 +1,12 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
+import { escribirUrlSearch, urlAbsoluta, useUrlSearch } from "@/hooks/useUrlSearch";
+import {
+  codificarEstado,
+  decodificarEstado,
+  type EstadoCalculadora,
+} from "@/lib/calculadora-url";
 import {
   ANUAL_SUSPENSION,
   MENSUAL_SIN_OBLIGACION,
@@ -19,10 +25,8 @@ import {
   type SueldosAlAno,
 } from "@/lib/impuestos";
 
-/** Azules del sitio, de claro a oscuro: un tono por tramo de la escala. */
+/** La rampa del ámbar, de clara a oscura: un tono por tramo de la escala. */
 const COLOR_TRAMO = ["#FFE9B0", "#FFD166", "#FFB627", "#D9930F", "#A66C05"] as const;
-
-type GastosTexto = Record<keyof GastosDeducibles, string>;
 
 const GASTOS_UI: ReadonlyArray<{ key: keyof GastosDeducibles; label: string; step: number }> = [
   { key: "alquiler", label: "Alquiler", step: 500 },
@@ -262,24 +266,133 @@ function Codigo({ children }: { children: ReactNode }) {
 }
 
 /* ------------------------------------------------------------------ */
+/* Compartir                                                           */
+/* ------------------------------------------------------------------ */
+
+type EstadoCopia = "listo" | "ok" | "falla";
+
+/**
+ * El cálculo ya viaja en la barra de direcciones, pero nadie mira la barra:
+ * este botón es lo que hace visible que el resultado tiene enlace propio.
+ */
+function BotonCompartir({ query }: { query: string }) {
+  const [copia, setCopia] = useState<EstadoCopia>("listo");
+
+  useEffect(() => {
+    if (copia === "listo") return;
+    const t = setTimeout(() => setCopia("listo"), 4000);
+    return () => clearTimeout(t);
+  }, [copia]);
+
+  const copiar = async () => {
+    try {
+      await navigator.clipboard.writeText(urlAbsoluta(query));
+      setCopia("ok");
+    } catch {
+      // Sin portapapeles disponible (contexto no seguro, permiso denegado):
+      // el enlace igual está arriba, así que lo decimos en vez de callar.
+      setCopia("falla");
+    }
+  };
+
+  return (
+    <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+      <button
+        type="button"
+        onClick={() => void copiar()}
+        className="inline-flex items-center gap-2 rounded-sm border border-line-hi px-4 py-2 text-sm font-medium text-fg transition-colors hover:border-accent hover:text-accent"
+      >
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1.8}
+          className="h-4 w-4"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M13.5 10.5 21 3m0 0h-5.25M21 3v5.25M10.5 6H6a3 3 0 0 0-3 3v9a3 3 0 0 0 3 3h9a3 3 0 0 0 3-3v-4.5"
+          />
+        </svg>
+        Copiar enlace de este cálculo
+      </button>
+      <span role="status" className="text-sm text-text-muted">
+        {copia === "ok" && "Enlace copiado."}
+        {copia === "falla" && "No se pudo copiar. El enlace está en la barra de direcciones."}
+      </span>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Anuncio para lectores de pantalla                                   */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Las tres cifras cambian con cada tecla y `aria-live="polite"` encola todos los
+ * cambios: sin demora, escribir "60000" en un campo deja cinco anuncios en cola
+ * que el usuario tiene que esperar a que terminen. Se anuncia cuando deja de
+ * escribir.
+ *
+ * Arranca con el texto ya puesto —no vacío— para que el resumen exista en el
+ * primer render: una región viva sólo anuncia lo que cambia después, así que de
+ * este modo la página no se anuncia sola al cargar.
+ */
+function useAnuncioDemorado(texto: string, ms = 700): string {
+  const [anuncio, setAnuncio] = useState(texto);
+
+  useEffect(() => {
+    const t = setTimeout(() => setAnuncio(texto), ms);
+    return () => clearTimeout(t);
+  }, [texto, ms]);
+
+  return anuncio;
+}
+
+/* ------------------------------------------------------------------ */
 /* Componente principal                                                */
 /* ------------------------------------------------------------------ */
 
+/**
+ * Un enlace distinto es, literalmente, otra calculadora: `key` la remonta con
+ * el estado que trae la URL. Remontar es más simple y más seguro que sincronizar
+ * el estado con la URL dentro de un efecto, y sólo ocurre dos veces —al hidratar
+ * un enlace con parámetros y al usar atrás/adelante— porque las escrituras
+ * propias no mueven el snapshot.
+ */
 export function CalculadoraImpuestos() {
-  const [moneda, setMoneda] = useState<Moneda>("PEN");
-  const [monto, setMonto] = useState("5000");
-  const [tipoCambio, setTipoCambio] = useState("3.36");
-  const [regimen, setRegimen] = useState<Regimen>("quinta");
-  const [sueldos, setSueldos] = useState<SueldosAlAno>(14);
-  const [pension, setPension] = useState("0.129");
-  const [pagador, setPagador] = useState<Pagador>("local");
-  const [gastos, setGastos] = useState<GastosTexto>({
-    alquiler: "0",
-    medicos: "0",
-    serviciosCuarta: "0",
-    restaurantes: "0",
-    essaludHogar: "0",
-  });
+  const search = useUrlSearch();
+  return <Motor key={search} search={search} />;
+}
+
+function Motor({ search }: { search: string }) {
+  const [estado, setEstado] = useState(() => decodificarEstado(search));
+  const { moneda, monto, tipoCambio, regimen, sueldos, pension, pagador, gastos } = estado;
+
+  const setCampo = <K extends keyof EstadoCalculadora>(clave: K, valor: EstadoCalculadora[K]) =>
+    setEstado((e) => ({ ...e, [clave]: valor }));
+
+  const setMoneda = (v: Moneda) => setCampo("moneda", v);
+  const setMonto = (v: string) => setCampo("monto", v);
+  const setTipoCambio = (v: string) => setCampo("tipoCambio", v);
+  const setRegimen = (v: Regimen) => setCampo("regimen", v);
+  const setSueldos = (v: SueldosAlAno) => setCampo("sueldos", v);
+  const setPension = (v: string) => setCampo("pension", v);
+  const setPagador = (v: Pagador) => setCampo("pagador", v);
+  const setGasto = (key: keyof GastosDeducibles, value: string) =>
+    setEstado((e) => ({ ...e, gastos: { ...e.gastos, [key]: value } }));
+
+  const query = codificarEstado(estado, search);
+
+  useEffect(() => {
+    // 400 ms: escribir en cada tecla choca con el límite de `replaceState` de
+    // los navegadores en cuanto alguien mantiene pulsada una flecha del teclado
+    // sobre un `input type="number"`.
+    const t = setTimeout(() => escribirUrlSearch(query), 400);
+    return () => clearTimeout(t);
+  }, [query]);
 
   const esQuinta = regimen === "quinta";
   const r = calcularRenta({
@@ -422,8 +535,17 @@ export function CalculadoraImpuestos() {
     );
   }
 
-  const setGasto = (key: keyof GastosDeducibles, value: string) =>
-    setGastos((g) => ({ ...g, [key]: value }));
+  /* ---- resumen hablado: lo que cambia cuando cambia un dato ---- */
+  const anuncio = useAnuncioDemorado(
+    [
+      `Impuesto del año: ${soles0(r.impuesto)} soles.`,
+      `Tasa efectiva: ${r.tasaEfectiva.toFixed(2)} por ciento.`,
+      `${tercera.titulo}: ${tercera.valor} soles.`,
+      avisos.length > 0 ? `Avisos: ${avisos.map((a) => a.titulo).join("; ")}.` : "",
+    ]
+      .join(" ")
+      .trim(),
+  );
 
   return (
     <div className="grid gap-8 lg:grid-cols-[22rem_1fr] lg:items-start">
@@ -578,6 +700,13 @@ export function CalculadoraImpuestos() {
 
       {/* ---------------- resultados ---------------- */}
       <div className="flex min-w-0 flex-col gap-8">
+        {/* Los números se rehacen sin que nada tome el foco ni aparezca un
+            control nuevo: sin esta región viva, un lector de pantalla no tiene
+            forma de saber que el resultado cambió. */}
+        <p role="status" aria-live="polite" className="sr-only">
+          {anuncio}
+        </p>
+
         <div className="grid gap-4 md:grid-cols-3">
           <Tarjeta
             titulo="Impuesto del año"
@@ -604,6 +733,8 @@ export function CalculadoraImpuestos() {
             tono={tercera.tono}
           />
         </div>
+
+        <BotonCompartir query={query} />
 
         {avisos.length > 0 && (
           <div className="flex flex-col gap-3">
