@@ -91,14 +91,14 @@ export function HeroSection() {
           </div>
 
           {/* Stats bar */}
-          <div className="mt-16 grid grid-cols-2 gap-8 border-t border-line pt-10 md:grid-cols-4">
+          <ul className="mt-16 grid grid-cols-2 gap-8 border-t border-line pt-10 md:grid-cols-4">
             {heroStats.map((stat) => (
-              <div key={stat.value}>
+              <li key={stat.value}>
                 <p className="figure text-3xl">{stat.value}</p>
                 <p className="col-label mt-2">{stat.label}</p>
-              </div>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </div>
     </section>

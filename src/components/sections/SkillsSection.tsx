@@ -10,16 +10,16 @@ function SkillCard({ category }: { category: SkillCategory }) {
         </span>
         <h3 className="text-lg font-bold text-fg">{category.title}</h3>
       </div>
-      <div className="flex flex-wrap gap-2">
+      <ul className="flex flex-wrap gap-2">
         {category.skills.map((skill) => (
-          <span
+          <li
             key={skill}
             className="rounded-lg bg-panel-hi px-3 py-1.5 text-sm font-medium text-fg transition-colors group-hover:bg-accent/10 group-hover:text-accent"
           >
             {skill}
-          </span>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 }
