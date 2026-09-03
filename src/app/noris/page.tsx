@@ -51,6 +51,8 @@ export default function NorisPage() {
       sway: Math.random() * Math.PI * 2,
     }));
 
+    let frameId = 0;
+
     function animate() {
       if (!ctx) return;
       ctx.clearRect(0, 0, width, height);
@@ -74,9 +76,12 @@ export default function NorisPage() {
         );
       });
 
-      requestAnimationFrame(animate);
+      frameId = requestAnimationFrame(animate);
     }
     animate();
+
+    // Sin esto el loop sigue corriendo después del unmount.
+    return () => cancelAnimationFrame(frameId);
   }, []);
 
   return (

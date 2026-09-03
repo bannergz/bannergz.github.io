@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { portfolioData } from "@/data/portfolio-data";
+import { CurrentYear } from "./CurrentYear";
 
 export function Footer() {
   const { name, title, contact } = portfolioData;
-  const currentYear = new Date().getFullYear();
+  const buildYear = new Date().getFullYear();
 
   return (
     <footer className="border-t border-gray-100 bg-primary text-white">
@@ -75,7 +76,7 @@ export function Footer() {
 
         <div className="mt-8 border-t border-gray-700 pt-8 text-center">
           <p className="text-sm text-gray-400">
-            &copy; {currentYear} {name}. All rights reserved. Built with Next.js
+            &copy; <CurrentYear buildYear={buildYear} /> {name}. All rights reserved. Built with Next.js
             &amp; Tailwind CSS.
           </p>
         </div>

@@ -34,6 +34,12 @@
     background-color: var(--color-accent);
     color: white;
   }
+
+  /* El header mide ~77px y es fixed: sin esto, saltar a #about o #skills
+     deja el título de la sección tapado debajo del header. */
+  section[id] {
+    scroll-margin-top: 6rem;
+  }
 }
 
 @layer components {

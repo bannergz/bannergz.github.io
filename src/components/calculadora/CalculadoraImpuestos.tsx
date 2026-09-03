@@ -428,7 +428,7 @@ export function CalculadoraImpuestos() {
   return (
     <div className="grid gap-8 lg:grid-cols-[22rem_1fr] lg:items-start">
       {/* ---------------- panel de entrada ---------------- */}
-      <aside className="flex flex-col gap-6 rounded-2xl border border-gray-100 bg-white p-6 shadow-lg lg:sticky lg:top-24">
+      <aside className="flex flex-col gap-6 rounded-2xl border border-gray-100 bg-white p-6 shadow-lg lg:sticky lg:top-24 lg:max-h-[calc(100dvh-7rem)] lg:overflow-y-auto lg:overscroll-contain">
         <Segmentado
           label="Moneda del ingreso"
           value={moneda}
