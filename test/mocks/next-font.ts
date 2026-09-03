@@ -22,3 +22,7 @@ const mockFont = (family: string, fallbackVar: string): FontLoader => {
 
 export const Archivo = mockFont("Archivo", "--font-archivo");
 export const IBM_Plex_Mono = mockFont("IBM Plex Mono", "--font-plex-mono");
+
+// Solo en /noris, que va aparte del sistema de diseño del sitio.
+export const Fraunces = mockFont("Fraunces", "--font-fraunces");
+export const Karla = mockFont("Karla", "--font-karla");
