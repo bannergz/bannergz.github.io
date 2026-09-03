@@ -55,6 +55,11 @@ interface Mota {
 
 export interface Campo {
   destruir(): void;
+  /** Detiene el bucle dejando el cuadro actual a la vista. */
+  pausar(): void;
+  reanudar(): void;
+  /** Falso cuando no hay nada que pausar: sin contexto o con quietud pedida. */
+  animado(): boolean;
 }
 
 const azar = (a: number, b: number) => a + Math.random() * (b - a);
@@ -70,19 +75,29 @@ function mezclar(
   return `rgb(${c(0)},${c(1)},${c(2)})`;
 }
 
-function prefiereQuietud(): boolean {
-  // jsdom no trae matchMedia, y el navegador viejo tampoco lo garantiza.
-  if (typeof window.matchMedia !== "function") return false;
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+/** jsdom no trae matchMedia, y el navegador viejo tampoco lo garantiza. */
+function consultarQuietud(): MediaQueryList | null {
+  if (typeof window.matchMedia !== "function") return null;
+  return window.matchMedia("(prefers-reduced-motion: reduce)");
 }
+
+const CAMPO_INERTE: Campo = {
+  destruir: () => {},
+  pausar: () => {},
+  reanudar: () => {},
+  animado: () => false,
+};
 
 export function sembrarCampo(lienzo: HTMLCanvasElement): Campo {
   const ctx = lienzo.getContext("2d");
   // Sin contexto no hay nada que dibujar y tampoco nada que limpiar: pasa
   // en jsdom y en cualquier entorno sin canvas.
-  if (!ctx) return { destruir: () => {} };
+  if (!ctx) return CAMPO_INERTE;
 
-  const quieto = prefiereQuietud();
+  const consulta = consultarQuietud();
+  let quieto = consulta?.matches ?? false;
+  let pausado = false;
+  let pausadoEn = 0;
 
   let W = 0;
   let H = 0;
@@ -330,16 +345,45 @@ export function sembrarCampo(lienzo: HTMLCanvasElement): Campo {
     for (const f of flores) pintarFlor(f, t);
     pintarMotas(t);
     pintarBruma();
-    if (!quieto) cuadro = requestAnimationFrame(pintar);
+    if (!quieto && !pausado) cuadro = requestAnimationFrame(pintar);
   }
 
   function arrancar() {
     cancelAnimationFrame(cuadro);
     medir();
+    // En pausa, redimensionar repinta el mismo instante: no reanuda nada.
+    if (pausado) {
+      pintar(pausadoEn);
+      return;
+    }
     inicio = performance.now();
     // Con movimiento reducido: un cuadro, el campo ya florecido y quieto.
     if (quieto) pintar(inicio);
     else cuadro = requestAnimationFrame(pintar);
+  }
+
+  function pausar() {
+    if (quieto || pausado) return;
+    pausado = true;
+    pausadoEn = performance.now();
+    cancelAnimationFrame(cuadro);
+  }
+
+  function reanudar() {
+    if (!pausado) return;
+    pausado = false;
+    // El tiempo detenido no cuenta: sin esto el campo salta hacia adelante
+    // tantos segundos como durara la pausa.
+    inicio += performance.now() - pausadoEn;
+    cuadro = requestAnimationFrame(pintar);
+  }
+
+  // La preferencia puede cambiar con la página abierta —el sistema operativo
+  // la ofrece como un interruptor—, y leerla sólo al montar la ignoraba.
+  function alCambiarQuietud(e: MediaQueryListEvent) {
+    quieto = e.matches;
+    pausado = false;
+    arrancar();
   }
 
   function alMover(e: PointerEvent) {
@@ -348,7 +392,7 @@ export function sembrarCampo(lienzo: HTMLCanvasElement): Campo {
   }
 
   function alTocar(e: PointerEvent) {
-    if (quieto) return;
+    if (quieto || pausado) return;
     const p = topar((e.clientY - horizonte) / (H - horizonte), 0.15, 1);
     flores.push(nuevaFlor(p, e.clientX, performance.now() - inicio));
     flores.sort((a, b) => a.p - b.p);
@@ -357,15 +401,20 @@ export function sembrarCampo(lienzo: HTMLCanvasElement): Campo {
   window.addEventListener("pointermove", alMover, { passive: true });
   window.addEventListener("pointerdown", alTocar, { passive: true });
   window.addEventListener("resize", arrancar);
+  consulta?.addEventListener("change", alCambiarQuietud);
   arrancar();
 
   return {
+    pausar,
+    reanudar,
+    animado: () => !quieto,
     destruir() {
       // Sin esto el bucle sigue corriendo después de salir de la página.
       cancelAnimationFrame(cuadro);
       window.removeEventListener("pointermove", alMover);
       window.removeEventListener("pointerdown", alTocar);
       window.removeEventListener("resize", arrancar);
+      consulta?.removeEventListener("change", alCambiarQuietud);
     },
   };
 }

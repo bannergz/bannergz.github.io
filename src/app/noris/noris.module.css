@@ -69,6 +69,38 @@
   color: var(--tinta-suave);
 }
 
+/* Vive dentro de .dedicatoria, que no recibe puntero: sin devolvérselo, el
+   botón se ve y no se deja pulsar. */
+.pausa {
+  margin-top: 0.4rem;
+  padding: 0.4rem 1rem;
+  border: 1px solid rgba(52, 32, 15, 0.22);
+  border-radius: 999px;
+  background: rgba(255, 247, 228, 0.55);
+  color: var(--tinta-suave);
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  pointer-events: auto;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.pausa:hover {
+  background: rgba(255, 247, 228, 0.88);
+  color: var(--tinta);
+}
+
+/* El foco global del sitio es ámbar, y sobre esta crema no se ve. */
+.pausa:focus-visible {
+  outline: 2px solid var(--tinta);
+  outline-offset: 3px;
+}
+
 .pista {
   position: fixed;
   left: 50%;

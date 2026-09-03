@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import NorisPage from "@/app/noris/page";
 import { sembrarCampo } from "@/app/noris/campo";
 
@@ -38,6 +39,12 @@ describe("página de Noris", () => {
     expect(screen.getByText(/para Nora/)).toBeInTheDocument();
   });
 
+  it("la dedicatoria es el h1: es el título de la página, no un párrafo", () => {
+    const { container } = render(<NorisPage />);
+    const h1 = container.querySelector("h1");
+    expect(h1?.textContent).toContain("Flores para ti por siempre");
+  });
+
   it("declara el contenido en español aunque el sitio esté en inglés", () => {
     // Sin esto la dedicatoria se lee con voz inglesa, que es justo la página
     // donde más importa: es lo único que Nora va a escuchar.
@@ -54,6 +61,52 @@ describe("página de Noris", () => {
   it("se monta y se desmonta sin canvas disponible", () => {
     const { unmount } = render(<NorisPage />);
     expect(() => unmount()).not.toThrow();
+  });
+});
+
+describe("página de Noris · pausa", () => {
+  const original = HTMLCanvasElement.prototype.getContext;
+  const consultaOriginal = window.matchMedia;
+
+  function fingirNavegador(quietud: boolean) {
+    const { ctx } = contextoFalso();
+    usarContexto(ctx);
+    window.matchMedia = ((consulta: string) => ({
+      matches: quietud && consulta.includes("prefers-reduced-motion"),
+      media: consulta,
+      addEventListener: () => {},
+      removeEventListener: () => {},
+    })) as unknown as typeof window.matchMedia;
+  }
+
+  afterEach(() => {
+    HTMLCanvasElement.prototype.getContext = original;
+    window.matchMedia = consultaOriginal;
+  });
+
+  it("ofrece detener el campo, que si no se mueve solo y para siempre", async () => {
+    const user = userEvent.setup();
+    fingirNavegador(false);
+    render(<NorisPage />);
+
+    const boton = screen.getByRole("button", { name: /pausar el campo/i });
+    await user.click(boton);
+    expect(screen.getByRole("button", { name: /reanudar el campo/i })).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: /reanudar el campo/i }));
+    expect(screen.getByRole("button", { name: /pausar el campo/i })).toBeInTheDocument();
+  });
+
+  it("no ofrece pausa donde ya está quieto: no habría nada que detener", () => {
+    fingirNavegador(true);
+    render(<NorisPage />);
+    expect(screen.queryByRole("button", { name: /pausar el campo/i })).not.toBeInTheDocument();
+  });
+
+  it("tampoco donde no hay canvas", () => {
+    usarContexto(null);
+    render(<NorisPage />);
+    expect(screen.queryByRole("button", { name: /pausar/i })).not.toBeInTheDocument();
   });
 });
 
@@ -103,6 +156,45 @@ describe("campo de girasoles", () => {
 
     expect(pedirCuadro).toHaveBeenCalled();
     campo.destruir();
+  });
+
+  it("pausar corta el bucle y reanudar lo vuelve a pedir", () => {
+    const { ctx } = contextoFalso();
+    usarContexto(ctx);
+    const cancelar = jest.spyOn(window, "cancelAnimationFrame");
+    const pedirCuadro = jest.spyOn(window, "requestAnimationFrame");
+
+    const campo = sembrarCampo(document.createElement("canvas"));
+    const pedidosAlArrancar = pedirCuadro.mock.calls.length;
+
+    campo.pausar();
+    expect(cancelar).toHaveBeenCalled();
+    expect(pedirCuadro.mock.calls.length).toBe(pedidosAlArrancar);
+
+    campo.reanudar();
+    expect(pedirCuadro.mock.calls.length).toBeGreaterThan(pedidosAlArrancar);
+    campo.destruir();
+  });
+
+  it("escucha la preferencia de movimiento y la suelta al destruirse", () => {
+    const { ctx } = contextoFalso();
+    usarContexto(ctx);
+    const escuchar = jest.fn();
+    const soltar = jest.fn();
+    // La preferencia puede cambiar con la página abierta: leerla sólo al
+    // montar dejaba el campo moviéndose después de pedir quietud.
+    window.matchMedia = ((consulta: string) => ({
+      matches: false,
+      media: consulta,
+      addEventListener: escuchar,
+      removeEventListener: soltar,
+    })) as unknown as typeof window.matchMedia;
+
+    const campo = sembrarCampo(document.createElement("canvas"));
+    expect(escuchar).toHaveBeenCalledWith("change", expect.any(Function));
+
+    campo.destruir();
+    expect(soltar).toHaveBeenCalledWith("change", expect.any(Function));
   });
 
   it("apaga el bucle y suelta los listeners al destruirse", () => {

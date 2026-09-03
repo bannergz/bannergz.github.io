@@ -1,4 +1,11 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+
+/** El resto del sitio es tinta oscura; esta página es un cielo. Sin esto la
+ *  barra del navegador queda negra encima del azul. */
+export const viewport: Viewport = {
+  themeColor: "#4a5f9e",
+  colorScheme: "light",
+};
 
 export const metadata: Metadata = {
   title: "Noris",
