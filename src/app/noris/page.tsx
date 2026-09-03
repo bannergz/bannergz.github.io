@@ -30,8 +30,10 @@ export default function NorisPage() {
     return () => campo.destruir();
   }, []);
 
+  // lang="es": la página entera está en español dentro de un <html lang="en">,
+  // y sin esto un lector de pantalla le lee la dedicatoria con voz inglesa.
   return (
-    <div className={`${fraunces.variable} ${karla.variable} ${estilos.campo}`}>
+    <div lang="es" className={`${fraunces.variable} ${karla.variable} ${estilos.campo}`}>
       {/* El campo es decoración: lo que hay que leer es la dedicatoria, y esa
           es texto de verdad, no píxeles. */}
       <canvas ref={lienzoRef} className={estilos.lienzo} aria-hidden="true" />
