@@ -4,12 +4,12 @@ export function AboutSection() {
   const { summary, specializations, languages } = portfolioData;
 
   return (
-    <section id="about" className="bg-white">
+    <section id="about" className="bg-ink">
       <div className="section-container">
         <div className="grid gap-12 lg:grid-cols-2">
           <div>
             <h2 className="section-title">
-              About <span className="gradient-text">Me</span>
+              About <span className="text-accent">Me</span>
             </h2>
             <p className="text-lg leading-relaxed text-text-muted">{summary}</p>
             <p className="mt-4 text-lg leading-relaxed text-text-muted">
@@ -34,14 +34,14 @@ export function AboutSection() {
           </div>
 
           <div>
-            <h3 className="mb-6 text-xl font-bold text-primary">
+            <h3 className="mb-6 text-xl font-bold text-fg">
               Specialization Areas
             </h3>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               {specializations.map((spec) => (
                 <div
                   key={spec}
-                  className="glass-card flex items-center gap-3"
+                  className="panel-card flex items-center gap-3"
                 >
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent/10">
                     <svg
@@ -58,7 +58,7 @@ export function AboutSection() {
                       />
                     </svg>
                   </div>
-                  <span className="text-sm font-medium text-primary">
+                  <span className="text-sm font-medium text-fg">
                     {spec}
                   </span>
                 </div>
