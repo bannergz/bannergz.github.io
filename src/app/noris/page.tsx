@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Fraunces, Karla } from "next/font/google";
-import { sembrarCampo, type Campo } from "./campo";
+import { sembrarCampo } from "./campo";
 import estilos from "./noris.module.css";
 
 const fraunces = Fraunces({
@@ -22,31 +22,13 @@ const karla = Karla({
 
 export default function NorisPage() {
   const lienzoRef = useRef<HTMLCanvasElement>(null);
-  const campoRef = useRef<Campo | null>(null);
-  const [animado, setAnimado] = useState(false);
-  const [pausado, setPausado] = useState(false);
 
   useEffect(() => {
     const lienzo = lienzoRef.current;
     if (!lienzo) return;
     const campo = sembrarCampo(lienzo);
-    campoRef.current = campo;
-    // El botón sólo existe si hay algo que pausar: sin canvas, o con quietud
-    // pedida, el campo ya está detenido y el control sobraría.
-    setAnimado(campo.animado());
-    return () => {
-      campo.destruir();
-      campoRef.current = null;
-    };
+    return () => campo.destruir();
   }, []);
-
-  const alternarPausa = () => {
-    const campo = campoRef.current;
-    if (!campo) return;
-    if (pausado) campo.reanudar();
-    else campo.pausar();
-    setPausado(!pausado);
-  };
 
   // lang="es": la página entera está en español dentro de un <html lang="en">,
   // y sin esto un lector de pantalla le lee la dedicatoria con voz inglesa.
@@ -68,14 +50,6 @@ export default function NorisPage() {
           </span>
         </h1>
         <p className={`${estilos.firma} ${estilos.entra}`}>para Nora &middot; 21 de septiembre</p>
-
-        {/* El campo se mueve solo y no para: quien lo necesite quieto tiene
-            que poder detenerlo, no sólo quien lo pidió en su sistema. */}
-        {animado && (
-          <button type="button" onClick={alternarPausa} className={estilos.pausa}>
-            {pausado ? "Reanudar el campo" : "Pausar el campo"}
-          </button>
-        )}
       </div>
     </div>
   );

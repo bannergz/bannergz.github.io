@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import NorisPage from "@/app/noris/page";
 import { sembrarCampo } from "@/app/noris/campo";
 
@@ -64,52 +63,6 @@ describe("página de Noris", () => {
   });
 });
 
-describe("página de Noris · pausa", () => {
-  const original = HTMLCanvasElement.prototype.getContext;
-  const consultaOriginal = window.matchMedia;
-
-  function fingirNavegador(quietud: boolean) {
-    const { ctx } = contextoFalso();
-    usarContexto(ctx);
-    window.matchMedia = ((consulta: string) => ({
-      matches: quietud && consulta.includes("prefers-reduced-motion"),
-      media: consulta,
-      addEventListener: () => {},
-      removeEventListener: () => {},
-    })) as unknown as typeof window.matchMedia;
-  }
-
-  afterEach(() => {
-    HTMLCanvasElement.prototype.getContext = original;
-    window.matchMedia = consultaOriginal;
-  });
-
-  it("ofrece detener el campo, que si no se mueve solo y para siempre", async () => {
-    const user = userEvent.setup();
-    fingirNavegador(false);
-    render(<NorisPage />);
-
-    const boton = screen.getByRole("button", { name: /pausar el campo/i });
-    await user.click(boton);
-    expect(screen.getByRole("button", { name: /reanudar el campo/i })).toBeInTheDocument();
-
-    await user.click(screen.getByRole("button", { name: /reanudar el campo/i }));
-    expect(screen.getByRole("button", { name: /pausar el campo/i })).toBeInTheDocument();
-  });
-
-  it("no ofrece pausa donde ya está quieto: no habría nada que detener", () => {
-    fingirNavegador(true);
-    render(<NorisPage />);
-    expect(screen.queryByRole("button", { name: /pausar el campo/i })).not.toBeInTheDocument();
-  });
-
-  it("tampoco donde no hay canvas", () => {
-    usarContexto(null);
-    render(<NorisPage />);
-    expect(screen.queryByRole("button", { name: /pausar/i })).not.toBeInTheDocument();
-  });
-});
-
 describe("campo de girasoles", () => {
   const original = HTMLCanvasElement.prototype.getContext;
   const consultaOriginal = window.matchMedia;
@@ -155,24 +108,6 @@ describe("campo de girasoles", () => {
     const campo = sembrarCampo(document.createElement("canvas"));
 
     expect(pedirCuadro).toHaveBeenCalled();
-    campo.destruir();
-  });
-
-  it("pausar corta el bucle y reanudar lo vuelve a pedir", () => {
-    const { ctx } = contextoFalso();
-    usarContexto(ctx);
-    const cancelar = jest.spyOn(window, "cancelAnimationFrame");
-    const pedirCuadro = jest.spyOn(window, "requestAnimationFrame");
-
-    const campo = sembrarCampo(document.createElement("canvas"));
-    const pedidosAlArrancar = pedirCuadro.mock.calls.length;
-
-    campo.pausar();
-    expect(cancelar).toHaveBeenCalled();
-    expect(pedirCuadro.mock.calls.length).toBe(pedidosAlArrancar);
-
-    campo.reanudar();
-    expect(pedirCuadro.mock.calls.length).toBeGreaterThan(pedidosAlArrancar);
     campo.destruir();
   });
 
