@@ -38,6 +38,13 @@ describe("página de Noris", () => {
     expect(screen.getByText(/para Nora/)).toBeInTheDocument();
   });
 
+  it("declara el contenido en español aunque el sitio esté en inglés", () => {
+    // Sin esto la dedicatoria se lee con voz inglesa, que es justo la página
+    // donde más importa: es lo único que Nora va a escuchar.
+    const { container } = render(<NorisPage />);
+    expect(container.querySelector('[lang="es"]')).not.toBeNull();
+  });
+
   it("esconde el campo de los lectores de pantalla: es decoración", () => {
     const { container } = render(<NorisPage />);
     const lienzo = container.querySelector("canvas");
