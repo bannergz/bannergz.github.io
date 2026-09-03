@@ -1,10 +1,7 @@
 import {
   HeroSection,
-  AboutSection,
-  SkillsSection,
   ExperienceSection,
-  AchievementsSection,
-  EducationSection,
+  SkillsSection,
   ContactSection,
 } from "@/components/sections";
 
@@ -12,11 +9,8 @@ export default function Home() {
   return (
     <>
       <HeroSection />
-      <AboutSection />
-      <SkillsSection />
       <ExperienceSection />
-      <AchievementsSection />
-      <EducationSection />
+      <SkillsSection />
       <ContactSection />
     </>
   );

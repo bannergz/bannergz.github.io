@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { ContactSection } from "@/components/sections/ContactSection";
+import { portfolioData } from "@/data/portfolio-data";
 
 describe("ContactSection", () => {
   it("renders the section title", () => {
@@ -46,5 +47,18 @@ describe("ContactSection", () => {
     const iconos = container.querySelectorAll("svg");
     expect(iconos.length).toBeGreaterThan(0);
     iconos.forEach((icono) => expect(icono).toHaveAttribute("aria-hidden", "true"));
+  });
+
+  it("conserva formación e idiomas, que vivían en la sección About", () => {
+    const { container } = render(<ContactSection />);
+    const texto = container.textContent ?? "";
+    portfolioData.education.forEach((entry) => {
+      expect(texto).toContain(entry.degree);
+      expect(texto).toContain(entry.institution);
+    });
+    portfolioData.languages.forEach((lang) => {
+      expect(texto).toContain(lang.language);
+      expect(texto).toContain(lang.level);
+    });
   });
 });

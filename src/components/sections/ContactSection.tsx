@@ -1,7 +1,7 @@
 import { portfolioData } from "@/data/portfolio-data";
 
 export function ContactSection() {
-  const { name, contact } = portfolioData;
+  const { name, contact, education, languages } = portfolioData;
 
   return (
     <section
@@ -125,6 +125,25 @@ export function ContactSection() {
               </a>
             </div>
           </div>
+
+          {/* Formacion e idiomas vivian en la seccion About, que ya no existe.
+              Son datos de ficha, y esta es la ficha. */}
+          <dl className="mt-10 flex flex-col gap-2 border-t border-line pt-6 text-sm text-text-muted sm:flex-row sm:justify-center sm:gap-8">
+            <div>
+              <dt className="col-label">Education</dt>
+              {education.map((entry) => (
+                <dd key={entry.institution} className="mt-1">
+                  {entry.degree} &middot; {entry.institution} &middot; {entry.period}
+                </dd>
+              ))}
+            </div>
+            <div>
+              <dt className="col-label">Languages</dt>
+              <dd className="mt-1">
+                {languages.map((lang) => `${lang.language} — ${lang.level}`).join(" · ")}
+              </dd>
+            </div>
+          </dl>
         </div>
       </div>
     </section>
