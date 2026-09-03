@@ -55,11 +55,6 @@ interface Mota {
 
 export interface Campo {
   destruir(): void;
-  /** Detiene el bucle dejando el cuadro actual a la vista. */
-  pausar(): void;
-  reanudar(): void;
-  /** Falso cuando no hay nada que pausar: sin contexto o con quietud pedida. */
-  animado(): boolean;
 }
 
 const azar = (a: number, b: number) => a + Math.random() * (b - a);
@@ -81,12 +76,7 @@ function consultarQuietud(): MediaQueryList | null {
   return window.matchMedia("(prefers-reduced-motion: reduce)");
 }
 
-const CAMPO_INERTE: Campo = {
-  destruir: () => {},
-  pausar: () => {},
-  reanudar: () => {},
-  animado: () => false,
-};
+const CAMPO_INERTE: Campo = { destruir: () => {} };
 
 export function sembrarCampo(lienzo: HTMLCanvasElement): Campo {
   const ctx = lienzo.getContext("2d");
@@ -96,8 +86,6 @@ export function sembrarCampo(lienzo: HTMLCanvasElement): Campo {
 
   const consulta = consultarQuietud();
   let quieto = consulta?.matches ?? false;
-  let pausado = false;
-  let pausadoEn = 0;
 
   let W = 0;
   let H = 0;
@@ -345,44 +333,22 @@ export function sembrarCampo(lienzo: HTMLCanvasElement): Campo {
     for (const f of flores) pintarFlor(f, t);
     pintarMotas(t);
     pintarBruma();
-    if (!quieto && !pausado) cuadro = requestAnimationFrame(pintar);
+    if (!quieto) cuadro = requestAnimationFrame(pintar);
   }
 
   function arrancar() {
     cancelAnimationFrame(cuadro);
     medir();
-    // En pausa, redimensionar repinta el mismo instante: no reanuda nada.
-    if (pausado) {
-      pintar(pausadoEn);
-      return;
-    }
     inicio = performance.now();
     // Con movimiento reducido: un cuadro, el campo ya florecido y quieto.
     if (quieto) pintar(inicio);
     else cuadro = requestAnimationFrame(pintar);
   }
 
-  function pausar() {
-    if (quieto || pausado) return;
-    pausado = true;
-    pausadoEn = performance.now();
-    cancelAnimationFrame(cuadro);
-  }
-
-  function reanudar() {
-    if (!pausado) return;
-    pausado = false;
-    // El tiempo detenido no cuenta: sin esto el campo salta hacia adelante
-    // tantos segundos como durara la pausa.
-    inicio += performance.now() - pausadoEn;
-    cuadro = requestAnimationFrame(pintar);
-  }
-
   // La preferencia puede cambiar con la página abierta —el sistema operativo
   // la ofrece como un interruptor—, y leerla sólo al montar la ignoraba.
   function alCambiarQuietud(e: MediaQueryListEvent) {
     quieto = e.matches;
-    pausado = false;
     arrancar();
   }
 
@@ -392,7 +358,7 @@ export function sembrarCampo(lienzo: HTMLCanvasElement): Campo {
   }
 
   function alTocar(e: PointerEvent) {
-    if (quieto || pausado) return;
+    if (quieto) return;
     const p = topar((e.clientY - horizonte) / (H - horizonte), 0.15, 1);
     flores.push(nuevaFlor(p, e.clientX, performance.now() - inicio));
     flores.sort((a, b) => a.p - b.p);
@@ -405,9 +371,6 @@ export function sembrarCampo(lienzo: HTMLCanvasElement): Campo {
   arrancar();
 
   return {
-    pausar,
-    reanudar,
-    animado: () => !quieto,
     destruir() {
       // Sin esto el bucle sigue corriendo después de salir de la página.
       cancelAnimationFrame(cuadro);
