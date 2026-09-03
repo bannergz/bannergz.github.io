@@ -97,33 +97,36 @@ export function Header() {
         </button>
       </nav>
 
-      {/* Mobile menu */}
-      {isMenuOpen && (
-        <div id={MENU_ID} className="border-t border-line bg-panel md:hidden">
-          <ul className="flex flex-col gap-1 px-6 py-4">
-            {NAV_LINKS.map((link) => (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  className="block rounded-sm px-4 py-3 text-sm font-medium text-text-muted transition-colors hover:bg-panel-hi hover:text-accent"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-            <li className="mt-2">
+      {/* Mobile menu. Se renderiza siempre y se oculta con `hidden`: un
+          `aria-controls` que apunta a un id inexistente no controla nada. */}
+      <div
+        id={MENU_ID}
+        hidden={!isMenuOpen}
+        className="border-t border-line bg-panel md:hidden"
+      >
+        <ul className="flex flex-col gap-1 px-6 py-4">
+          {NAV_LINKS.map((link) => (
+            <li key={link.href}>
               <Link
-                href="/#contact"
-                className="btn-primary w-full justify-center text-sm"
+                href={link.href}
+                className="block rounded-sm px-4 py-3 text-sm font-medium text-text-muted transition-colors hover:bg-panel-hi hover:text-accent"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Hire Me
+                {link.label}
               </Link>
             </li>
-          </ul>
-        </div>
-      )}
+          ))}
+          <li className="mt-2">
+            <Link
+              href="/#contact"
+              className="btn-primary w-full justify-center text-sm"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Hire Me
+            </Link>
+          </li>
+        </ul>
+      </div>
     </header>
   );
 }
