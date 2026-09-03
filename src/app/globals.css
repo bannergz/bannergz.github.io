@@ -1,20 +1,41 @@
 @import "tailwindcss";
 
+/* ============================================================
+   Ledger — la tinta es el fondo, el ámbar es la señal.
+   La cifra es el héroe: todo número va en mono tabular.
+   Cada par de color está medido contra WCAG AA (4.5:1 texto normal).
+   ============================================================ */
 @theme {
-  --color-primary: #0f172a;
-  --color-secondary: #1e293b;
-  --color-accent: #3b82f6;
-  --color-accent-light: #60a5fa;
-  --color-accent-dark: #2563eb;
-  --color-surface: #f8fafc;
-  --color-surface-dark: #f1f5f9;
-  --color-text: #0f172a;
-  --color-text-muted: #64748b;
-  --color-gold: #f59e0b;
-  --color-emerald: #10b981;
+  /* Superficies, de la más profunda a la más elevada.
+     Los neutros sesgan cálido (R > B) para acompañar al ámbar: un gris
+     slate azulado peleaba con el acento y delataba la paleta anterior. */
+  --color-ink: #0d0c0b;
+  --color-panel: #171613;
+  --color-panel-hi: #201e1a;
 
-  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
-  --font-heading: "Inter", system-ui, -apple-system, sans-serif;
+  /* Bordes: no llevan texto, sólo tienen que verse */
+  --color-line: #2e2b25;
+  --color-line-hi: #3e3a33;
+
+  /* Texto */
+  --color-fg: #edeae4; /* 16.28:1 sobre ink */
+  --color-text-muted: #a29a8e; /* 7.03:1 sobre ink, 6.50:1 sobre panel */
+
+  /* Señal */
+  --color-accent: #ffb627; /* 11.14:1 sobre ink */
+  --color-on-accent: #0d0c0b; /* 11.14:1 sobre accent, 6.63:1 en hover */
+  --color-accent-dim: #c98a12;
+
+  /* Semánticos: sólo para estado, nunca como acento decorativo */
+  --color-positive: #3dd68c; /* 10.42:1 sobre ink */
+  --color-negative: #ff6b6b; /* 7.04:1 sobre ink */
+
+  /* --font-archivo y --font-plex-mono los define next/font en la clase que
+     va en <html>. Si esa clase estuviera en <body>, estos var() se
+     evaluarían en :root sin la variable definida, el valor quedaría
+     inválido y ambas familias caerían al sans por defecto en silencio. */
+  --font-sans: var(--font-archivo), system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", monospace;
 }
 
 @layer base {
@@ -22,23 +43,34 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* El sitio es dark-only: sin esto los scrollbars y controles nativos
+       se pintan en claro y desentonan. */
+    color-scheme: dark;
   }
 
   body {
     font-family: var(--font-sans);
-    color: var(--color-text);
-    background: var(--color-surface);
+    color: var(--color-fg);
+    background: var(--color-ink);
   }
 
   ::selection {
     background-color: var(--color-accent);
-    color: white;
+    color: var(--color-on-accent);
   }
 
   /* El header mide ~77px y es fixed: sin esto, saltar a #about o #skills
      deja el título de la sección tapado debajo del header. */
   section[id] {
     scroll-margin-top: 6rem;
+  }
+
+  /* Un foco visible y consistente en todo lo que se puede tabular.
+     Va con outline (no ring) para que sobreviva a forced-colors. */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 2px;
   }
 }
 
@@ -48,31 +80,47 @@
   }
 
   .section-title {
-    @apply mb-4 text-3xl font-bold tracking-tight text-primary lg:text-4xl;
+    @apply mb-4 text-3xl font-bold tracking-tight text-balance text-fg lg:text-4xl;
   }
 
   .section-subtitle {
-    @apply mb-12 text-lg text-text-muted;
+    @apply mb-12 max-w-2xl text-lg text-pretty text-text-muted;
   }
 
-  .glass-card {
-    @apply rounded-2xl border border-white/20 bg-white/80 p-6 shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-xl;
+  /* Antes era .glass-card: vidrio esmerilado sobre blanco. Ledger no usa
+     vidrio — usa un panel con borde real, que además se sostiene en
+     forced-colors, donde backdrop-filter no existe. */
+  .panel-card {
+    @apply rounded-lg border border-line bg-panel p-6 transition-colors duration-200 hover:border-line-hi;
   }
 
-  .gradient-text {
-    @apply bg-gradient-to-r from-accent to-accent-light bg-clip-text text-transparent;
+  /* La cifra es el héroe de Ledger: mono, tabular, sin degradado.
+     El .gradient-text anterior usaba text-transparent, que dejaba las
+     métricas invisibles en modo alto contraste. */
+  .figure {
+    @apply font-mono font-semibold tracking-tight text-fg tabular-nums;
+  }
+
+  .figure-accent {
+    @apply font-mono font-semibold tracking-tight text-accent tabular-nums;
   }
 
   .btn-primary {
-    @apply inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 font-semibold text-white transition-all duration-300 hover:bg-accent-dark hover:shadow-lg hover:shadow-accent/25;
+    @apply inline-flex items-center gap-2 rounded-sm bg-accent px-6 py-3 font-semibold text-on-accent transition-colors duration-200 hover:bg-accent-dim;
   }
 
   .btn-outline {
-    @apply inline-flex items-center gap-2 rounded-full border-2 border-accent px-6 py-3 font-semibold text-accent transition-all duration-300 hover:bg-accent hover:text-white;
+    @apply inline-flex items-center gap-2 rounded-sm border border-line-hi px-6 py-3 font-semibold text-fg transition-colors duration-200 hover:border-accent hover:text-accent;
   }
 
   .tag {
-    @apply inline-block rounded-full bg-accent/10 px-3 py-1 text-sm font-medium text-accent;
+    @apply inline-block rounded-sm bg-panel-hi px-3 py-1 text-sm font-medium text-text-muted;
+  }
+
+  /* Etiqueta de dato: versalita con tracking, como el encabezado de una
+     columna en un estado de cuenta. */
+  .col-label {
+    @apply font-mono text-xs font-medium tracking-[0.14em] text-text-muted uppercase;
   }
 }
 

@@ -20,7 +20,7 @@ import {
 } from "@/lib/impuestos";
 
 /** Azules del sitio, de claro a oscuro: un tono por tramo de la escala. */
-const COLOR_TRAMO = ["#bfdbfe", "#60a5fa", "#3b82f6", "#1d4ed8", "#1e3a8a"] as const;
+const COLOR_TRAMO = ["#FFE9B0", "#FFD166", "#FFB627", "#D9930F", "#A66C05"] as const;
 
 type GastosTexto = Record<keyof GastosDeducibles, string>;
 
@@ -33,9 +33,9 @@ const GASTOS_UI: ReadonlyArray<{ key: keyof GastosDeducibles; label: string; ste
 ];
 
 const INPUT_BASE =
-  "rounded-xl border border-gray-200 bg-white px-3 py-2 text-base tabular-nums text-primary outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20";
+  "rounded-sm border border-line bg-panel-hi px-3 py-2 font-mono text-base tabular-nums text-fg transition-colors focus:border-accent";
 const INPUT = `w-full ${INPUT_BASE}`;
-const LABEL = "text-xs font-semibold uppercase tracking-wider text-text-muted";
+const LABEL = "col-label";
 
 function aNumero(s: string): number {
   const n = parseFloat(s);
@@ -67,7 +67,7 @@ function Segmentado<T extends string | number>({
       <div
         role="group"
         aria-label={label}
-        className="flex rounded-full border border-gray-200 bg-surface-dark p-1"
+        className="flex rounded-sm border border-line bg-panel-hi p-1"
       >
         {options.map((o) => {
           const activo = o.value === value;
@@ -77,8 +77,8 @@ function Segmentado<T extends string | number>({
               type="button"
               aria-pressed={activo}
               onClick={() => onChange(o.value)}
-              className={`flex-1 rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
-                activo ? "bg-accent text-white shadow-sm" : "text-text-muted hover:text-primary"
+              className={`flex-1 rounded-sm px-3 py-1.5 text-sm font-medium transition-colors ${
+                activo ? "bg-accent text-on-accent" : "text-text-muted hover:text-fg"
               }`}
             >
               {o.label}
@@ -116,11 +116,11 @@ function Tarjeta({
   tono?: Tono;
 }) {
   const color =
-    tono === "good" ? "text-emerald" : tono === "flat" ? "text-primary" : "text-accent";
+    tono === "good" ? "text-positive" : tono === "flat" ? "text-fg" : "text-accent";
   return (
-    <div className="flex flex-col gap-1 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+    <div className="flex flex-col gap-1 rounded-lg border border-line bg-panel p-6">
       <span className={LABEL}>{titulo}</span>
-      <span className={`text-3xl font-bold tabular-nums tracking-tight ${color}`}>
+      <span className={`font-mono text-3xl font-semibold tabular-nums tracking-tight ${color}`}>
         {prefijo && <span className="mr-1 text-base font-medium text-text-muted">{prefijo}</span>}
         {valor}
         {sufijo && <span className="ml-1 text-base font-medium text-text-muted">{sufijo}</span>}
@@ -135,14 +135,14 @@ type Aviso = { tipo: "info" | "warn" | "good"; titulo: string; texto: string };
 function Nota({ aviso }: { aviso: Aviso }) {
   const estilo =
     aviso.tipo === "warn"
-      ? "border-gold bg-gold/10 text-amber-800"
+      ? "border-accent bg-accent/10 text-accent"
       : aviso.tipo === "good"
-        ? "border-emerald bg-emerald/10 text-emerald-800"
-        : "border-accent bg-accent/5 text-accent-dark";
+        ? "border-positive bg-positive/10 text-positive"
+        : "border-accent bg-accent/5 text-accent";
   return (
-    <div className={`rounded-xl border-l-4 px-5 py-4 ${estilo}`}>
+    <div className={`rounded-sm border-l-2 px-5 py-4 ${estilo}`}>
       <p className="text-xs font-semibold uppercase tracking-wider">{aviso.titulo}</p>
-      <p className="mt-1 text-sm leading-relaxed text-primary">{aviso.texto}</p>
+      <p className="mt-1 text-sm leading-relaxed text-fg">{aviso.texto}</p>
     </div>
   );
 }
@@ -162,20 +162,20 @@ function Fila({
 }) {
   const fila =
     variante === "sum"
-      ? "bg-surface-dark font-semibold"
+      ? "bg-panel-hi font-semibold"
       : variante === "base"
         ? "bg-accent/10 font-semibold"
         : variante === "total"
-          ? "border-t-2 border-gray-200 bg-surface-dark font-bold"
+          ? "border-t-2 border-line bg-panel-hi font-bold"
           : "";
   const num =
     variante === "minus"
-      ? "text-amber-700"
+      ? "text-accent"
       : variante === "base" || variante === "total"
         ? "text-accent"
-        : "text-primary";
+        : "text-fg";
   return (
-    <tr className={`border-b border-gray-100 last:border-b-0 ${fila}`}>
+    <tr className={`border-b border-line last:border-b-0 ${fila}`}>
       <td className="px-4 py-3">
         {concepto}
         {cita && <span className="mt-0.5 block text-xs font-normal text-text-muted">{cita}</span>}
@@ -208,7 +208,7 @@ function rango(c: CorteTramo): string {
 function BarraTramos({ r }: { r: ResultadoRenta }) {
   if (r.rentaImponible <= 0) {
     return (
-      <div className="rounded-xl border border-dashed border-gray-300 bg-white p-5 text-sm text-text-muted">
+      <div className="rounded-lg border border-dashed border-line-hi bg-panel p-5 text-sm text-text-muted">
         Tu renta imponible es cero: las deducciones cubren todo tu ingreso, así que no hay
         impuesto que repartir en tramos.
       </div>
@@ -220,7 +220,7 @@ function BarraTramos({ r }: { r: ResultadoRenta }) {
       <div
         role="img"
         aria-label="Distribución de la renta imponible por tramo"
-        className="flex h-10 w-full overflow-hidden rounded-full bg-surface-dark"
+        className="flex h-10 w-full overflow-hidden rounded-sm bg-panel-hi"
       >
         {activos.map(({ c, i }) => (
           <span
@@ -238,7 +238,7 @@ function BarraTramos({ r }: { r: ResultadoRenta }) {
           <span key={i} className="flex items-center gap-2 text-sm text-text-muted">
             <i className="block h-3 w-3 rounded-sm" style={{ background: COLOR_TRAMO[i] }} />
             {pct(c.tramo.tasa)} sobre{" "}
-            <b className="font-semibold tabular-nums text-primary">S/ {soles0(c.base)}</b>
+            <b className="font-semibold tabular-nums text-fg">S/ {soles0(c.base)}</b>
           </span>
         ))}
       </div>
@@ -248,17 +248,17 @@ function BarraTramos({ r }: { r: ResultadoRenta }) {
 
 function Paso({ n, children }: { n: number; children: ReactNode }) {
   return (
-    <li className="flex gap-4 border-b border-gray-100 py-4 last:border-b-0">
-      <span className="flex h-7 w-7 flex-none items-center justify-center rounded-full bg-accent/10 text-xs font-bold text-accent">
+    <li className="flex gap-4 border-b border-line py-4 last:border-b-0">
+      <span className="flex h-7 w-7 flex-none items-center justify-center rounded-sm bg-accent/15 font-mono text-xs font-semibold text-accent">
         {n}
       </span>
-      <span className="text-sm leading-relaxed text-primary">{children}</span>
+      <span className="text-sm leading-relaxed text-fg">{children}</span>
     </li>
   );
 }
 
 function Codigo({ children }: { children: ReactNode }) {
-  return <code className="rounded bg-surface-dark px-1.5 py-0.5 text-[0.85em]">{children}</code>;
+  return <code className="rounded-sm bg-panel-hi px-1.5 py-0.5 font-mono text-[0.85em] text-fg">{children}</code>;
 }
 
 /* ------------------------------------------------------------------ */
@@ -428,7 +428,7 @@ export function CalculadoraImpuestos() {
   return (
     <div className="grid gap-8 lg:grid-cols-[22rem_1fr] lg:items-start">
       {/* ---------------- panel de entrada ---------------- */}
-      <aside className="flex flex-col gap-6 rounded-2xl border border-gray-100 bg-white p-6 shadow-lg lg:sticky lg:top-24 lg:max-h-[calc(100dvh-7rem)] lg:overflow-y-auto lg:overscroll-contain">
+      <aside className="flex flex-col gap-6 rounded-lg border border-line bg-panel p-6 lg:sticky lg:top-24 lg:max-h-[calc(100dvh-7rem)] lg:overflow-y-auto lg:overscroll-contain">
         <Segmentado
           label="Moneda del ingreso"
           value={moneda}
@@ -539,8 +539,8 @@ export function CalculadoraImpuestos() {
           </div>
         )}
 
-        <div className="flex flex-col gap-3 border-t border-gray-100 pt-5">
-          <h3 className="text-sm font-semibold text-primary">Gastos deducibles del año</h3>
+        <div className="flex flex-col gap-3 border-t border-line pt-5">
+          <h3 className="text-sm font-semibold text-fg">Gastos deducibles del año</h3>
           <Pista>
             Lo que pagaste con tarjeta o transferencia y con comprobante electrónico a tu nombre. En
             efectivo no cuenta.
@@ -548,7 +548,7 @@ export function CalculadoraImpuestos() {
           {GASTOS_UI.map((g) => (
             <div key={g.key} className="flex items-center gap-3">
               <div className="flex flex-1 flex-col leading-snug">
-                <label htmlFor={`gasto-${g.key}`} className="text-sm text-primary">
+                <label htmlFor={`gasto-${g.key}`} className="text-sm text-fg">
                   {g.label}
                 </label>
                 <span className="text-xs tabular-nums text-text-muted">
@@ -615,15 +615,15 @@ export function CalculadoraImpuestos() {
 
         <section className="flex flex-col gap-4">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight text-primary">Cómo sale el número</h2>
+            <h2 className="text-2xl font-bold tracking-tight text-balance text-fg">Cómo sale el número</h2>
             <p className="mt-1 text-sm text-text-muted">
               El orden es el de la ley: primero la deducción de la categoría, después las 7 UIT y las
               3 UIT, y recién sobre ese saldo corre la escala.
             </p>
           </div>
-          <div className="overflow-x-auto rounded-2xl border border-gray-100 bg-white shadow-sm">
+          <div className="overflow-x-auto rounded-lg border border-line bg-panel">
             <table className="w-full text-sm">
-              <thead className="border-b border-gray-200">
+              <thead className="border-b border-line">
                 <tr>
                   <Th>Concepto</Th>
                   <Th right>Parcial</Th>
@@ -701,16 +701,16 @@ export function CalculadoraImpuestos() {
 
         <section className="flex flex-col gap-4">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight text-primary">Dónde cae tu ingreso</h2>
+            <h2 className="text-2xl font-bold tracking-tight text-fg">Dónde cae tu ingreso</h2>
             <p className="mt-1 text-sm text-text-muted">
               La escala es marginal: cada tramo paga su propia tasa, no toda la renta paga la tasa más
               alta que alcanzas.
             </p>
           </div>
           <BarraTramos r={r} />
-          <div className="overflow-x-auto rounded-2xl border border-gray-100 bg-white shadow-sm">
+          <div className="overflow-x-auto rounded-lg border border-line bg-panel">
             <table className="w-full text-sm">
-              <thead className="border-b border-gray-200">
+              <thead className="border-b border-line">
                 <tr>
                   <Th>Tramo</Th>
                   <Th right>Renta neta de trabajo</Th>
@@ -722,7 +722,7 @@ export function CalculadoraImpuestos() {
                 {r.cortes.map((c) => (
                   <tr
                     key={c.tramo.nombre}
-                    className={`border-b border-gray-100 last:border-b-0 ${
+                    className={`border-b border-line last:border-b-0 ${
                       c.base > 0 ? "bg-accent/10 font-semibold" : ""
                     }`}
                   >
@@ -744,8 +744,8 @@ export function CalculadoraImpuestos() {
         </section>
 
         <section className="flex flex-col gap-2">
-          <h2 className="text-2xl font-bold tracking-tight text-primary">Qué te toca hacer</h2>
-          <ol className="rounded-2xl border border-gray-100 bg-white px-6 shadow-sm">
+          <h2 className="text-2xl font-bold tracking-tight text-fg">Qué te toca hacer</h2>
+          <ol className="rounded-lg border border-line bg-panel px-6">
             {pasos.map((p, i) => (
               <Paso key={i} n={i + 1}>
                 {p}

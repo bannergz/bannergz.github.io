@@ -20,24 +20,22 @@ function TimelineItem({
         className={`absolute top-1 left-0 -translate-x-1/2 md:left-4 ${
           isFirst ? "h-4 w-4" : "h-3 w-3"
         } rounded-full border-2 border-accent ${
-          isFirst ? "bg-accent" : "bg-white"
+          isFirst ? "bg-accent" : "bg-ink"
         }`}
       />
 
       {/* Content card */}
-      <div className={`glass-card ${isFirst ? "border-accent/30" : ""}`}>
+      <div className={`panel-card ${isFirst ? "border-accent/40" : ""}`}>
         <div className="mb-4 flex flex-wrap items-center gap-3">
-          <span className="rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold text-accent">
-            {entry.period}
-          </span>
+          <span className="col-label">{entry.period}</span>
           {isFirst && (
-            <span className="rounded-full bg-emerald/10 px-3 py-1 text-xs font-semibold text-emerald">
+            <span className="rounded-sm bg-positive/15 px-2 py-0.5 font-mono text-xs font-medium text-positive">
               Current
             </span>
           )}
         </div>
 
-        <h3 className="text-xl font-bold text-primary">{entry.role}</h3>
+        <h3 className="text-xl font-bold text-fg">{entry.role}</h3>
         <p className="mt-1 text-base font-medium text-accent">
           {entry.company}
         </p>
@@ -71,10 +69,10 @@ export function ExperienceSection() {
   const { experience } = portfolioData;
 
   return (
-    <section id="experience" className="bg-white">
+    <section id="experience" className="bg-ink">
       <div className="section-container">
         <h2 className="section-title">
-          Professional <span className="gradient-text">Experience</span>
+          Professional <span className="text-accent">Experience</span>
         </h2>
         <p className="section-subtitle">
           A track record of leading engineering teams and delivering
