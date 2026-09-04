@@ -19,25 +19,46 @@ export function Footer() {
             </p>
           </div>
 
-          <nav aria-label="Free tools">
-            <p className="text-xs font-semibold uppercase tracking-wider text-text-muted">
-              Free tools
-            </p>
-            <ul className="mt-3">
-              <li>
-                <Link
-                  href="/calcula-tus-impuestos"
-                  hrefLang="es"
-                  className="text-sm font-medium text-fg transition-colors hover:text-accent"
-                >
-                  Calculadora de Impuesto a la Renta 2026 &mdash; ¿cuánto me descuenta SUNAT?
-                </Link>
-                <p className="mt-1 text-xs text-text-muted">
-                  Planilla o recibo por honorarios, UIT 2026 y gastos deducibles (Perú)
-                </p>
-              </li>
-            </ul>
-          </nav>
+          <div className="grid gap-8 sm:grid-cols-2 md:max-w-xl lg:max-w-2xl">
+            <nav aria-label="Free tools">
+              <p className="text-xs font-semibold uppercase tracking-wider text-text-muted">
+                Free tools
+              </p>
+              <ul className="mt-3">
+                <li>
+                  <Link
+                    href="/calcula-tus-impuestos"
+                    hrefLang="es"
+                    className="text-sm font-medium text-fg transition-colors hover:text-accent"
+                  >
+                    Calculadora de Impuesto a la Renta 2026 &mdash; ¿cuánto me descuenta SUNAT?
+                  </Link>
+                  <p className="mt-1 text-xs text-text-muted">
+                    Planilla o recibo por honorarios, UIT 2026 y gastos deducibles (Perú)
+                  </p>
+                </li>
+              </ul>
+            </nav>
+
+            <nav aria-label="Reference">
+              <p className="text-xs font-semibold uppercase tracking-wider text-text-muted">
+                Reference
+              </p>
+              <ul className="mt-3">
+                <li>
+                  <Link
+                    href="/architecture"
+                    className="text-sm font-medium text-fg transition-colors hover:text-accent"
+                  >
+                    Software Architecture Atlas &mdash; patterns, traps and the 10 questions
+                  </Link>
+                  <p className="mt-1 text-xs text-text-muted">
+                    Where each pattern lives, what it costs and when not to use it
+                  </p>
+                </li>
+              </ul>
+            </nav>
+          </div>
 
           <div className="flex items-center gap-6">
             <a

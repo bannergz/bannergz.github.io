@@ -1,65 +1,148 @@
 /**
- * Contenido del atlas de /architecture.
+ * El atlas en español.
  *
- * Vive fuera de la página porque se usa tres veces: como texto visible, como
- * cifras del hero (que se cuentan, no se escriben a mano) y como JSON-LD. Una
- * sola fuente evita que las tres versiones se desalineen.
+ * No es la versión por defecto de la página: llega por `import()` recién
+ * cuando alguien encuentra el easter egg, así que este archivo entero es un
+ * chunk aparte que la mayoría de las visitas nunca descarga.
  *
  * El orden de las familias es deliberado: es el orden en que se toman las
  * decisiones al diseñar, de la más cara de revertir a la más operativa.
  */
 
-export interface Patron {
-  /** Nombre canónico del patrón, tal como se lo busca en la literatura. */
-  nombre: string;
-  /** Qué hace, en una o dos frases. */
-  que: string;
-  /** Cómo se paga: el modo de fallo que aparece cuando se elige mal. */
-  trampa?: string;
-}
+import type {
+  Atlas,
+  Escalon,
+  Estacion,
+  Familia,
+  Interfaz,
+  Pregunta,
+  Principio,
+  Trampa,
+} from "./tipos";
 
-export interface Familia {
-  id: string;
-  numero: string;
-  titulo: string;
-  /** Etiqueta corta, para el índice fijo: el título completo no entra. */
-  abrev: string;
-  /** La pregunta que la familia contesta. Es lo que la hace buscable. */
-  pregunta: string;
-  intro: string;
-  patrones: ReadonlyArray<Patron>;
-}
+const ui: Interfaz = {
+  idioma: "es",
+  insignia: "Referencia de trabajo · en español",
+  tituloPlano: "Atlas de",
+  tituloAcento: "arquitectura",
+  intro: {
+    antes:
+      "El mapa de decisiones que se toman antes de escribir la primera línea: qué patrones existen, dónde vive cada uno, qué cuesta y cuándo ",
+    enfasis: "no",
+    despues:
+      " usarlo. No es una lista de cosas para agregar — es el vocabulario para discutir un diseño antes de implementarlo.",
+  },
+  cifras: [
+    "Patrones y principios",
+    "Familias",
+    "Estaciones del camino",
+    "Preguntas antes de codear",
+  ],
+  paraQue: [
+    {
+      titulo: "Qué es",
+      texto:
+        "Un catálogo de los patrones que existen, qué resuelve cada uno, qué cuesta y cuándo no usarlo.",
+    },
+    {
+      titulo: "Para qué",
+      texto:
+        "Para que la decisión de diseño sea explícita antes del código, en vez de tomarse por omisión.",
+    },
+    {
+      titulo: "Cómo se lee",
+      texto:
+        "Buscá la estación donde duele, entrá a la familia, leé la ficha. Después contestá las diez preguntas.",
+    },
+    {
+      titulo: "Qué no es",
+      texto:
+        "Una lista de cosas para agregar. La mitad del atlas existe para justificar no usar la otra mitad.",
+    },
+  ],
+  indice: {
+    etiqueta: "Secciones del atlas",
+    mapa: "Mapa",
+    escalera: "Escalera",
+    principios: "07 · Principios",
+    trampas: "Trampas",
+    preguntas: "Las 10 preguntas",
+  },
+  mapa: {
+    etiqueta: "El mapa",
+    titulo: "Dónde vive cada patrón",
+    bajada:
+      "Casi todo lo que entra a un sistema recorre las mismas seis estaciones. Cada patrón pertenece a una: si sabés en qué estación duele, sabés en qué familia buscar.",
+    pie: "Las estaciones no son opcionales: un evento las atraviesa todas, aunque una esté vacía. Una estación vacía no es una estación que no existe — es una decisión que nadie tomó, y se nota recién con carga.",
+    svg: {
+      alt: "El camino de un evento externo por seis estaciones: origen, borde, amortiguador y trabajo en fila, y desde el trabajo dos ramas, una hacia el estado y otra hacia la salida a terceros. Cada estación lista los patrones que viven en ella.",
+      titulo: "El camino de un evento externo",
+      subtitulo: "de un webhook de un tercero hasta el dato ya indexado",
+      verbos: ["empuja", "acepta", "entrega", "escribe", "llama a terceros"],
+      transversal1: "atraviesan las seis: observabilidad (traza, métrica, log)",
+      transversal2: "feature flags · idempotencia · contratos versionados",
+    },
+  },
+  escalera: {
+    etiqueta: "La escalera",
+    titulo: "Acoplamiento: cada escalón compra durabilidad y cobra operación",
+    bajada:
+      "La discusión «¿lo hacemos asíncrono?» casi nunca es binaria. Son seis escalones, y el trabajo del diseño es elegir cuál, no subir hasta arriba porque suena moderno.",
+    pie: {
+      antes: "La línea punteada es la única frontera que importa de verdad: ",
+      enfasis: "a su izquierda el trabajo vive en la memoria de un proceso",
+      despues:
+        " y desaparece con un reinicio, un OOM o un redeploy. Subir un escalón de más cuesta operación real; quedarse abajo cuando el negocio no tolera perder el evento cuesta un incidente.",
+    },
+    svg: {
+      alt: "Escalera de seis escalones que sube de izquierda a derecha: llamada síncrona directa, más timeout y reintento, más circuit breaker, cola de trabajo durable, evento publicado y workflow durable. Una línea vertical punteada entre el tercer y el cuarto escalón marca la frontera de durabilidad: a la izquierda el trabajo muere con el proceso.",
+      ejeY: "↑ lo que sobrevive a una caída",
+      ejeX: "lo que cuesta operarlo →",
+      frontera: "FRONTERA DE DURABILIDAD",
+      fronteraPie:
+        "a la izquierda, el trabajo vive en memoria y muere con el proceso",
+    },
+    tabla: [
+      "Escalón",
+      "Qué sobrevive",
+      "Qué pagás",
+      "Cuándo es la respuesta correcta",
+    ],
+  },
+  familiaPrefijo: "Familia",
+  principios: {
+    etiqueta: "Familia 07",
+    titulo: "Principios",
+    complemento: "— lo que aplica aunque no elijas ningún patrón",
+    bajada:
+      "Los patrones se eligen; los principios se respetan. Son los que aparecen una y otra vez en las revisiones de código.",
+  },
+  trampas: {
+    etiqueta: "Antipatrones",
+    titulo: "Trampas: patrones que se eligen sin darse cuenta",
+    bajada:
+      "Un antipatrón casi nunca se elige a propósito. Aparece por omisión, cuando nadie hizo la pregunta. Estos son los que más caro salen.",
+  },
+  preguntas: {
+    etiqueta: "El checklist",
+    titulo: "Las diez preguntas, antes de abrir el editor",
+    bajada:
+      "Diez respuestas escritas, de una o dos líneas cada una. Si una respuesta es «no sé», medirla es lo primero que hay que hacer.",
+    cierre:
+      "El objetivo no es ceremonia. Es que la conversación de arquitectura ocurra antes del código y quede escrita, para que dentro de seis meses se pueda leer por qué el sistema es como es.",
+    remate:
+      "Ninguna de estas diez preguntas es cara de contestar. Todas son carísimas de contestar tarde.",
+  },
+  egg: {
+    tecla: "e",
+    invitacion: "para leerlo en inglés",
+    instruccion:
+      "Leer este atlas en inglés: pulsá la tecla E cinco veces, o tocá estas cinco teclas.",
+    anuncio: "El atlas está ahora en español.",
+  },
+};
 
-export interface Principio {
-  nombre: string;
-  que: string;
-}
-
-export interface Trampa {
-  nombre: string;
-  que: string;
-}
-
-export interface Pregunta {
-  pregunta: string;
-  porQue: string;
-}
-
-export interface Escalon {
-  nivel: string;
-  nombre: string;
-  sobrevive: string;
-  cuesta: string;
-  cuando: string;
-}
-
-export interface Estacion {
-  numero: string;
-  nombre: string;
-  patrones: ReadonlyArray<string>;
-}
-
-export const familias: ReadonlyArray<Familia> = [
+const familias: ReadonlyArray<Familia> = [
   {
     id: "forma",
     numero: "01",
@@ -607,7 +690,7 @@ export const familias: ReadonlyArray<Familia> = [
  * La séptima familia tiene otra forma: no se elige, se respeta. Por eso va en
  * su propia lista y se pinta más compacta.
  */
-export const principios: ReadonlyArray<Principio> = [
+const principios: ReadonlyArray<Principio> = [
   {
     nombre: "SRP",
     que: "Una clase, una razón para cambiar. Si dos áreas de negocio la tocan, son dos clases.",
@@ -714,7 +797,7 @@ export const principios: ReadonlyArray<Principio> = [
   },
 ];
 
-export const trampas: ReadonlyArray<Trampa> = [
+const trampas: ReadonlyArray<Trampa> = [
   {
     nombre: "Monolito distribuido",
     que: "Servicios separados que igual hay que desplegar juntos, porque comparten esquema o contrato. Pagás el precio de los microservicios sin ninguno de sus beneficios.",
@@ -765,7 +848,7 @@ export const trampas: ReadonlyArray<Trampa> = [
   },
 ];
 
-export const preguntas: ReadonlyArray<Pregunta> = [
+const preguntas: ReadonlyArray<Pregunta> = [
   {
     pregunta: "¿Cuánto entra, en el pico?",
     porQue:
@@ -823,7 +906,7 @@ export const preguntas: ReadonlyArray<Pregunta> = [
  * durabilidad y cobra operación, y la frontera entre el 03 y el 04 es la
  * única que cambia de naturaleza — abajo el trabajo vive en memoria.
  */
-export const escalones: ReadonlyArray<Escalon> = [
+const escalones: ReadonlyArray<Escalon> = [
   {
     nivel: "01",
     nombre: "Llamada síncrona directa",
@@ -883,7 +966,7 @@ export const escalones: ReadonlyArray<Escalon> = [
  * espacial del atlas: si sabés en qué estación duele, sabés en qué familia
  * buscar.
  */
-export const estaciones: ReadonlyArray<Estacion> = [
+const estaciones: ReadonlyArray<Estacion> = [
   {
     numero: "01",
     nombre: "Origen",
@@ -941,6 +1024,12 @@ export const estaciones: ReadonlyArray<Estacion> = [
   },
 ];
 
-/** Se cuentan, no se escriben a mano: el hero no puede mentir sobre el cuerpo. */
-export const totalPatrones =
-  familias.reduce((n, f) => n + f.patrones.length, 0) + principios.length;
+export const atlasEs: Atlas = {
+  ui,
+  familias,
+  principios,
+  trampas,
+  preguntas,
+  escalones,
+  estaciones,
+};

@@ -30,3 +30,18 @@ describe("Footer tools", () => {
     expect(link?.getAttribute("hreflang")).toBe("es");
   });
 });
+
+describe("Footer reference", () => {
+  it("links to the architecture atlas with descriptive anchor text", () => {
+    const { container } = render(<Footer />);
+    const link = container.querySelector('a[href="/architecture"]');
+    expect(link).not.toBeNull();
+    expect(link?.textContent).toMatch(/Software Architecture Atlas/);
+  });
+
+  it("carries no hreflang on the atlas: it is English, like the rest of the site", () => {
+    const { container } = render(<Footer />);
+    const link = container.querySelector('a[href="/architecture"]');
+    expect(link?.getAttribute("hreflang")).toBeNull();
+  });
+});
