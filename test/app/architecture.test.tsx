@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import ArchitecturePage from "@/app/architecture/page";
-import { metadata } from "@/app/architecture/layout";
+import ArchitectureLayout, { metadata } from "@/app/architecture/layout";
 import { atlasEn } from "@/data/atlas/en";
 import { atlasEs } from "@/data/atlas/es";
 import { contarPatrones } from "@/data/atlas/tipos";
@@ -60,9 +60,58 @@ describe("página /architecture", () => {
     for (const familia of atlasEn.familias) {
       expect(container.querySelector(`#${familia.id}`)).not.toBeNull();
     }
-    for (const id of ["mapa", "escalera", "principios", "trampas", "preguntas"]) {
+    for (const id of ["mapa", "escalera", "principios", "trampas", "preguntas", "practica"]) {
       expect(container.querySelector(`#${id}`)).not.toBeNull();
     }
+  });
+});
+
+describe("del atlas a la práctica", () => {
+  const { practica } = atlasEn.ui;
+
+  it("dice quién construyó el skill, dónde, y lo nombra tal cual", () => {
+    const { container } = render(<ArchitecturePage />);
+    const seccion = container.querySelector("#practica");
+    expect(seccion).not.toBeNull();
+    expect(seccion?.querySelector("code")?.textContent).toBe("ya-architecture-design");
+    expect(seccion?.textContent).toContain("YaVendio");
+    expect(seccion?.textContent).toContain("Claude Code");
+  });
+
+  it("muestra los cuatro niveles con lo que corre cada uno", () => {
+    const { container } = render(<ArchitecturePage />);
+    const niveles = container.querySelectorAll("#practica dt");
+    expect(Array.from(niveles, (dt) => dt.textContent)).toEqual(["N0", "N1", "N2", "N?"]);
+    for (const nivel of practica.niveles) {
+      expect(container.querySelector("#practica")?.textContent).toContain(nivel.corre);
+    }
+  });
+
+  it("enlaza cada parte que reutiliza a su sección, que existe en la página", () => {
+    const { container } = render(<ArchitecturePage />);
+    for (const parte of practica.usa) {
+      const enlace = container.querySelector(`#practica a[href="#${parte.ancla}"]`);
+      expect(enlace?.textContent).toContain(parte.titulo);
+      expect(container.querySelector(`#${parte.ancla}`)).not.toBeNull();
+    }
+  });
+
+  it("aparece en el índice fijo", () => {
+    render(<ArchitecturePage />);
+    const indice = screen.getByRole("navigation", { name: atlasEn.ui.indice.etiqueta });
+    expect(indice.querySelector('a[href="#practica"]')?.textContent).toBe(
+      atlasEn.ui.indice.practica,
+    );
+  });
+
+  it("también cambia de idioma con el egg", async () => {
+    const usuario = userEvent.setup();
+    render(<ArchitecturePage />);
+
+    await usuario.keyboard("sssss");
+
+    expect(await screen.findByText(atlasEs.ui.practica.titulo)).toBeInTheDocument();
+    expect(screen.getByText(atlasEs.ui.practica.cierre)).toBeInTheDocument();
   });
 });
 
@@ -183,5 +232,37 @@ describe("metadata de /architecture", () => {
 
   it("cuenta los patrones en la descripción en vez de escribir la cifra", () => {
     expect(String(metadata.description)).toContain(String(contarPatrones(atlasEn)));
+  });
+});
+
+describe("datos estructurados de /architecture", () => {
+  const leer = () => {
+    const { container } = render(
+      <ArchitectureLayout>
+        <div />
+      </ArchitectureLayout>,
+    );
+    return Array.from(
+      container.querySelectorAll('script[type="application/ld+json"]'),
+      (s) => JSON.parse(s.textContent ?? "{}") as Record<string, unknown>,
+    );
+  };
+
+  it("cuenta la sección de práctica entre las del artículo", () => {
+    const articulo = leer().find((ld) => ld["@type"] === "TechArticle");
+    expect(articulo?.articleSection).toContain(atlasEn.ui.practica.titulo);
+  });
+
+  it("menciona el skill como obra de Banner basada en esta página, sin url propia", () => {
+    const articulo = leer().find((ld) => ld["@type"] === "TechArticle");
+    const menciones = articulo?.mentions as Array<Record<string, unknown>>;
+    const skill = menciones.find((m) => m["@type"] === "SoftwareSourceCode");
+    expect(skill).toMatchObject({
+      name: "ya-architecture-design",
+      isBasedOn: `${SITE_URL}${RUTA}`,
+      author: { name: "Banner Gonzales" },
+    });
+    // El código es privado: una url sería un enlace roto o una filtración.
+    expect(skill).not.toHaveProperty("url");
   });
 });

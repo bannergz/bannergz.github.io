@@ -24,6 +24,7 @@ function construirIndice(atlas: Atlas): ReadonlyArray<{ href: string; label: str
     { href: "#principios", label: indice.principios },
     { href: "#trampas", label: indice.trampas },
     { href: "#preguntas", label: indice.preguntas },
+    { href: "#practica", label: indice.practica },
   ];
 }
 
@@ -314,6 +315,7 @@ function EscaleraAcoplamiento({
 export default function ArchitecturePage() {
   const { atlas, racha, pulsar, cambiado } = useCambioDeIdioma();
   const { ui, familias, principios, trampas, preguntas, escalones, estaciones } = atlas;
+  const { practica } = ui;
 
   const indice = construirIndice(atlas);
   const cifras = [
@@ -568,6 +570,62 @@ export default function ArchitecturePage() {
             <p className="text-base leading-relaxed text-fg">{ui.preguntas.cierre}</p>
             <p className="mt-3 text-sm leading-relaxed text-text-muted">{ui.preguntas.remate}</p>
           </div>
+        </div>
+      </section>
+
+      {/* ---------------- del atlas a la práctica ---------------- */}
+      <section id="practica" className="scroll-mt-36 border-t border-line bg-ink">
+        <div className="section-container py-16">
+          <span className="col-label text-accent">{practica.etiqueta}</span>
+          <h2 className="section-title mt-3">{practica.titulo}</h2>
+          <p className="section-subtitle">
+            {practica.intro.antes}
+            <code className="font-mono text-[0.92em] whitespace-nowrap text-accent">
+              {practica.skill}
+            </code>
+            {practica.intro.despues}
+          </p>
+
+          <p className="col-label">{practica.nivelesEtiqueta}</p>
+          {/* Dos columnas y no cuatro: el N2 lista sus siete disparadores y en
+              una fila de cuatro quedaría como una tira angosta y larguísima. */}
+          <dl className="mt-3 grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2">
+            {practica.niveles.map((nivel) => (
+              <div key={nivel.nivel} className="bg-panel p-5">
+                <dt className="figure-accent text-2xl">{nivel.nivel}</dt>
+                <dd className="mt-2 text-sm leading-relaxed font-medium text-fg">
+                  {nivel.cuando}
+                </dd>
+                <dd className="mt-2 text-sm leading-relaxed text-text-muted">
+                  <span aria-hidden="true" className="text-accent-dim">
+                    ↳{" "}
+                  </span>
+                  {nivel.corre}
+                </dd>
+              </div>
+            ))}
+          </dl>
+
+          <p className="col-label mt-12">{practica.usaEtiqueta}</p>
+          <ul className="mt-3 grid gap-4 md:grid-cols-3">
+            {practica.usa.map((parte) => (
+              <li key={parte.ancla}>
+                <a href={`#${parte.ancla}`} className="panel-card group block h-full">
+                  <span className="block font-mono text-sm font-semibold text-accent group-hover:underline">
+                    {parte.titulo}{" "}
+                    <span aria-hidden="true">↑</span>
+                  </span>
+                  <span className="mt-2 block text-sm leading-relaxed text-text-muted">
+                    {parte.texto}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          <p className="mt-10 max-w-3xl text-sm leading-relaxed text-text-muted">
+            {practica.cierre}
+          </p>
         </div>
       </section>
 

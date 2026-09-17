@@ -74,6 +74,25 @@ export interface ParrafoEnfasis {
   despues: string;
 }
 
+/**
+ * Un nivel de arquitectura del skill: qué cambio cae ahí y qué análisis le
+ * toca. El código (`N0`…`N?`) no se traduce: es el mismo que queda escrito en
+ * el ticket.
+ */
+export interface Nivel {
+  nivel: string;
+  cuando: string;
+  corre: string;
+}
+
+/** Una parte de este atlas que el skill reutiliza, con el ancla de su sección. */
+export interface Reutilizado {
+  /** Ancla de una sección de esta misma página, sin el `#`. */
+  ancla: string;
+  titulo: string;
+  texto: string;
+}
+
 /** Una sección con etiqueta, título y bajada: la cabecera se repite seis veces. */
 export interface Cabecera {
   etiqueta: string;
@@ -102,6 +121,7 @@ export interface Interfaz {
     principios: string;
     trampas: string;
     preguntas: string;
+    practica: string;
   };
   mapa: Cabecera & {
     pie: string;
@@ -130,6 +150,24 @@ export interface Interfaz {
   principios: Cabecera & { complemento: string };
   trampas: Cabecera;
   preguntas: Cabecera & { cierre: string; remate: string };
+  /**
+   * Dónde se usa el atlas fuera de esta página: el skill que se construyó
+   * encima. Es la única parte que nombra a la empresa — el resto del atlas es
+   * referencia general, y un test sostiene las dos cosas.
+   */
+  practica: {
+    etiqueta: string;
+    titulo: string;
+    /** El nombre del skill. Es un identificador: no se traduce. */
+    skill: string;
+    /** El párrafo de entrada; el nombre del skill va entre las dos partes. */
+    intro: { antes: string; despues: string };
+    nivelesEtiqueta: string;
+    niveles: ReadonlyArray<Nivel>;
+    usaEtiqueta: string;
+    usa: ReadonlyArray<Reutilizado>;
+    cierre: string;
+  };
   /** El easter egg: cinco teclas, y lo que dicen antes y después. */
   egg: {
     /** La tecla que hay que repetir para saltar al OTRO idioma. */

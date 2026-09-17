@@ -68,6 +68,7 @@ const ui: Interfaz = {
     principios: "07 · Principles",
     trampas: "Traps",
     preguntas: "The 10 questions",
+    practica: "In practice",
   },
   mapa: {
     etiqueta: "The map",
@@ -128,6 +129,67 @@ const ui: Interfaz = {
       "The goal is not ceremony. It is that the architecture conversation happens before the code and stays written down, so that six months from now someone can read why the system is the way it is.",
     remate:
       "None of these ten questions is expensive to answer. All of them are ruinously expensive to answer late.",
+  },
+  practica: {
+    etiqueta: "In practice",
+    titulo: "From atlas to practice",
+    skill: "ya-architecture-design",
+    intro: {
+      antes: "At YaVendio I built ",
+      despues:
+        " on top of this atlas: a Claude Code skill in the company’s internal engineering harness. It declares a change’s architecture level before any code exists, then runs only the analysis that level demands.",
+    },
+    nivelesEtiqueta: "The four levels",
+    niveles: [
+      {
+        nivel: "N0",
+        cuando:
+          "One repo, one process, no contract or network change, undone with a revert.",
+        corre: "Nothing runs. The level and its reason, in one line.",
+      },
+      {
+        nivel: "N1",
+        cuando: "Touches a contract, a schema or an existing call.",
+        corre:
+          "Four questions in the ticket: who reads it today, is it backward compatible, how do I roll it back, how do I find out it broke.",
+      },
+      {
+        nivel: "N2",
+        cuando:
+          "Adds or changes a call between processes, takes traffic nobody controls, changes data another service reads, changes throughput in either direction, adds an external dependency, touches money or conversation state on the write path, or was born from an incident.",
+        corre:
+          "Measure, pick a rung on the ladder, answer the ten questions, write the ADR before the code, and update the C4 model if the shape of the system changed.",
+      },
+      {
+        nivel: "N?",
+        cuando: "Not enough written down to decide.",
+        corre:
+          "Stop and ask. A ticket that says nothing has not said that the change is small.",
+      },
+    ],
+    usaEtiqueta: "What it takes from this atlas",
+    usa: [
+      {
+        ancla: "escalera",
+        titulo: "The coupling ladder",
+        texto:
+          "The six rungs and the durability line between 03 and 04. An N2 change names the rung it stands on.",
+      },
+      {
+        ancla: "preguntas",
+        titulo: "The ten questions",
+        texto:
+          "The same ten, in the same order, answered in writing for every N2 change, one or two lines each.",
+      },
+      {
+        ancla: "mapa",
+        titulo: "The catalogue",
+        texto:
+          "The patterns and their traps, which the ladder and the questions were distilled from.",
+      },
+    ],
+    cierre:
+      "The default is inverted: the skill declares the level, and an engineer who disagrees overrules it with one line that stays in the ticket. A deterministic pre-filter can raise a level, never lower it.",
   },
   egg: {
     tecla: "s",

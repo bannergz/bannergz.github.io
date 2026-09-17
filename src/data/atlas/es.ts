@@ -67,6 +67,7 @@ const ui: Interfaz = {
     principios: "07 · Principios",
     trampas: "Trampas",
     preguntas: "Las 10 preguntas",
+    practica: "En la práctica",
   },
   mapa: {
     etiqueta: "El mapa",
@@ -132,6 +133,67 @@ const ui: Interfaz = {
       "El objetivo no es ceremonia. Es que la conversación de arquitectura ocurra antes del código y quede escrita, para que dentro de seis meses se pueda leer por qué el sistema es como es.",
     remate:
       "Ninguna de estas diez preguntas es cara de contestar. Todas son carísimas de contestar tarde.",
+  },
+  practica: {
+    etiqueta: "En la práctica",
+    titulo: "Del atlas a la práctica",
+    skill: "ya-architecture-design",
+    intro: {
+      antes: "En YaVendio construí ",
+      despues:
+        " sobre este atlas: un skill de Claude Code dentro del harness interno de ingeniería de la empresa. Declara el nivel de arquitectura de un cambio antes de que exista el código y corre sólo el análisis que ese nivel exige.",
+    },
+    nivelesEtiqueta: "Los cuatro niveles",
+    niveles: [
+      {
+        nivel: "N0",
+        cuando:
+          "Un repo, un proceso, sin cambio de contrato ni de red; se deshace con un revert.",
+        corre: "No corre nada. El nivel y su motivo, en una línea.",
+      },
+      {
+        nivel: "N1",
+        cuando: "Toca un contrato, un esquema o una llamada existente.",
+        corre:
+          "Cuatro preguntas en el ticket: quién lo lee hoy, si es compatible hacia atrás, cómo se revierte y cómo te enterás de que se rompió.",
+      },
+      {
+        nivel: "N2",
+        cuando:
+          "Agrega o cambia una llamada entre procesos, recibe tráfico que nadie controla, cambia un dato que otro servicio lee, cambia el caudal en cualquier sentido, suma una dependencia externa, toca dinero o el estado de una conversación al escribir, o nació de un incidente.",
+        corre:
+          "Medir, elegir un escalón de la escalera, contestar las diez preguntas, escribir el ADR antes del código y actualizar el modelo C4 si cambió la forma del sistema.",
+      },
+      {
+        nivel: "N?",
+        cuando: "No hay suficiente escrito para decidir.",
+        corre:
+          "Parar y preguntar. Un ticket que no dice nada no dijo que el cambio sea chico.",
+      },
+    ],
+    usaEtiqueta: "Lo que toma de este atlas",
+    usa: [
+      {
+        ancla: "escalera",
+        titulo: "La escalera de acoplamiento",
+        texto:
+          "Los seis escalones y la frontera de durabilidad entre el 03 y el 04. Un cambio N2 nombra el escalón en el que se para.",
+      },
+      {
+        ancla: "preguntas",
+        titulo: "Las diez preguntas",
+        texto:
+          "Las mismas diez, en el mismo orden, contestadas por escrito en cada cambio N2, en una o dos líneas.",
+      },
+      {
+        ancla: "mapa",
+        titulo: "El catálogo",
+        texto:
+          "Los patrones y sus trampas, de los que salieron la escalera y las preguntas.",
+      },
+    ],
+    cierre:
+      "El default está invertido: el skill declara el nivel, y quien no esté de acuerdo lo corrige con una línea que queda en el ticket. Un prefiltro determinista puede subir un nivel, nunca bajarlo.",
   },
   egg: {
     tecla: "e",

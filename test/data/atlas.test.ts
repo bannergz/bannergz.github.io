@@ -20,7 +20,30 @@ const TERMINOS_PRIVADOS = [
   "sentry",
   "shopify",
   "kong",
+  "claude.ai",
 ];
+
+/**
+ * La sección `ui.practica` cuenta dónde se usa el atlas, así que es la única
+ * que puede nombrar a la empresa. Todo lo demás sigue sin poder hacerlo, y
+ * ella tampoco puede nombrar servicios, tickets ni proveedores.
+ */
+const EMPRESA = "yavendio";
+
+/** El atlas sin la sección de práctica: lo que es referencia general. */
+const referencia = (atlas: Atlas) =>
+  JSON.stringify(atlas, (clave, valor) =>
+    clave === "practica" ? undefined : valor,
+  ).toLowerCase();
+
+/**
+ * El harness lo escribió otra persona; el skill es lo único propio. Cada
+ * mención del harness lo atribuye a la empresa, en el idioma de la mención.
+ */
+const DUENO_DEL_HARNESS: Record<string, string> = {
+  en: "company’s",
+  es: "de la empresa",
+};
 
 /** Recorre el objeto entero y devuelve cada string con su ruta. */
 function textos(valor: unknown, ruta = ""): Array<[string, string]> {
@@ -41,11 +64,43 @@ const idiomas: ReadonlyArray<[string, Atlas]> = [
   ["es", atlasEs],
 ];
 
-describe.each(idiomas)("atlas %s", (_nombre, atlas) => {
+describe.each(idiomas)("atlas %s", (nombre, atlas) => {
   it("no menciona ningún servicio, ticket ni proveedor privado", () => {
-    const contenido = JSON.stringify(atlas).toLowerCase();
+    const contenido = referencia(atlas);
     for (const termino of TERMINOS_PRIVADOS) {
       expect(contenido).not.toContain(termino);
+    }
+  });
+
+  it("nombra a la empresa sólo en la práctica, y nada más de adentro", () => {
+    const practica = JSON.stringify(atlas.ui.practica).toLowerCase();
+    expect(practica).toContain(EMPRESA);
+    for (const termino of TERMINOS_PRIVADOS.filter((t) => t !== EMPRESA)) {
+      expect(practica).not.toContain(termino);
+    }
+  });
+
+  it("atribuye el harness a la empresa cada vez que lo nombra", () => {
+    const menciones = textos(atlas.ui.practica).filter(([, texto]) =>
+      /harness/i.test(texto),
+    );
+    expect(menciones.length).toBeGreaterThan(0);
+    for (const [, texto] of menciones) {
+      expect(texto).toContain(DUENO_DEL_HARNESS[nombre]);
+    }
+  });
+
+  it("sólo enlaza a secciones que existen en la página", () => {
+    const secciones = [
+      "mapa",
+      "escalera",
+      ...atlas.familias.map((f) => f.id),
+      "principios",
+      "trampas",
+      "preguntas",
+    ];
+    for (const parte of atlas.ui.practica.usa) {
+      expect(secciones).toContain(parte.ancla);
     }
   });
 
@@ -114,6 +169,31 @@ describe("paridad entre los dos idiomas", () => {
     atlasEn.preguntas.forEach((pregunta, i) => {
       expect(atlasEs.preguntas[i].porQue).not.toBe(pregunta.porQue);
     });
+    expect(atlasEs.ui.practica.intro.despues).not.toBe(
+      atlasEn.ui.practica.intro.despues,
+    );
+    atlasEn.ui.practica.niveles.forEach((nivel, i) => {
+      expect(atlasEs.ui.practica.niveles[i].corre).not.toBe(nivel.corre);
+    });
+  });
+
+  it("describe el mismo skill con los mismos niveles y los mismos enlaces", () => {
+    // El nombre del skill y los códigos de nivel son identificadores: son los
+    // que quedan escritos en un ticket, así que no se traducen.
+    expect(atlasEn.ui.practica.skill).toBe("ya-architecture-design");
+    expect(atlasEs.ui.practica.skill).toBe(atlasEn.ui.practica.skill);
+    expect(atlasEn.ui.practica.niveles.map((n) => n.nivel)).toEqual([
+      "N0",
+      "N1",
+      "N2",
+      "N?",
+    ]);
+    expect(atlasEs.ui.practica.niveles.map((n) => n.nivel)).toEqual(
+      atlasEn.ui.practica.niveles.map((n) => n.nivel),
+    );
+    expect(atlasEs.ui.practica.usa.map((u) => u.ancla)).toEqual(
+      atlasEn.ui.practica.usa.map((u) => u.ancla),
+    );
   });
 
   it("declara idiomas distintos y una tecla distinta para salir de cada uno", () => {

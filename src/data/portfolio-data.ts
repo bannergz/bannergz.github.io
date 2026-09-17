@@ -153,6 +153,7 @@ export const portfolioData: PortfolioData = {
         "Authored the organization’s Rust microservice scaffold — hexagonal architecture, persistence, observability bootstrap, and container-based integration testing — adopted as the fleet standard.",
         "Introduced continuous performance benchmarking across three production services and codified it as an organization-wide engineering standard.",
         "Contributor to and power user of the internal agentic AI harness — skills, subagents, and safety hooks for Claude-based workflows — used across the engineering organization.",
+        "Created ya-architecture-design, a Claude Code skill that declares a change’s architecture level before any code exists and applies the coupling ladder and the ten questions from my public software architecture atlas.",
         "Daily delivery across a polyglot fleet of Rust, TypeScript, and Python services, spanning backend, frontend, and infrastructure.",
       ],
     },

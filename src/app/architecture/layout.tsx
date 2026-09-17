@@ -71,15 +71,27 @@ const articleJsonLd = {
     ui.principios.titulo,
     ui.trampas.titulo,
     ui.preguntas.titulo,
+    ui.practica.titulo,
   ],
   about: [
     ...atlasEn.estaciones.map((e) => ({ "@type": "Thing", name: e.nombre })),
     { "@type": "Thing", name: "Software architecture patterns" },
   ],
-  mentions: atlasEn.preguntas.map((p) => ({
-    "@type": "Question",
-    name: p.pregunta,
-  })),
+  mentions: [
+    ...atlasEn.preguntas.map((p) => ({
+      "@type": "Question",
+      name: p.pregunta,
+    })),
+    // El skill construido sobre este atlas. Sin `url`: el código no es
+    // público, y `isBasedOn` es lo único que esta página puede afirmar de él.
+    {
+      "@type": "SoftwareSourceCode",
+      name: ui.practica.skill,
+      runtimePlatform: "Claude Code",
+      author: { "@type": "Person", name: portfolioData.name, url: SITE_URL },
+      isBasedOn: PAGE_URL,
+    },
+  ],
 };
 
 const breadcrumbJsonLd = {
