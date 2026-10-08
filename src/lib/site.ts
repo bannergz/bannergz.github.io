@@ -11,3 +11,11 @@
  * they cannot drift apart again.
  */
 export const SITE_URL = "https://www.bannergonzales.com";
+
+/**
+ * Google Analytics 4 measurement ID for the `bannergonzales.com` web stream.
+ *
+ * It is public by design (it ships in every page's HTML), so it lives here
+ * rather than in an env var that a static export would inline anyway.
+ */
+export const GA_MEASUREMENT_ID = "G-KQLXRK9PC5";
