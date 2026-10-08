@@ -2,12 +2,18 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { sendGAEvent } from "@next/third-parties/google";
 
 const NAV_LINKS: ReadonlyArray<{ href: string; label: string }> = [
   { href: "/#experience", label: "Experience" },
   { href: "/#skills", label: "Skills" },
   { href: "/#contact", label: "Contact" },
 ];
+
+/** "Hire Me" es un ancla interna: la medición mejorada de GA4 no la ve. */
+function trackHireMe(placement: "desktop" | "mobile") {
+  sendGAEvent("event", "hire_me_click", { placement });
+}
 
 /** El botón lo declara en `aria-controls`, así que tiene que ser estable. */
 const MENU_ID = "menu-principal";
@@ -60,7 +66,11 @@ export function Header() {
             </li>
           ))}
           <li>
-            <Link href="/#contact" className="btn-primary text-sm">
+            <Link
+              href="/#contact"
+              className="btn-primary text-sm"
+              onClick={() => trackHireMe("desktop")}
+            >
               Hire Me
             </Link>
           </li>
@@ -125,7 +135,10 @@ export function Header() {
             <Link
               href="/#contact"
               className="btn-primary w-full justify-center text-sm"
-              onClick={() => setIsMenuOpen(false)}
+              onClick={() => {
+                trackHireMe("mobile");
+                setIsMenuOpen(false);
+              }}
             >
               Hire Me
             </Link>

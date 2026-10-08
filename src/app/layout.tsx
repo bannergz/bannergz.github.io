@@ -1,9 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Archivo, IBM_Plex_Mono } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { LayoutContent } from "./layout-content";
 import { portfolioData } from "@/data/portfolio-data";
-import { SITE_URL } from "@/lib/site";
+import { GA_MEASUREMENT_ID, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const archivo = Archivo({
@@ -85,6 +86,7 @@ export default function RootLayout({
         />
         <LayoutContent>{children}</LayoutContent>
       </body>
+      <GoogleAnalytics gaId={GA_MEASUREMENT_ID} />
     </html>
   );
 }
