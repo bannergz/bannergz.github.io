@@ -52,7 +52,7 @@ describe("HeroSection", () => {
 
   it("renders the AI stat that carries the positioning", () => {
     render(<HeroSection />);
-    expect(screen.getByText("300%")).toBeInTheDocument();
-    expect(screen.getByText("AI Efficiency Gain")).toBeInTheDocument();
+    expect(screen.getByText("8x")).toBeInTheDocument();
+    expect(screen.getByText("Merged PRs per Month")).toBeInTheDocument();
   });
 });

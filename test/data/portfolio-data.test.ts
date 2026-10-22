@@ -32,8 +32,8 @@ describe("portfolioData", () => {
 
   it("leads the hero stats with experience and closes with the AI metric", () => {
     expect(portfolioData.heroStats[0].value).toBe("8+");
-    expect(portfolioData.heroStats[3].value).toBe("300%");
-    expect(portfolioData.heroStats[3].label).toBe("AI Efficiency Gain");
+    expect(portfolioData.heroStats[3].value).toBe("8x");
+    expect(portfolioData.heroStats[3].label).toBe("Merged PRs per Month");
   });
 
   it("has valid contact information", () => {
