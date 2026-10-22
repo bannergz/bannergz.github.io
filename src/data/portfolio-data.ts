@@ -16,7 +16,7 @@ export const portfolioData: PortfolioData = {
     { value: "8+", label: "Years Experience" },
     { value: "20+", label: "Enterprise APIs" },
     { value: "Millions", label: "Users Impacted" },
-    { value: "300%", label: "AI Efficiency Gain" },
+    { value: "8x", label: "Merged PRs per Month" },
   ],
   skillCategories: [
     {
@@ -152,7 +152,7 @@ export const portfolioData: PortfolioData = {
         "Designed an authenticated architecture-documentation platform with C4 modeling, validated in CI on every change.",
         "Authored the organization’s Rust microservice scaffold — hexagonal architecture, persistence, observability bootstrap, and container-based integration testing — adopted as the fleet standard.",
         "Introduced continuous performance benchmarking across three production services and codified it as an organization-wide engineering standard.",
-        "Contributor to and power user of the internal agentic AI harness — skills, subagents, and safety hooks for Claude-based workflows — used across the engineering organization.",
+        "Contributor to and power user of the internal agentic AI harness — skills, subagents, and safety hooks for Claude-based workflows — rolled out to all 19 people in the company; merged PRs per month grew from under 400 to over 3,100 (8x) between January and August 2026.",
         "Created ya-architecture-design, a Claude Code skill that declares a change’s architecture level before any code exists and applies the coupling ladder and the ten questions from my public software architecture atlas.",
         "Daily delivery across a polyglot fleet of Rust, TypeScript, and Python services, spanning backend, frontend, and infrastructure.",
       ],
@@ -214,12 +214,14 @@ export const portfolioData: PortfolioData = {
   ],
   achievements: [
     {
-      metric: "5x",
-      description: "Optimization of applications and products.",
+      metric: "25s → 5s",
+      description:
+        "First load of Yape’s promotions landing (1,000+ promotions with per-segment rules): Algolia search instead of a single Redis key, CDN-served images, lazy-loaded WebView.",
     },
     {
-      metric: "250%",
-      description: "Efficiency improvement in the customer service process.",
+      metric: "0.24%",
+      description:
+        "Revert rate on merged PRs at YaVendio, down from 1.0%, while monthly merges grew 8x (Jan–Jun vs Jul–Oct 2026).",
     },
     {
       metric: "19+",
