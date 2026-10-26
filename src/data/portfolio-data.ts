@@ -12,12 +12,6 @@ export const portfolioData: PortfolioData = {
     phone: "+51 994 486 755",
     linkedin: "linkedin.com/in/bannergz",
   },
-  heroStats: [
-    { value: "8+", label: "Years Experience" },
-    { value: "20+", label: "Enterprise APIs" },
-    { value: "Millions", label: "Users Impacted" },
-    { value: "8x", label: "Merged PRs per Month" },
-  ],
   skillCategories: [
     {
       title: "AI & Agentic Systems",

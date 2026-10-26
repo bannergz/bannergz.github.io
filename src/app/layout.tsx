@@ -1,19 +1,30 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
-import { Archivo, IBM_Plex_Mono } from "next/font/google";
+import { IBM_Plex_Mono, IBM_Plex_Sans, IBM_Plex_Sans_Condensed } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { LayoutContent } from "./layout-content";
 import { portfolioData } from "@/data/portfolio-data";
 import { GA_MEASUREMENT_ID, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
-const archivo = Archivo({
-  variable: "--font-archivo",
+/** IBM Plex: the type of the company where the career starts. */
+const plexSans = IBM_Plex_Sans({
+  variable: "--font-plex-sans",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
-/** Ledger pone toda cifra en mono tabular: métricas, montos y periodos. */
+/** Only for the giant section words. */
+const plexCondensed = IBM_Plex_Sans_Condensed({
+  variable: "--font-plex-condensed",
+  subsets: ["latin"],
+  weight: ["700"],
+  display: "swap",
+});
+
+/** Only for code and numeric inputs. */
 const plexMono = IBM_Plex_Mono({
   variable: "--font-plex-mono",
   subsets: ["latin"],
@@ -25,8 +36,8 @@ const OG_IMAGE = "/BannerGonzalesWhite.png";
 const PAGE_TITLE = `${portfolioData.name} — ${portfolioData.title}`;
 
 export const viewport: Viewport = {
-  themeColor: "#0d0c0b",
-  colorScheme: "dark",
+  themeColor: "#f4f6f8",
+  colorScheme: "light",
 };
 
 export const metadata: Metadata = {
@@ -77,7 +88,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${archivo.variable} ${plexMono.variable} scroll-smooth`}
+      className={`${plexSans.variable} ${plexCondensed.variable} ${plexMono.variable} scroll-smooth`}
     >
       <body className="font-sans antialiased">
         <script

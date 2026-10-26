@@ -3,7 +3,6 @@ export type {
   SkillCategory,
   ExperienceEntry,
   Achievement,
-  HeroStat,
   EducationEntry,
   LanguageEntry,
   PortfolioData

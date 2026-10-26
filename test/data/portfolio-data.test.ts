@@ -24,18 +24,6 @@ describe("portfolioData", () => {
     expect(portfolioData.specializations[0]).toBe("Agentic AI Systems");
   });
 
-  it("has four hero stats with unique values (HeroSection keys on value)", () => {
-    expect(portfolioData.heroStats).toHaveLength(4);
-    const values = portfolioData.heroStats.map((s) => s.value);
-    expect(new Set(values).size).toBe(values.length);
-  });
-
-  it("leads the hero stats with experience and closes with the AI metric", () => {
-    expect(portfolioData.heroStats[0].value).toBe("8+");
-    expect(portfolioData.heroStats[3].value).toBe("8x");
-    expect(portfolioData.heroStats[3].label).toBe("Merged PRs per Month");
-  });
-
   it("has valid contact information", () => {
     expect(portfolioData.contact.email).toBe("bannergz1999@gmail.com");
     expect(portfolioData.contact.phone).toBe("+51 994 486 755");
@@ -79,7 +67,7 @@ describe("portfolioData", () => {
     expect(companies).not.toContain("Everis Perú");
   });
 
-  it("has unique company names (ExperienceSection keys on company)", () => {
+  it("has unique company names (the career bars key on company)", () => {
     const companies = portfolioData.experience.map((e) => e.company);
     expect(new Set(companies).size).toBe(companies.length);
   });
@@ -121,20 +109,13 @@ describe("portfolioData", () => {
     expect(overclaims).toEqual([]);
   });
 
-  it("has exactly five achievements (la fila de cifras de Experience usa lg:grid-cols-5)", () => {
+  it("has exactly five achievements (the What moved figures on the home)", () => {
     expect(portfolioData.achievements).toHaveLength(5);
   });
 
-  it("has unique achievement metrics (la fila de cifras de Experience indexa por metric)", () => {
+  it("has unique achievement metrics (the home keys its figures on metric)", () => {
     const metrics = portfolioData.achievements.map((a) => a.metric);
     expect(new Set(metrics).size).toBe(metrics.length);
-  });
-
-  it("does not repeat the hero stats in achievements", () => {
-    const heroValues = portfolioData.heroStats.map((s) => s.value);
-    const metrics = portfolioData.achievements.map((a) => a.metric);
-    const overlap = metrics.filter((m) => heroValues.includes(m));
-    expect(overlap).toEqual([]);
   });
 
   it("leads skills with the AI category", () => {
@@ -146,7 +127,7 @@ describe("portfolioData", () => {
     expect(allSkills).toContain("Rust");
   });
 
-  it("has unique skill category titles (SkillsSection keys on title)", () => {
+  it("has unique skill category titles (the tools list keys on title)", () => {
     const titles = portfolioData.skillCategories.map((c) => c.title);
     expect(new Set(titles).size).toBe(titles.length);
   });

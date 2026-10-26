@@ -11,9 +11,7 @@ export function Footer() {
       <div className="mx-auto max-w-6xl px-6 py-12 lg:px-8">
         <div className="flex flex-col items-center gap-8 text-center md:flex-row md:items-start md:justify-between md:text-left">
           <div>
-            <p className="font-mono text-xl font-semibold">
-              BG<span className="text-accent">.</span>
-            </p>
+            <p className="text-xl font-semibold">{name}</p>
             <p className="mt-1 text-sm text-text-muted">
               {name} &mdash; {title}
             </p>
