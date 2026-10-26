@@ -16,6 +16,13 @@ describe("CalculadoraImpuestos", () => {
     expect(text).toContain("4,115");
   });
 
+  // An HTML entity inside a JS string is printed as-is, not as a space.
+  it("no imprime entidades HTML literales en las notas", () => {
+    const { container } = render(<CalculadoraImpuestos />);
+    expect(container.textContent).toContain("previsional S/ 645");
+    expect(container.textContent).not.toContain("&nbsp;");
+  });
+
   it("muestra el tipo de cambio solo cuando el ingreso es en dólares", async () => {
     const user = userEvent.setup();
     render(<CalculadoraImpuestos />);

@@ -32,8 +32,8 @@ import {
   type SueldosAlAno,
 } from "@/lib/impuestos";
 
-/** La rampa de los azules C4, de claro a oscuro: un tono por tramo de la escala. */
-const COLOR_TRAMO = ["#85bbf0", "#438dd5", "#1168bd", "#08427b", "#0a1f38"] as const;
+/** La rampa de los azules C4, de claro a oscuro: un tono por tramo. Sin el navy, que se pierde en el tema oscuro. */
+const COLOR_TRAMO = ["#cfe3f8", "#85bbf0", "#438dd5", "#1168bd", "#08427b"] as const;
 
 const GASTOS_UI: ReadonlyArray<{ key: keyof GastosDeducibles; label: string; step: number }> = [
   { key: "alquiler", label: "Alquiler", step: 500 },
@@ -461,7 +461,7 @@ function Motor({ search }: { search: string }) {
       valor: soles0(r.netoMensual),
       tono: "good",
       nota: `Promedio. Bruto S/\u00A0${soles0(r.ingresoMensualPEN)} menos IR S/\u00A0${soles0(r.retencionMensualPromedio)}${
-        r.pensionMensual > 0 ? ` y previsional S/&nbsp;${soles0(r.pensionMensual)}` : ""
+        r.pensionMensual > 0 ? ` y previsional S/\u00A0${soles0(r.pensionMensual)}` : ""
       }. La retención real varía mes a mes.`,
     };
   } else if (!r.obligadoPagoMensual) {

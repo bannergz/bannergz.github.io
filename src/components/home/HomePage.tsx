@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { portfolioData } from "@/data/portfolio-data";
 import { CurrentYear } from "@/components/layout/CurrentYear";
+import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { C4Split } from "./C4Split";
 import { C4Stage } from "./C4Stage";
 import { WorkIndex } from "./WorkIndex";
@@ -36,6 +37,7 @@ export function HomePage() {
               <a href="#career">Career</a>
               <a href="#work">Work</a>
               <a href="#tools">Tools</a>
+              <ThemeToggle />
               <a className={styles.btn} href="#contact">
                 Get in touch
               </a>

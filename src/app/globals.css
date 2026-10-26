@@ -45,12 +45,50 @@
   --font-mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", monospace;
 }
 
+/* Dark: the diagram's night. Same roles, re-measured for AA on the dark
+   ground. It follows the system unless the visitor picked a theme, which
+   the toggle stores as data-theme on <html> (set before paint in layout.tsx).
+   Unlayered on purpose: it must beat the @theme defaults above. */
+:root[data-theme="dark"] {
+  --color-ink: #06111f;
+  --color-panel: #0d2340;
+  --color-panel-hi: #14304f;
+  --color-line: #1d3a5c;
+  --color-line-hi: #2c5079;
+  --color-fg: #e6eef8; /* 16.0:1 on ground */
+  --color-text-muted: #a9bdd3; /* 9.6:1 on ground, 7.6:1 on panel */
+  --color-accent: #85bbf0; /* 9.0:1 on ground */
+  --color-on-accent: #06111f;
+  --color-accent-dim: #b9d6f5;
+  --color-positive: #5fd39a;
+  --color-negative: #ff8a80;
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-ink: #06111f;
+    --color-panel: #0d2340;
+    --color-panel-hi: #14304f;
+    --color-line: #1d3a5c;
+    --color-line-hi: #2c5079;
+    --color-fg: #e6eef8;
+    --color-text-muted: #a9bdd3;
+    --color-accent: #85bbf0;
+    --color-on-accent: #06111f;
+    --color-accent-dim: #b9d6f5;
+    --color-positive: #5fd39a;
+    --color-negative: #ff8a80;
+    color-scheme: dark;
+  }
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* Light-only: native scrollbars and controls follow the paper ground. */
+    /* The dark tokens above switch this to dark; native controls follow. */
     color-scheme: light;
   }
 
@@ -62,7 +100,7 @@
 
   ::selection {
     background-color: var(--color-amber);
-    color: var(--color-fg);
+    color: #0d1b2a; /* amber is light in both themes */
   }
 
   /* El header mide ~77px y es fixed: sin esto, saltar a #about o #skills
@@ -125,7 +163,7 @@
   }
 
   .btn-primary {
-    @apply inline-flex items-center gap-2 rounded-md bg-fg px-6 py-3 font-semibold text-white transition-colors duration-200 hover:bg-accent;
+    @apply inline-flex items-center gap-2 rounded-md bg-fg px-6 py-3 font-semibold text-ink transition-colors duration-200 hover:bg-accent;
   }
 
   .btn-outline {
