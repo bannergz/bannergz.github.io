@@ -11,10 +11,10 @@
 .page h2,
 .page h3 { font-weight: 600; line-height: 1.08; letter-spacing: -0.02em; }
 .page img { display: block; max-width: 100%; height: auto; }
-.page mark { background: var(--color-amber); color: var(--color-fg); padding: 0 0.15em; }
+.page mark { background: var(--color-amber); color: #0d1b2a; padding: 0 0.15em; }
 
-.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 24px; background: var(--color-fg); color: #fff; font-weight: 600; font-size: 17px; line-height: 1; text-decoration: none; border-radius: 6px; transition: background 0.2s, transform 0.15s; }
-.btn:hover { background: var(--color-accent); }
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 24px; background: var(--color-fg); color: var(--color-ink); font-weight: 600; font-size: 17px; line-height: 1; text-decoration: none; border-radius: 6px; transition: background 0.2s, transform 0.15s; }
+.btn:hover { background: var(--color-accent); color: var(--color-on-accent); }
 .btn:active { transform: scale(0.97); }
 
 /* ---------- the split ---------- */
@@ -117,7 +117,8 @@
 .free a { font-weight: 600; text-underline-offset: 4px; }
 
 /* ---------- contact: breaks the split, full width ---------- */
-.contact { background: var(--color-amber); padding: 48px 0 72px; overflow: hidden; }
+/* The amber band is light in both themes, so its ink is fixed. */
+.contact { background: var(--color-amber); color: #0d1b2a; padding: 48px 0 72px; overflow: hidden; }
 .strip { display: flex; gap: 8px; width: max-content; animation: drift 60s linear infinite; }
 .strip img { height: 150px; width: auto; border-radius: 6px; object-fit: cover; background: #fff3c8; }
 @keyframes drift { to { transform: translateX(-50%); } }
@@ -127,8 +128,8 @@
 .cells { margin-top: 40px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .cells a { min-height: 96px; border-radius: 6px; background: #ffd66b; display: flex; flex-direction: column; justify-content: center; align-items: center; text-decoration: none; font-size: 19px; font-weight: 600; transition: background 0.2s, color 0.2s; }
 .cells a small { font-weight: 400; font-size: 15px; margin-top: 2px; }
-.cells a:last-child { background: var(--color-fg); color: #fff; }
-.cells a:hover { background: #fff; color: var(--color-fg); }
+.cells a:last-child { background: #0d1b2a; color: #fff; }
+.cells a:hover { background: #fff; color: #0d1b2a; }
 .fine { margin-top: 14px; font-size: 15px; }
 .fine a { text-underline-offset: 3px; }
 

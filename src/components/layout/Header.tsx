@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { sendGAEvent } from "@next/third-parties/google";
+import { ThemeToggle } from "./ThemeToggle";
 
 const NAV_LINKS: ReadonlyArray<{ href: string; label: string }> = [
   { href: "/#career", label: "Career" },
@@ -53,63 +54,67 @@ export function Header() {
           Banner Gonzales
         </Link>
 
-        {/* Desktop nav */}
-        <ul className="hidden items-center gap-8 md:flex">
-          {NAV_LINKS.map((link) => (
-            <li key={link.href}>
+        <div className="flex items-center gap-4 md:gap-6">
+          {/* Desktop nav */}
+          <ul className="hidden items-center gap-8 md:flex">
+            {NAV_LINKS.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className="text-sm font-medium text-text-muted transition-colors hover:text-accent"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+            <li>
               <Link
-                href={link.href}
-                className="text-sm font-medium text-text-muted transition-colors hover:text-accent"
+                href="/#contact"
+                className="btn-primary text-sm"
+                onClick={() => trackHireMe("desktop")}
               >
-                {link.label}
+                Get in touch
               </Link>
             </li>
-          ))}
-          <li>
-            <Link
-              href="/#contact"
-              className="btn-primary text-sm"
-              onClick={() => trackHireMe("desktop")}
-            >
-              Get in touch
-            </Link>
-          </li>
-        </ul>
+          </ul>
 
-        {/* Mobile toggle */}
-        <button
-          ref={botonRef}
-          type="button"
-          className="md:hidden"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          aria-label="Toggle menu"
-          aria-expanded={isMenuOpen}
-          aria-controls={MENU_ID}
-        >
-          <svg
-            aria-hidden="true"
-            className="h-6 w-6 text-fg"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+          <ThemeToggle />
+
+          {/* Mobile toggle */}
+          <button
+            ref={botonRef}
+            type="button"
+            className="md:hidden"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle menu"
+            aria-expanded={isMenuOpen}
+            aria-controls={MENU_ID}
           >
-            {isMenuOpen ? (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            ) : (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            )}
-          </svg>
-        </button>
+            <svg
+              aria-hidden="true"
+              className="h-6 w-6 text-fg"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              {isMenuOpen ? (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              ) : (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              )}
+            </svg>
+          </button>
+        </div>
       </nav>
 
       {/* Mobile menu. Se renderiza siempre y se oculta con `hidden`: un

@@ -5,6 +5,7 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import { LayoutContent } from "./layout-content";
 import { portfolioData } from "@/data/portfolio-data";
 import { GA_MEASUREMENT_ID, SITE_URL } from "@/lib/site";
+import { THEME_INIT_SCRIPT } from "@/lib/theme";
 import "./globals.css";
 
 /** IBM Plex: the type of the company where the career starts. */
@@ -36,8 +37,11 @@ const OG_IMAGE = "/BannerGonzalesWhite.png";
 const PAGE_TITLE = `${portfolioData.name} — ${portfolioData.title}`;
 
 export const viewport: Viewport = {
-  themeColor: "#f4f6f8",
-  colorScheme: "light",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f4f6f8" },
+    { media: "(prefers-color-scheme: dark)", color: "#06111f" },
+  ],
+  colorScheme: "light dark",
 };
 
 export const metadata: Metadata = {
@@ -89,7 +93,12 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${plexSans.variable} ${plexCondensed.variable} ${plexMono.variable} scroll-smooth`}
+      // The head script sets data-theme before React hydrates.
+      suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       <body className="font-sans antialiased">
         <script
           type="application/ld+json"
