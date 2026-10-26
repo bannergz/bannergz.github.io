@@ -32,6 +32,15 @@ describe("Header", () => {
   });
 });
 
+describe("Header · brand", () => {
+  it("links home with the name, the mark staying decorative", () => {
+    render(<Header />);
+    const home = screen.getByRole("link", { name: "Banner Gonzales" });
+    expect(home).toHaveAttribute("href", "/");
+    expect(home.querySelector("svg")).toHaveAttribute("aria-hidden", "true");
+  });
+});
+
 describe("Header · menú móvil", () => {
   it("controla un elemento que existe también con el menú cerrado", async () => {
     const user = userEvent.setup();

@@ -61,6 +61,8 @@
 .hero nav a:hover { text-decoration: underline; text-underline-offset: 5px; }
 .hero nav .btn { min-height: 42px; padding: 0 18px; font-size: 15px; }
 .hero nav .btn:hover { text-decoration: none; }
+.brand { margin-right: auto; }
+.mark { display: block; width: 44px; height: 44px; }
 .sub { margin-top: 30vh; font-size: clamp(21px, 1.7vw, 25px); line-height: 1.4; max-width: 30ch; }
 .hero h1 { margin-top: auto; font-size: clamp(76px, 8.6vw, 148px); line-height: 0.86; letter-spacing: -0.055em; }
 .hero h1 span { display: block; }
@@ -151,7 +153,7 @@
   .stage { order: 2; position: relative; height: auto; padding: 18px 16px; }
   .col > section:not(.hero) { order: 3; }
   .diagram { height: 112vw; flex: none; }
-  .hero nav a:not(.btn) { display: none; }
+  .hero nav a:not(.btn, .brand) { display: none; }
   .sub { margin-top: 64px; font-size: 19px; }
   .hero h1 { margin-top: 48px; font-size: 21vw; }
   .letter { padding-top: 96px !important; padding-bottom: 96px !important; }
