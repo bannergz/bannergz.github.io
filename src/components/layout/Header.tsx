@@ -5,12 +5,12 @@ import Link from "next/link";
 import { sendGAEvent } from "@next/third-parties/google";
 
 const NAV_LINKS: ReadonlyArray<{ href: string; label: string }> = [
-  { href: "/#experience", label: "Experience" },
-  { href: "/#skills", label: "Skills" },
-  { href: "/#contact", label: "Contact" },
+  { href: "/#career", label: "Career" },
+  { href: "/#work", label: "Work" },
+  { href: "/#tools", label: "Tools" },
 ];
 
-/** "Hire Me" es un ancla interna: la medición mejorada de GA4 no la ve. */
+/** "Get in touch" es un ancla interna: la medición mejorada de GA4 no la ve. */
 function trackHireMe(placement: "desktop" | "mobile") {
   sendGAEvent("event", "hire_me_click", { placement });
 }
@@ -48,9 +48,9 @@ export function Header() {
       >
         <Link
           href="/"
-          className="font-mono text-xl font-semibold tracking-tight text-fg"
+          className="text-xl font-semibold tracking-tight text-fg"
         >
-          BG<span className="text-accent">.</span>
+          Banner Gonzales
         </Link>
 
         {/* Desktop nav */}
@@ -71,7 +71,7 @@ export function Header() {
               className="btn-primary text-sm"
               onClick={() => trackHireMe("desktop")}
             >
-              Hire Me
+              Get in touch
             </Link>
           </li>
         </ul>
@@ -140,7 +140,7 @@ export function Header() {
                 setIsMenuOpen(false);
               }}
             >
-              Hire Me
+              Get in touch
             </Link>
           </li>
         </ul>

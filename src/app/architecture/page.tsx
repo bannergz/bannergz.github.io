@@ -331,17 +331,13 @@ export default function ArchitecturePage() {
     <div lang={ui.idioma}>
       {/* ---------------- hero ---------------- */}
       <section className="relative overflow-hidden bg-ink">
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-accent/10 blur-3xl" />
-          <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-accent/8 blur-3xl" />
-        </div>
 
         <div className="section-container relative z-10 pt-32 pb-14">
           <div className="mx-auto max-w-4xl">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-4 py-2">
-              <span className="h-2 w-2 rounded-full bg-positive" />
-              <span className="text-sm font-medium text-accent">{ui.insignia}</span>
-            </div>
+            {/* The C4 tag line: [kind], the way a box names what it is. */}
+            <p className="mb-6 text-base font-semibold text-accent before:content-['['] after:content-[']']">
+              {ui.insignia}
+            </p>
 
             <h1 className="text-4xl font-bold tracking-tight text-balance text-fg md:text-5xl lg:text-6xl">
               {ui.tituloPlano} <span className="text-accent">{ui.tituloAcento}</span>

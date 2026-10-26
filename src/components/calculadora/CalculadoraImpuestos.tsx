@@ -32,8 +32,8 @@ import {
   type SueldosAlAno,
 } from "@/lib/impuestos";
 
-/** La rampa del ámbar, de clara a oscura: un tono por tramo de la escala. */
-const COLOR_TRAMO = ["#FFE9B0", "#FFD166", "#FFB627", "#D9930F", "#A66C05"] as const;
+/** La rampa de los azules C4, de claro a oscuro: un tono por tramo de la escala. */
+const COLOR_TRAMO = ["#85bbf0", "#438dd5", "#1168bd", "#08427b", "#0a1f38"] as const;
 
 const GASTOS_UI: ReadonlyArray<{ key: keyof GastosDeducibles; label: string; step: number }> = [
   { key: "alquiler", label: "Alquiler", step: 500 },

@@ -20,7 +20,8 @@ const mockFont = (family: string, fallbackVar: string): FontLoader => {
   });
 };
 
-export const Archivo = mockFont("Archivo", "--font-archivo");
+export const IBM_Plex_Sans = mockFont("IBM Plex Sans", "--font-plex-sans");
+export const IBM_Plex_Sans_Condensed = mockFont("IBM Plex Sans Condensed", "--font-plex-condensed");
 export const IBM_Plex_Mono = mockFont("IBM Plex Mono", "--font-plex-mono");
 
 // Solo en /noris, que va aparte del sistema de diseño del sitio.

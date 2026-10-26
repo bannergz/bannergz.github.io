@@ -1,17 +1,5 @@
-import {
-  HeroSection,
-  ExperienceSection,
-  SkillsSection,
-  ContactSection,
-} from "@/components/sections";
+import { HomePage } from "@/components/home/HomePage";
 
 export default function Home() {
-  return (
-    <>
-      <HeroSection />
-      <ExperienceSection />
-      <SkillsSection />
-      <ContactSection />
-    </>
-  );
+  return <HomePage />;
 }

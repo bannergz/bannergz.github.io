@@ -1,40 +1,47 @@
 @import "tailwindcss";
 
 /* ============================================================
-   Ledger — la tinta es el fondo, el ámbar es la señal.
-   La cifra es el héroe: todo número va en mono tabular.
-   Cada par de color está medido contra WCAG AA (4.5:1 texto normal).
+   C4 — the site reads as a C4 diagram: paper ground, the C4 blues
+   as structure, his amber only as a highlight.
+   Every text pair is measured against WCAG AA (4.5:1 normal text).
    ============================================================ */
 @theme {
-  /* Superficies, de la más profunda a la más elevada.
-     Los neutros sesgan cálido (R > B) para acompañar al ámbar: un gris
-     slate azulado peleaba con el acento y delataba la paleta anterior. */
-  --color-ink: #0d0c0b;
-  --color-panel: #171613;
-  --color-panel-hi: #201e1a;
+  /* Surfaces, from the ground up. */
+  --color-ink: #f4f6f8; /* paper: cool white, not cream */
+  --color-panel: #ffffff;
+  --color-panel-hi: #e3e8ee;
 
-  /* Bordes: no llevan texto, sólo tienen que verse */
-  --color-line: #2e2b25;
-  --color-line-hi: #3e3a33;
+  /* Borders: they carry no text, they only have to show. */
+  --color-line: #d5dce4;
+  --color-line-hi: #b6c2cf;
 
-  /* Texto */
-  --color-fg: #edeae4; /* 16.28:1 sobre ink */
-  --color-text-muted: #a29a8e; /* 7.03:1 sobre ink, 6.50:1 sobre panel */
+  /* Text */
+  --color-fg: #0d1b2a; /* 16.2:1 on paper */
+  --color-text-muted: #46566a; /* 7.0:1 on paper, 7.5:1 on panel */
 
-  /* Señal */
-  --color-accent: #ffb627; /* 11.14:1 sobre ink */
-  --color-on-accent: #0d0c0b; /* 11.14:1 sobre accent, 6.63:1 en hover */
-  --color-accent-dim: #c98a12;
+  /* Signal: the C4 software-system blue. */
+  --color-accent: #1168bd; /* 5.1:1 on paper */
+  --color-on-accent: #ffffff; /* 5.5:1 on accent */
+  --color-accent-dim: #08427b; /* C4 person blue: hover, 10:1 on paper */
 
-  /* Semánticos: sólo para estado, nunca como acento decorativo */
-  --color-positive: #3dd68c; /* 10.42:1 sobre ink */
-  --color-negative: #ff6b6b; /* 7.04:1 sobre ink */
+  /* The C4 palette, for diagrams. */
+  --color-navy: #0a1f38;
+  --color-c4-person: #08427b;
+  --color-c4-system: #1168bd;
+  --color-c4-container: #438dd5;
+  --color-c4-component: #85bbf0;
+  --color-c4-ext: #5f6b78;
+  --color-amber: #f2a900; /* his brand amber: a highlighter, never text on paper */
 
-  /* --font-archivo y --font-plex-mono los define next/font en la clase que
-     va en <html>. Si esa clase estuviera en <body>, estos var() se
-     evaluarían en :root sin la variable definida, el valor quedaría
-     inválido y ambas familias caerían al sans por defecto en silencio. */
-  --font-sans: var(--font-archivo), system-ui, -apple-system, sans-serif;
+  /* Semantic: state only, never decoration. */
+  --color-positive: #0f7b4a; /* 5.2:1 on paper */
+  --color-negative: #b42318; /* 6.1:1 on paper */
+
+  /* next/font defines these on the <html> class. If that class sat on
+     <body>, these var() would resolve at :root with the variable missing,
+     the value would be invalid and every family would fall back silently. */
+  --font-sans: var(--font-plex-sans), system-ui, -apple-system, sans-serif;
+  --font-condensed: var(--font-plex-condensed), var(--font-plex-sans), sans-serif;
   --font-mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", monospace;
 }
 
@@ -43,9 +50,8 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* El sitio es dark-only: sin esto los scrollbars y controles nativos
-       se pintan en claro y desentonan. */
-    color-scheme: dark;
+    /* Light-only: native scrollbars and controls follow the paper ground. */
+    color-scheme: light;
   }
 
   body {
@@ -55,8 +61,8 @@
   }
 
   ::selection {
-    background-color: var(--color-accent);
-    color: var(--color-on-accent);
+    background-color: var(--color-amber);
+    color: var(--color-fg);
   }
 
   /* El header mide ~77px y es fixed: sin esto, saltar a #about o #skills
@@ -76,13 +82,13 @@
   summary,
   [role="button"] {
     touch-action: manipulation;
-    -webkit-tap-highlight-color: rgb(255 182 39 / 0.18);
+    -webkit-tap-highlight-color: rgb(17 104 189 / 0.16);
   }
 
   /* Un foco visible y consistente en todo lo que se puede tabular.
      Va con outline (no ring) para que sobreviva a forced-colors. */
   :focus-visible {
-    outline: 2px solid var(--color-accent);
+    outline: 3px solid var(--color-amber);
     outline-offset: 3px;
     border-radius: 2px;
   }
@@ -108,33 +114,31 @@
     @apply rounded-lg border border-line bg-panel p-6 transition-colors duration-200 hover:border-line-hi;
   }
 
-  /* La cifra es el héroe de Ledger: mono, tabular, sin degradado.
-     El .gradient-text anterior usaba text-transparent, que dejaba las
-     métricas invisibles en modo alto contraste. */
+  /* A figure is set large in the text face, with tabular digits.
+     No gradient text: text-transparent vanishes in forced colors. */
   .figure {
-    @apply font-mono font-semibold tracking-tight text-fg tabular-nums;
+    @apply font-semibold tracking-tight text-fg tabular-nums;
   }
 
   .figure-accent {
-    @apply font-mono font-semibold tracking-tight text-accent tabular-nums;
+    @apply font-semibold tracking-tight text-accent tabular-nums;
   }
 
   .btn-primary {
-    @apply inline-flex items-center gap-2 rounded-sm bg-accent px-6 py-3 font-semibold text-on-accent transition-colors duration-200 hover:bg-accent-dim;
+    @apply inline-flex items-center gap-2 rounded-md bg-fg px-6 py-3 font-semibold text-white transition-colors duration-200 hover:bg-accent;
   }
 
   .btn-outline {
-    @apply inline-flex items-center gap-2 rounded-sm border border-line-hi px-6 py-3 font-semibold text-fg transition-colors duration-200 hover:border-accent hover:text-accent;
+    @apply inline-flex items-center gap-2 rounded-md border border-line-hi px-6 py-3 font-semibold text-fg transition-colors duration-200 hover:border-accent hover:text-accent;
   }
 
   .tag {
     @apply inline-block rounded-sm bg-panel-hi px-3 py-1 text-sm font-medium text-text-muted;
   }
 
-  /* Etiqueta de dato: versalita con tracking, como el encabezado de una
-     columna en un estado de cuenta. */
+  /* A data label: the [kind] line of a C4 box, in the text face. */
   .col-label {
-    @apply font-mono text-xs font-medium tracking-[0.14em] text-text-muted uppercase;
+    @apply text-sm font-semibold text-text-muted;
   }
 }
 

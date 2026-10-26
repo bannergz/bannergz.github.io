@@ -52,3 +52,30 @@ describe("LayoutContent · saltar al contenido", () => {
     expect(screen.queryByRole("banner")).not.toBeInTheDocument();
   });
 });
+
+describe("LayoutContent · the home carries its own chrome", () => {
+  it("leaves the global header and footer out of the home, keeping the skip link", () => {
+    rutaActual = "/";
+    render(
+      <LayoutContent>
+        <p>contenido</p>
+      </LayoutContent>,
+    );
+
+    expect(screen.getByRole("link", { name: "Skip to content" })).toBeInTheDocument();
+    expect(screen.queryByRole("banner")).not.toBeInTheDocument();
+    expect(screen.queryByRole("contentinfo")).not.toBeInTheDocument();
+  });
+
+  it("wraps every subpage in the global header and footer", () => {
+    rutaActual = "/architecture";
+    render(
+      <LayoutContent>
+        <p>contenido</p>
+      </LayoutContent>,
+    );
+
+    expect(screen.getByRole("banner")).toBeInTheDocument();
+    expect(screen.getByRole("contentinfo")).toBeInTheDocument();
+  });
+});
