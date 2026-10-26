@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { sendGAEvent } from "@next/third-parties/google";
+import { BrandMark } from "./BrandMark";
 import { ThemeToggle } from "./ThemeToggle";
 
 const NAV_LINKS: ReadonlyArray<{ href: string; label: string }> = [
@@ -49,8 +50,9 @@ export function Header() {
       >
         <Link
           href="/"
-          className="text-xl font-semibold tracking-tight text-fg"
+          className="flex items-center gap-2.5 text-xl font-semibold tracking-tight text-fg"
         >
+          <BrandMark className="h-9 w-9" />
           Banner Gonzales
         </Link>
 
