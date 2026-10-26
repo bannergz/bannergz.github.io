@@ -32,6 +32,7 @@
   --color-c4-component: #85bbf0;
   --color-c4-ext: #5f6b78;
   --color-amber: #f2a900; /* his brand amber: a highlighter, never text on paper */
+  --color-logo-saddle: #0a1f38; /* the dark of Sam's coat in the brand mark */
 
   /* Semantic: state only, never decoration. */
   --color-positive: #0f7b4a; /* 5.2:1 on paper */
@@ -62,6 +63,7 @@
   --color-accent-dim: #b9d6f5;
   --color-positive: #5fd39a;
   --color-negative: #ff8a80;
+  --color-logo-saddle: #cfe0f3;
   color-scheme: dark;
 }
 
@@ -79,6 +81,7 @@
     --color-accent-dim: #b9d6f5;
     --color-positive: #5fd39a;
     --color-negative: #ff8a80;
+    --color-logo-saddle: #cfe0f3;
     color-scheme: dark;
   }
 }

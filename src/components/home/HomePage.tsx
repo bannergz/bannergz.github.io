@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { portfolioData } from "@/data/portfolio-data";
 import { CurrentYear } from "@/components/layout/CurrentYear";
+import { BrandMark } from "@/components/layout/BrandMark";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { C4Split } from "./C4Split";
 import { C4Stage } from "./C4Stage";
@@ -34,6 +35,9 @@ export function HomePage() {
         <div className={styles.col}>
           <section id="hero" className={styles.hero} data-level="1">
             <nav aria-label="Main">
+              <a href="#hero" className={styles.brand} aria-label="Banner Gonzales, top of the page">
+                <BrandMark className={styles.mark} />
+              </a>
               <a href="#career">Career</a>
               <a href="#work">Work</a>
               <a href="#tools">Tools</a>
